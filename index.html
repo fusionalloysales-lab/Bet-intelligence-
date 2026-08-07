@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08111d">
-<title>BET INTELLIGENCE V9</title>
+<title>BET INTELLIGENCE V10</title>
 
 <style>
 :root{
@@ -16,7 +16,8 @@
   --blue:#67a9dc;
   --green:#55df99;
   --yellow:#ffd166;
-  --red:#ff7777
+  --red:#ff7777;
+  --purple:#b89cff;
 }
 
 *{box-sizing:border-box}
@@ -29,15 +30,16 @@ body{
 }
 
 main{
-  max-width:900px;
+  max-width:1000px;
   margin:auto;
-  padding:12px 12px 50px
+  padding:12px 12px 60px
 }
 
 .head{
   display:flex;
   justify-content:space-between;
-  align-items:end
+  align-items:end;
+  gap:10px
 }
 
 .brand{
@@ -110,36 +112,17 @@ button:disabled{
 .warn{color:var(--yellow)}
 .bad{color:var(--red)}
 
-.game,.leg{
+.game{
   border:1px solid var(--line);
   border-radius:10px;
   padding:12px;
-  margin:7px 0
-}
-
-.game{
+  margin:7px 0;
   cursor:pointer
 }
 
 .game.selected{
   border-color:var(--blue);
   background:#10263a
-}
-
-.leg{
-  display:flex;
-  gap:10px;
-  align-items:flex-start
-}
-
-.leg input{
-  width:auto;
-  margin:3px 0
-}
-
-.price{
-  margin-left:auto;
-  font-weight:800
 }
 
 .small{
@@ -149,7 +132,7 @@ button:disabled{
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:8px
 }
 
@@ -218,9 +201,167 @@ details{
   color:var(--muted)
 }
 
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr 1fr}
-  .brand{font-size:22px}
+.candidate{
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:11px;
+  margin:7px 0;
+  background:#0b1825
+}
+
+.candidate-head{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+.candidate-name{
+  font-weight:800;
+  flex:1
+}
+
+.score{
+  font-weight:900;
+  font-size:18px
+}
+
+.score-high{color:var(--green)}
+.score-mid{color:var(--yellow)}
+.score-low{color:var(--red)}
+
+.badge{
+  display:inline-block;
+  border-radius:99px;
+  padding:3px 7px;
+  font-size:11px;
+  font-weight:800;
+  border:1px solid var(--line);
+  margin:2px
+}
+
+.badge-green{color:var(--green)}
+.badge-yellow{color:var(--yellow)}
+.badge-red{color:var(--red)}
+.badge-blue{color:var(--blue)}
+.badge-purple{color:var(--purple)}
+
+.multi{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:13px;
+  margin:10px 0;
+  background:#0b1927
+}
+
+.multi.core{
+  border-color:#397d61
+}
+
+.multi.value{
+  border-color:#685b8e
+}
+
+.multi-title{
+  font-size:17px;
+  font-weight:850;
+  margin-bottom:8px
+}
+
+.leg-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid #26384c
+}
+
+.leg-row:last-child{
+  border-bottom:0
+}
+
+.leg-num{
+  width:25px;
+  color:var(--muted);
+  font-weight:800
+}
+
+.leg-info{
+  flex:1
+}
+
+.leg-odds{
+  font-weight:900
+}
+
+.reason{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.45;
+  margin-top:8px
+}
+
+.risk{
+  font-size:12px;
+  line-height:1.45;
+  margin-top:8px;
+  padding:8px;
+  border-radius:8px;
+  background:#091522
+}
+
+.avoid{
+  border-left:3px solid var(--red);
+  padding:8px 10px;
+  margin:6px 0;
+  background:#0b151f;
+  border-radius:6px
+}
+
+.section-label{
+  font-size:12px;
+  font-weight:850;
+  color:var(--muted);
+  letter-spacing:.5px;
+  margin:14px 0 6px
+}
+
+.engine-summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px
+}
+
+.engine-box{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px;
+  text-align:center
+}
+
+.engine-box strong{
+  display:block;
+  font-size:19px;
+  margin-top:3px
+}
+
+.empty{
+  padding:18px;
+  text-align:center;
+  color:var(--muted)
+}
+
+@media(max-width:650px){
+  .engine-summary{
+    grid-template-columns:1fr 1fr
+  }
+
+  .grid{
+    grid-template-columns:1fr 1fr
+  }
+
+  .brand{
+    font-size:22px
+  }
 }
 </style>
 </head>
@@ -230,7 +371,7 @@ details{
 
 <div class="head">
   <div class="brand">BET INTELLIGENCE</div>
-  <div class="version">V9 • Intelligence Analysis Build</div>
+  <div class="version">V10 • Intelligence Engine</div>
 </div>
 
 
@@ -260,7 +401,7 @@ details{
 
 <details>
 <summary>Connection diagnostics</summary>
-<div id="diag" class="diag">V9 ready.</div>
+<div id="diag" class="diag">V10 ready.</div>
 </details>
 
 </div>
@@ -306,7 +447,7 @@ Connect first.
 
 
 <!-- =====================================================
-     4. GAME + MARKETS
+     4. GAME
 ===================================================== -->
 
 <div class="card">
@@ -314,7 +455,7 @@ Connect first.
 <h2>🎯 4. SELECT GAME</h2>
 
 <select id="gameSelect" disabled>
-  <option value="">Select a game...</option>
+<option value="">Select a game...</option>
 </select>
 
 <div id="selected" class="status">
@@ -329,34 +470,107 @@ LOAD SPORTSBOOK MARKETS
 No markets loaded.
 </div>
 
+</div>
+
 
 <!-- =====================================================
-     CHATGPT EXPORT
+     5. INTELLIGENCE ENGINE
 ===================================================== -->
 
-<div class="copybox">
+<div class="card">
 
-<div class="copy-title">
-🧠 CHATGPT MARKET INTELLIGENCE
-</div>
+<h2>🧠 5. INTELLIGENCE ENGINE</h2>
 
 <div class="copy-note">
-The app keeps the complete Sportsbet dataset, but the ChatGPT
-export removes only individual selections above 10.00 odds.
-Short-priced selections are deliberately retained because they
-may be useful as high-confidence multipliers.
+V10 ranks available markets before constructing multis.
+It does not claim statistical probability from odds alone.
+Current injuries, selections, role and matchup require external verification.
 </div>
 
-<div class="filter-info" id="filterInfo">
+<button id="analyse" disabled>
+RUN INTELLIGENCE ENGINE
+</button>
+
+<div id="engineStatus" class="status">
+Load Sportsbet markets first.
+</div>
+
+<div id="engineSummary"></div>
+
+<div id="candidates"></div>
+
+</div>
+
+
+<!-- =====================================================
+     6. RECOMMENDED BETS
+===================================================== -->
+
+<div class="card">
+
+<h2>🎯 6. RECOMMENDED MULTIS</h2>
+
+<div class="grid">
+
+<div>
+<label class="small">CORE TARGET MIN</label>
+<input id="min20" type="number" value="18" step=".1" min="1">
+</div>
+
+<div>
+<label class="small">CORE TARGET MAX</label>
+<input id="max20" type="number" value="22" step=".1" min="1">
+</div>
+
+</div>
+
+<div class="grid">
+
+<div>
+<label class="small">VALUE TARGET MIN</label>
+<input id="min40" type="number" value="40" step=".1" min="1">
+</div>
+
+<div>
+<label class="small">VALUE TARGET MAX</label>
+<input id="max40" type="number" value="60" step=".1" min="1">
+</div>
+
+</div>
+
+<button id="build" disabled>
+BUILD DIVERSIFIED MULTIS
+</button>
+
+<div id="results">
+<div class="empty">
+Run the Intelligence Engine first.
+</div>
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     7. CHATGPT EXPORT
+===================================================== -->
+
+<div class="card">
+
+<h2>🧠 7. CHATGPT MARKET INTELLIGENCE</h2>
+
+<div class="copy-note">
+The export contains the ranked candidate pool plus supporting market data.
+Use ChatGPT for current verified team news, injuries, role, matchup,
+probability and value analysis before finalising a bet.
+</div>
+
+<div id="filterInfo" class="filter-info">
 No market data loaded.
 </div>
 
-<button
-  id="prepareChatGPT"
-  class="copy-button"
-  disabled
->
-🧠 PREPARE CHATGPT ANALYSIS
+<button id="prepareChatGPT" disabled>
+PREPARE CHATGPT ANALYSIS
 </button>
 
 <div id="copyControls"></div>
@@ -364,71 +578,23 @@ No market data loaded.
 </div>
 
 
-<div id="markets"></div>
-
-</div>
-
-
 <!-- =====================================================
-     5. MULTI BUILDER
+     8. DATA INTEGRITY
 ===================================================== -->
 
 <div class="card">
 
-<h2>🧠 5. MULTI BUILDER</h2>
-
-<div class="grid">
-
-<div class="metric">
-Selected legs
-<strong id="count">0</strong>
-</div>
-
-<div class="metric">
-Combined odds
-<strong id="odds">—</strong>
-</div>
-
-</div>
-
-
-<div class="row">
-<input id="min20" type="number" value="18" step=".1" min="1">
-<input id="max20" type="number" value="22" step=".1" min="1">
-</div>
-
-<div class="row">
-<input id="min40" type="number" value="40" step=".1" min="1">
-<input id="max40" type="number" value="60" step=".1" min="1">
-</div>
-
-<button id="build" disabled>
-BUILD ~20 & 40+
-</button>
-
-<div id="results"></div>
-
-</div>
-
-
-<!-- =====================================================
-     6. DATA INTEGRITY
-===================================================== -->
-
-<div class="card">
-
-<h2>🛡️ DATA INTEGRITY</h2>
+<h2>🛡️ 8. DATA INTEGRITY</h2>
 
 <div id="integrity" class="status">
 No live data.
 </div>
 
 <div class="status warn">
-V9 does not invent injuries, team selections, player statistics,
-probability, EV or weather. Those require separate verified
-information. ChatGPT is intended to perform the deeper analysis
-using the market data supplied by V9 plus independently verified
-current information.
+The Odds API verifies the event/market feed only.
+V10 does NOT invent or assume injuries, team selection,
+player statistics, role, weather or probability.
+Those require independent verification.
 </div>
 
 </div>
@@ -461,9 +627,7 @@ const state={
 
   markets:[],
 
-  selected:new Set(),
-
-  exportMarkets:[],
+  candidates:[],
 
   exportChunks:[]
 
@@ -510,6 +674,16 @@ function diag(text){
 }
 
 
+function clamp(n,min,max){
+
+  return Math.max(
+    min,
+    Math.min(max,n)
+  );
+
+}
+
+
 /* =========================================================
    API
 ========================================================= */
@@ -534,7 +708,6 @@ async function api(path,params={}){
 
 
   let r;
-
 
   try{
 
@@ -563,11 +736,9 @@ async function api(path,params={}){
 
   let data;
 
-
   try{
 
-    data=
-      JSON.parse(text);
+    data=JSON.parse(text);
 
   }catch{
 
@@ -596,14 +767,10 @@ async function api(path,params={}){
     data,
 
     remaining:
-      r.headers.get(
-        "x-requests-remaining"
-      ),
+      r.headers.get("x-requests-remaining"),
 
     used:
-      r.headers.get(
-        "x-requests-used"
-      )
+      r.headers.get("x-requests-used")
 
   };
 
@@ -617,15 +784,9 @@ async function api(path,params={}){
 function resetResults(){
 
   state.games=[];
-
   state.game=null;
-
   state.markets=[];
-
-  state.selected.clear();
-
-  state.exportMarkets=[];
-
+  state.candidates=[];
   state.exportChunks=[];
 
 
@@ -645,11 +806,38 @@ function resetResults(){
     "No game selected.";
 
 
-  $("markets").innerHTML="";
+  $("loadMarkets").disabled=true;
+
+
+  $("analyse").disabled=true;
+
+
+  $("build").disabled=true;
+
+
+  $("prepareChatGPT").disabled=true;
+
+
+  $("markets") &&
+    ($("markets").innerHTML="");
 
 
   $("marketStatus").textContent=
     "No markets loaded.";
+
+
+  $("engineStatus").textContent=
+    "Load Sportsbet markets first.";
+
+
+  $("engineSummary").innerHTML="";
+
+
+  $("candidates").innerHTML="";
+
+
+  $("results").innerHTML=
+    '<div class="empty">Run the Intelligence Engine first.</div>';
 
 
   $("filterInfo").textContent=
@@ -657,18 +845,6 @@ function resetResults(){
 
 
   $("copyControls").innerHTML="";
-
-
-  $("prepareChatGPT").disabled=true;
-
-
-  $("build").disabled=true;
-
-
-  $("loadMarkets").disabled=true;
-
-
-  summary();
 
 }
 
@@ -805,9 +981,6 @@ async function loadGames(){
   );
 
 
-  resetResults();
-
-
   try{
 
     const r=
@@ -833,9 +1006,7 @@ async function loadGames(){
       .filter(g=>{
 
         const t=
-          Date.parse(
-            g.commence_time
-          );
+          Date.parse(g.commence_time);
 
 
         return(
@@ -978,12 +1149,8 @@ function selectGame(i){
     state.games[i];
 
 
-  state.selected.clear();
-
   state.markets=[];
-
-  state.exportMarkets=[];
-
+  state.candidates=[];
   state.exportChunks=[];
 
 
@@ -1025,27 +1192,36 @@ function selectGame(i){
 
   $("loadMarkets").disabled=false;
 
+  $("analyse").disabled=true;
+
+  $("build").disabled=true;
+
   $("prepareChatGPT").disabled=true;
 
-  $("copyControls").innerHTML="";
-
-  $("markets").innerHTML="";
 
   $("marketStatus").textContent=
     "Ready.";
 
-  $("build").disabled=true;
+  $("engineStatus").textContent=
+    "Load Sportsbet markets first.";
+
+  $("engineSummary").innerHTML="";
+
+  $("candidates").innerHTML="";
+
+  $("results").innerHTML=
+    '<div class="empty">Run the Intelligence Engine first.</div>';
 
   $("filterInfo").textContent=
     "No market data loaded.";
 
-  summary();
+  $("copyControls").innerHTML="";
 
 }
 
 
 /* =========================================================
-   VALIDATED MARKET LIST
+   REQUESTED MARKETS
 ========================================================= */
 
 function requestedMarkets(){
@@ -1090,14 +1266,9 @@ async function loadMarkets(){
 
   status(
     $("marketStatus"),
-    "Loading Sportsbet markets for the selected event …",
+    "Loading Sportsbet markets for selected event …",
     "warn"
   );
-
-
-  $("prepareChatGPT").disabled=true;
-
-  $("copyControls").innerHTML="";
 
 
   try{
@@ -1166,6 +1337,9 @@ async function loadMarkets(){
 
               state.markets.push({
 
+                id:
+                  state.markets.length,
+
                 name:
                   o.description||
                   o.name||
@@ -1197,90 +1371,13 @@ async function loadMarkets(){
     if(!state.markets.length){
 
       throw new Error(
-        "Sportsbet was returned, but no supported player markets are currently open for this event."
+        "Sportsbet was returned, but no supported player markets are currently open."
       );
 
     }
 
 
-    $("markets").innerHTML=
-      state.markets.map((m,i)=>`
-
-        <label class="leg">
-
-          <input
-            type="checkbox"
-            data-leg="${i}"
-          >
-
-          <span>
-
-            <b>
-              ${esc(m.name)}
-            </b>
-
-            <br>
-
-            <span class="small">
-
-              ${esc(m.market)}
-
-              ${
-                m.line!=null
-                ?" • line "+esc(m.line)
-                :""
-              }
-
-              ${
-                m.lastUpdate
-                ?" • "+new Date(
-                  m.lastUpdate
-                ).toLocaleTimeString()
-                :""
-              }
-
-            </span>
-
-          </span>
-
-          <span class="price">
-            ${m.odds.toFixed(2)}
-          </span>
-
-        </label>
-
-      `).join("");
-
-
-    document
-      .querySelectorAll("[data-leg]")
-      .forEach(c=>{
-
-        c.onchange=()=>{
-
-          const i=
-            Number(c.dataset.leg);
-
-
-          if(c.checked){
-
-            state.selected.add(i);
-
-          }else{
-
-            state.selected.delete(i);
-
-          }
-
-
-          summary();
-
-        };
-
-      });
-
-
-    $("build").disabled=false;
+    $("analyse").disabled=false;
 
     $("prepareChatGPT").disabled=false;
 
@@ -1290,14 +1387,14 @@ async function loadMarkets(){
 
     status(
       $("marketStatus"),
-      `🟢 Sportsbet returned ${state.markets.length} supported outcomes for this event.`,
+      `🟢 Sportsbet returned ${state.markets.length} outcomes.`,
       "ok"
     );
 
 
     status(
       $("integrity"),
-      "🟢 Event and bookmaker odds verified by API response. Player availability/injuries/late changes are NOT verified by this odds feed.",
+      "🟢 Event and Sportsbet odds verified by API. Player availability, role and statistics still require independent verification.",
       "ok"
     );
 
@@ -1305,7 +1402,7 @@ async function loadMarkets(){
     diag(
       "PASS: event-odds endpoint responded.\n"+
       "Event: "+state.game.id+"\n"+
-      "Sportsbet market outcomes: "+state.markets.length+"\n"+
+      "Sportsbet outcomes: "+state.markets.length+"\n"+
       "Credits remaining: "+(r.remaining??"not supplied")
     );
 
@@ -1329,65 +1426,1271 @@ async function loadMarkets(){
 
 
 /* =========================================================
-   FILTER FOR CHATGPT
-   IMPORTANT:
-   ONLY remove individual selections above 10.00.
-   DO NOT remove low-priced selections.
+   PLAYER EXTRACTION
 ========================================================= */
 
-function buildExportMarketPool(){
+function playerName(m){
 
-  return state.markets.filter(m=>{
-
-    const odds=
-      Number(m.odds);
+  let name=
+    String(m.name||"").trim();
 
 
-    return(
-      Number.isFinite(odds)&&
-      odds<=10
-    );
+  /*
+   * The Odds API player descriptions normally contain
+   * the player name directly. Keep this intentionally
+   * conservative rather than trying to invent names.
+   */
 
-  });
+  return name;
 
 }
 
 
-function updateFilterInfo(){
+/* =========================================================
+   MARKET CHARACTERISTICS
+========================================================= */
+
+function marketType(m){
+
+  const x=
+    String(m.market||"").toLowerCase();
+
+
+  if(
+    x.includes("tackle")
+  )return "tackles";
+
+
+  if(
+    x.includes("disposal")
+  )return "disposals";
+
+
+  if(
+    x.includes("mark")
+  )return "marks";
+
+
+  if(
+    x.includes("clearance")
+  )return "clearances";
+
+
+  if(
+    x.includes("kick")
+  )return "kicks";
+
+
+  if(
+    x.includes("handball")
+  )return "handballs";
+
+
+  if(
+    x.includes("fantasy")
+  )return "fantasy";
+
+
+  if(
+    x.includes("goal")
+  )return "goals";
+
+
+  if(
+    x.includes("try")
+  )return "tries";
+
+
+  return "other";
+
+}
+
+
+/* =========================================================
+   BASE MARKET SCORE
+=========================================================
+
+   Important:
+   This is a MARKET QUALITY PRIORITY SCORE,
+   NOT a claimed true probability.
+
+   Without player statistics/team news, V10 cannot
+   legitimately manufacture a statistical probability.
+========================================================= */
+
+function scoreMarket(m){
+
+  const type=
+    marketType(m);
+
+
+  const odds=
+    Number(m.odds);
+
+
+  if(!Number.isFinite(odds)||odds<=1){
+
+    return null;
+
+  }
+
+
+  let score=50;
+
+
+  /*
+   * Price quality.
+   *
+   * Short prices are useful as stabilisers but should
+   * not dominate the entire multi.
+   */
+
+  if(odds>=1.35&&odds<=1.90){
+
+    score+=15;
+
+  }else if(odds>1.90&&odds<=2.40){
+
+    score+=13;
+
+  }else if(odds>2.40&&odds<=3.50){
+
+    score+=7;
+
+  }else if(odds>3.50&&odds<=5){
+
+    score-=3;
+
+  }else if(odds>5){
+
+    score-=12;
+
+  }else if(odds<1.25){
+
+    score-=7;
+
+  }
+
+
+  /*
+   * Market-type stability heuristic.
+   *
+   * This is deliberately modest because no player
+   * statistics have been supplied to the engine.
+   */
+
+  const stability={
+
+    tackles:7,
+
+    disposals:8,
+
+    marks:5,
+
+    clearances:7,
+
+    kicks:6,
+
+    handballs:6,
+
+    fantasy:7,
+
+    goals:-7,
+
+    tries:-7,
+
+    other:0
+
+  };
+
+
+  score+=
+    stability[type]||0;
+
+
+  /*
+   * Lines can be useful for classification,
+   * but V10 does not pretend a line is a probability.
+   */
+
+  if(m.line!=null){
+
+    score+=3;
+
+  }
+
+
+  /*
+   * Penalise extreme longshots.
+   */
+
+  if(odds>=6){
+
+    score-=8;
+
+  }
+
+
+  /*
+   * Penalise extreme short prices because they can
+   * consume odds without necessarily adding enough
+   * incremental value.
+   */
+
+  if(odds<=1.20){
+
+    score-=5;
+
+  }
+
+
+  score=
+    clamp(
+      score,
+      1,
+      99
+    );
+
+
+  return score;
+
+}
+
+
+/* =========================================================
+   CANDIDATE CLASSIFICATION
+========================================================= */
+
+function candidateClass(score){
+
+  if(score>=78)return "A";
+
+  if(score>=68)return "B";
+
+  if(score>=58)return "C";
+
+  return "D";
+
+}
+
+
+/* =========================================================
+   CANDIDATE REASON
+========================================================= */
+
+function candidateReason(c){
+
+  const reasons=[];
+
+
+  if(
+    c.odds>=1.35&&
+    c.odds<=1.90
+  ){
+
+    reasons.push(
+      "usable price for a stabilising leg"
+    );
+
+  }
+
+
+  if(
+    c.odds>1.90&&
+    c.odds<=3.50
+  ){
+
+    reasons.push(
+      "potential value range"
+    );
+
+  }
+
+
+  if(
+    ["tackles","disposals","clearances","fantasy"]
+      .includes(c.type)
+  ){
+
+    reasons.push(
+      "generally suitable statistical market"
+    );
+
+  }
+
+
+  if(
+    ["goals","tries"]
+      .includes(c.type)
+  ){
+
+    reasons.push(
+      "higher-variance scoring market"
+    );
+
+  }
+
+
+  if(c.odds>5){
+
+    reasons.push(
+      "long-price volatility"
+    );
+
+  }
+
+
+  return reasons.join(" • ");
+
+}
+
+
+/* =========================================================
+   RUN ENGINE
+========================================================= */
+
+function runEngine(){
 
   if(!state.markets.length){
 
-    $("filterInfo").textContent=
-      "No market data loaded.";
+    status(
+      $("engineStatus"),
+      "🔴 Load Sportsbet markets first.",
+      "bad"
+    );
 
     return;
 
   }
 
 
-  const eligible=
-    buildExportMarketPool();
+  status(
+    $("engineStatus"),
+    "Analysing market structure …",
+    "warn"
+  );
 
 
-  const excluded=
-    state.markets.length-
-    eligible.length;
+  state.candidates=
+    state.markets
+      .map(m=>{
+
+        const score=
+          scoreMarket(m);
 
 
-  $("filterInfo").innerHTML=
-    `<b>${state.markets.length}</b> total outcomes • `+
-    `<b>${eligible.length}</b> sent to ChatGPT • `+
-    `<b>${excluded}</b> over 10.00 excluded • `+
-    `<b>0</b> excluded for being too short`;
+        if(score==null)return null;
+
+
+        const c={
+
+          ...m,
+
+          player:
+            playerName(m),
+
+          type:
+            marketType(m),
+
+          score,
+
+          grade:
+            candidateClass(score)
+
+        };
+
+
+        c.reason=
+          candidateReason(c);
+
+
+        return c;
+
+      })
+      .filter(Boolean)
+      .sort(
+        (a,b)=>
+          b.score-a.score
+      );
+
+
+  renderEngine();
+
+
+  $("build").disabled=
+    state.candidates.length<4;
+
+
+  status(
+    $("engineStatus"),
+    `🟢 Engine ranked ${state.candidates.length} candidates from ${state.markets.length} outcomes.`,
+    "ok"
+  );
+
+
+  diag(
+    "INTELLIGENCE ENGINE COMPLETE\n"+
+    "Raw outcomes: "+state.markets.length+"\n"+
+    "Ranked candidates: "+state.candidates.length+"\n"+
+    "Grade A: "+state.candidates.filter(x=>x.grade==="A").length+"\n"+
+    "Grade B: "+state.candidates.filter(x=>x.grade==="B").length+"\n"+
+    "Grade C: "+state.candidates.filter(x=>x.grade==="C").length+"\n"+
+    "Grade D: "+state.candidates.filter(x=>x.grade==="D").length
+  );
 
 }
 
 
 /* =========================================================
-   FORMAT MARKET
+   RENDER ENGINE
 ========================================================= */
 
-function compactMarketLine(m,index){
+function renderEngine(){
+
+  const c=
+    state.candidates;
+
+
+  const a=
+    c.filter(x=>x.grade==="A").length;
+
+
+  const b=
+    c.filter(x=>x.grade==="B").length;
+
+
+  const usable=
+    c.filter(x=>x.grade!=="D").length;
+
+
+  $("engineSummary").innerHTML=`
+
+    <div class="engine-summary">
+
+      <div class="engine-box">
+        Raw markets
+        <strong>${state.markets.length}</strong>
+      </div>
+
+      <div class="engine-box">
+        A candidates
+        <strong class="ok">${a}</strong>
+      </div>
+
+      <div class="engine-box">
+        B candidates
+        <strong class="warn">${b}</strong>
+      </div>
+
+      <div class="engine-box">
+        Usable
+        <strong>${usable}</strong>
+      </div>
+
+    </div>
+
+  `;
+
+
+  const display=
+    c
+      .filter(x=>x.grade!=="D")
+      .slice(0,30);
+
+
+  $("candidates").innerHTML=`
+
+    <div class="section-label">
+      TOP MARKET CANDIDATES
+    </div>
+
+    ${
+      display.length
+      ?display.map(renderCandidate).join("")
+      :'<div class="empty">No sufficiently strong candidates.</div>'
+    }
+
+  `;
+
+}
+
+
+function renderCandidate(c,i){
+
+  const scoreClass=
+    c.score>=78
+    ?"score-high"
+    :c.score>=68
+    ?"score-mid"
+    :"score-low";
+
+
+  const badgeClass=
+    c.grade==="A"
+    ?"badge-green"
+    :c.grade==="B"
+    ?"badge-yellow"
+    :"badge-blue";
+
+
+  return`
+
+    <div class="candidate">
+
+      <div class="candidate-head">
+
+        <div class="candidate-name">
+          ${esc(c.player)}
+        </div>
+
+        <div class="score ${scoreClass}">
+          ${c.score}
+        </div>
+
+      </div>
+
+      <div>
+
+        <span class="badge ${badgeClass}">
+          GRADE ${c.grade}
+        </span>
+
+        <span class="badge badge-blue">
+          ${esc(c.type)}
+        </span>
+
+        <span class="badge">
+          ${c.odds.toFixed(2)}
+        </span>
+
+        ${
+          c.line!=null
+          ?`<span class="badge">LINE ${esc(c.line)}</span>`
+          :""
+        }
+
+      </div>
+
+      <div class="small">
+        ${esc(c.market)}
+      </div>
+
+      <div class="reason">
+        ${esc(c.reason)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   MULTI SEARCH
+=========================================================
+
+   The search objective is NOT "closest to target".
+
+   It maximises candidate quality while:
+   - reaching target odds
+   - avoiding longshots
+   - limiting repeated players
+   - preferring sensible market diversity
+========================================================= */
+
+function multiQuality(combo){
+
+  if(!combo.length)return 0;
+
+
+  let score=0;
+
+
+  combo.forEach(c=>{
+
+    score+=c.score;
+
+  });
+
+
+  /*
+   * Reward stronger average candidate quality.
+   */
+
+  score+=
+    (
+      combo.reduce(
+        (a,c)=>a+c.score,
+        0
+      )/
+      combo.length
+    )*2;
+
+
+  /*
+   * Penalise scoring-market concentration.
+   */
+
+  const scoring=
+    combo.filter(
+      c=>
+        c.type==="goals"||
+        c.type==="tries"
+    ).length;
+
+
+  score-=
+    scoring*8;
+
+
+  /*
+   * Reward modest market diversity.
+   */
+
+  const types=
+    new Set(
+      combo.map(c=>c.type)
+    );
+
+
+  score+=
+    Math.min(
+      types.size*3,
+      12
+    );
+
+
+  return score;
+
+}
+
+
+/* =========================================================
+   UNIQUE PLAYER KEY
+========================================================= */
+
+function playerKey(c){
+
+  return String(
+    c.player||
+    c.name||
+    ""
+  )
+  .trim()
+  .toLowerCase();
+
+}
+
+
+/* =========================================================
+   FIND BEST MULTI
+========================================================= */
+
+function findBestMulti(
+  candidates,
+  minOdds,
+  maxOdds,
+  target,
+  blockedPlayers=new Set()
+){
+
+  const pool=
+    candidates
+      .filter(c=>{
+
+        const p=
+          playerKey(c);
+
+
+        if(
+          blockedPlayers.has(p)
+        ){
+
+          return false;
+
+        }
+
+
+        /*
+         * Don't allow extreme longshots into the
+         * standard engine unless absolutely necessary.
+         */
+
+        if(c.odds>6){
+
+          return false;
+
+        }
+
+
+        return true;
+
+      })
+      .slice(0,22);
+
+
+  let best=null;
+
+
+  function walk(
+    start,
+    chosen,
+    odds,
+    players
+  ){
+
+    if(
+      chosen.length>=3&&
+      odds>=minOdds&&
+      odds<=maxOdds
+    ){
+
+      const quality=
+        multiQuality(chosen);
+
+
+      const distance=
+        Math.abs(
+          Math.log(
+            odds/target
+          )
+        );
+
+
+      /*
+       * Quality is primary.
+       * Distance from target is secondary.
+       */
+
+      const finalScore=
+        quality-
+        distance*12;
+
+
+      if(
+        !best||
+        finalScore>best.finalScore
+      ){
+
+        best={
+
+          chosen:[...chosen],
+
+          odds,
+
+          finalScore,
+
+          quality
+
+        };
+
+      }
+
+    }
+
+
+    if(chosen.length>=7)return;
+
+
+    for(
+      let i=start;
+      i<pool.length;
+      i++
+    ){
+
+      const c=
+        pool[i];
+
+
+      const p=
+        playerKey(c);
+
+
+      /*
+       * Never put two markets for the same player
+       * in the same recommended multi.
+       */
+
+      if(players.has(p)){
+
+        continue;
+
+      }
+
+
+      const nextOdds=
+        odds*c.odds;
+
+
+      if(nextOdds>maxOdds*1.25){
+
+        continue;
+
+      }
+
+
+      const nextPlayers=
+        new Set(players);
+
+
+      nextPlayers.add(p);
+
+
+      walk(
+        i+1,
+        chosen.concat(c),
+        nextOdds,
+        nextPlayers
+      );
+
+    }
+
+  }
+
+
+  walk(
+    0,
+    [],
+    1,
+    new Set()
+  );
+
+
+  return best;
+
+}
+
+
+/* =========================================================
+   BUILD DIVERSIFIED MULTIS
+========================================================= */
+
+function build(){
+
+  if(
+    state.candidates.length<4
+  ){
+
+    $("results").innerHTML=
+      `<div class="status warn">
+        Not enough quality candidates. Run the engine again after checking the market feed.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const min20=
+    Number($("min20").value);
+
+
+  const max20=
+    Number($("max20").value);
+
+
+  const min40=
+    Number($("min40").value);
+
+
+  const max40=
+    Number($("max40").value);
+
+
+  const core=
+    findBestMulti(
+      state.candidates,
+      min20,
+      max20,
+      20
+    );
+
+
+  let value=null;
+
+
+  if(core){
+
+    const blocked=
+      new Set(
+        core.chosen.map(
+          playerKey
+        )
+      );
+
+
+    value=
+      findBestMulti(
+        state.candidates,
+        min40,
+        max40,
+        50,
+        blocked
+      );
+
+  }else{
+
+    value=
+      findBestMulti(
+        state.candidates,
+        min40,
+        max40,
+        50
+      );
+
+  }
+
+
+  /*
+   * If we couldn't achieve zero player overlap,
+   * try to construct an alternative independently.
+   */
+
+  if(
+    core&&
+    value
+  ){
+
+    const overlap=
+      value.chosen.filter(
+        x=>
+          core.chosen.some(
+            y=>
+              playerKey(x)===
+              playerKey(y)
+          )
+      ).length;
+
+
+    if(overlap>0){
+
+      const alternative=
+        findBestMulti(
+          state.candidates,
+          min40,
+          max40,
+          50,
+          new Set(
+            core.chosen.map(
+              playerKey
+            )
+          )
+        );
+
+
+      if(alternative){
+
+        value=alternative;
+
+      }
+
+    }
+
+  }
+
+
+  renderResults(
+    core,
+    value
+  );
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+========================================================= */
+
+function renderResults(
+  core,
+  value
+){
+
+  if(!core&&!value){
+
+    $("results").innerHTML=`
+
+      <div class="status bad">
+
+        🚫 NO BET
+
+        <br><br>
+
+        The engine could not construct a sufficiently
+        strong combination inside the requested odds ranges
+        without relying excessively on weak or long-priced markets.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  $("results").innerHTML=
+    renderMulti(
+      "MULTI A — CORE",
+      core,
+      "core"
+    )+
+    renderMulti(
+      "MULTI B — VALUE",
+      value,
+      "value"
+    );
+
+
+  if(core&&value){
+
+    const overlap=
+      core.chosen.filter(
+        a=>
+          value.chosen.some(
+            b=>
+              playerKey(a)===
+              playerKey(b)
+          )
+      ).length;
+
+
+    $("results").insertAdjacentHTML(
+      "beforeend",
+      `
+
+      <div class="status ${
+        overlap===0
+        ?"ok"
+        :"warn"
+      }">
+
+        <b>PLAYER DIVERSIFICATION:</b>
+        ${overlap===0
+          ?"🟢 0 shared players — ideal."
+          :"🟡 "+overlap+" shared player(s) — diversification could not be fully achieved."
+        }
+
+        <br>
+
+        The engine deliberately attempts to keep
+        a poor performance by one player from destroying
+        both recommendations.
+
+      </div>
+
+      `
+    );
+
+  }
+
+
+  $("results").insertAdjacentHTML(
+    "beforeend",
+    `
+
+    <div class="status warn">
+
+      <b>IMPORTANT:</b>
+      V10's candidate score is a market-prioritisation
+      score, not a verified probability or expected-value model.
+      Current team selection, injuries, role, matchup and statistics
+      still need independent verification before betting.
+
+    </div>
+
+    `
+  );
+
+}
+
+
+function renderMulti(
+  title,
+  multi,
+  cls
+){
+
+  if(!multi){
+
+    return`
+
+      <div class="multi">
+
+        <div class="multi-title">
+          ${title}
+        </div>
+
+        <div class="status">
+          No combination met the requested range
+          without unacceptable selection quality.
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  const scoring=
+    multi.chosen.filter(
+      c=>
+        c.type==="goals"||
+        c.type==="tries"
+    ).length;
+
+
+  const average=
+    multi.chosen.reduce(
+      (a,c)=>a+c.score,
+      0
+    )/
+    multi.chosen.length;
+
+
+  const strongest=
+    [...multi.chosen]
+      .sort(
+        (a,b)=>b.score-a.score
+      )[0];
+
+
+  const weakest=
+    [...multi.chosen]
+      .sort(
+        (a,b)=>a.score-b.score
+      )[0];
+
+
+  return`
+
+    <div class="multi ${cls}">
+
+      <div class="multi-title">
+        ${title}
+      </div>
+
+      <div class="grid">
+
+        <div class="metric">
+          Combined odds
+          <strong>${multi.odds.toFixed(2)}</strong>
+        </div>
+
+        <div class="metric">
+          Engine quality
+          <strong>${Math.round(average)}/100</strong>
+        </div>
+
+      </div>
+
+
+      <div class="section-label">
+        LEGS
+      </div>
+
+
+      ${
+        multi.chosen.map((c,i)=>`
+
+          <div class="leg-row">
+
+            <div class="leg-num">
+              ${i+1}
+            </div>
+
+            <div class="leg-info">
+
+              <b>${esc(c.player)}</b>
+
+              <br>
+
+              <span class="small">
+                ${esc(c.market)}
+                ${
+                  c.line!=null
+                  ?" • line "+esc(c.line)
+                  :""
+                }
+                • engine score ${c.score}
+              </span>
+
+            </div>
+
+            <div class="leg-odds">
+              ${c.odds.toFixed(2)}
+            </div>
+
+          </div>
+
+        `).join("")
+
+      }
+
+
+      <div class="reason">
+
+        <b>Strongest:</b>
+        ${esc(strongest.player)}
+        (${strongest.score}/100)
+
+        <br>
+
+        <b>Weakest:</b>
+        ${esc(weakest.player)}
+        (${weakest.score}/100)
+
+        <br>
+
+        <b>Market diversity:</b>
+        ${
+          new Set(
+            multi.chosen.map(c=>c.type)
+          ).size
+        } market types
+
+      </div>
+
+
+      <div class="risk">
+
+        ${
+          scoring
+          ?`⚠️ ${scoring} scoring-market leg(s). These are intentionally treated as higher variance.`
+          :"🟢 No goals/tries market included."
+        }
+
+      </div>
+
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CHATGPT EXPORT
+========================================================= */
+
+function buildExportCandidates(){
+
+  return state.candidates
+    .filter(
+      c=>c.grade!=="D"
+    )
+    .slice(0,40);
+
+}
+
+
+function compactMarketLine(
+  m,
+  index
+){
 
   return[
     index,
@@ -1400,10 +2703,6 @@ function compactMarketLine(m,index){
 }
 
 
-/* =========================================================
-   PREPARE CHATGPT DATA
-========================================================= */
-
 function prepareChatGPT(){
 
   if(
@@ -1413,7 +2712,7 @@ function prepareChatGPT(){
 
     status(
       $("marketStatus"),
-      "🔴 Load a game and Sportsbook markets first.",
+      "🔴 Load a game and Sportsbet markets first.",
       "bad"
     );
 
@@ -1422,31 +2721,63 @@ function prepareChatGPT(){
   }
 
 
-  const eligible=
-    buildExportMarketPool();
+  if(
+    !state.candidates.length
+  ){
+
+    runEngine();
+
+  }
 
 
-  state.exportMarkets=
-    eligible;
+  const candidates=
+    buildExportCandidates();
+
+
+  const candidateIds=
+    new Set(
+      candidates.map(
+        c=>c.id
+      )
+    );
+
+
+  const candidateMarkets=
+    state.markets.filter(
+      m=>candidateIds.has(m.id)
+    );
 
 
   /*
-   * Keep chunks around 9,000 characters.
-   * This leaves room for the ChatGPT interface.
+   * Also retain moderate-price raw markets to allow
+   * ChatGPT to see alternatives without flooding it.
    */
 
-  const MAX_CHARS=9000;
+  const additional=
+    state.markets
+      .filter(
+        m=>
+          Number(m.odds)<=3.5&&
+          !candidateIds.has(m.id)
+      )
+      .slice(0,80);
+
+
+  const exportMarkets=[
+    ...candidateMarkets,
+    ...additional
+  ];
 
 
   const intro=[];
 
 
   intro.push(
-    "BET INTELLIGENCE — CHATGPT ANALYSIS PACKAGE"
+    "BET INTELLIGENCE V10 — CHATGPT DEEP ANALYSIS PACKAGE"
   );
 
   intro.push(
-    "================================================"
+    "===================================================="
   );
 
   intro.push("");
@@ -1472,9 +2803,7 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    `Scheduled: ${new Date(
-      state.game.commence_time
-    ).toLocaleString()}`
+    `Scheduled: ${new Date(state.game.commence_time).toLocaleString()}`
   );
 
   intro.push(
@@ -1482,290 +2811,276 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    `Raw Sportsbet outcomes: ${state.markets.length}`
+    `Raw outcomes: ${state.markets.length}`
   );
 
   intro.push(
-    `Candidate outcomes supplied: ${eligible.length}`
+    `V10 ranked candidates: ${candidates.length}`
   );
 
   intro.push(
-    "Excluded: individual odds above 10.00 only"
-  );
-
-  intro.push(
-    "No lower price cutoff."
+    `Exported outcomes: ${exportMarkets.length}`
   );
 
   intro.push("");
 
   intro.push(
-    "CORE OBJECTIVE"
+    "OBJECTIVE"
   );
 
   intro.push(
-    "--------------"
+    "---------"
   );
 
   intro.push(
-    "Construct the best same-game multi around 20.00 odds and the best higher-risk multi around 40.00–60.00 odds."
+    "Find the two strongest same-game multis from the supplied Sportsbet markets."
+  );
+
+  intro.push(
+    "MULTI A target: approximately 18.00–22.00."
+  );
+
+  intro.push(
+    "MULTI B target: approximately 40.00–60.00."
   );
 
   intro.push("");
 
   intro.push(
-    "Do NOT simply find combinations whose multiplied prices equal the target."
+    "CRITICAL PORTFOLIO RULE"
   );
 
   intro.push(
-    "The primary objective is to maximise the quality of the selections while keeping the combined odds within the target range."
+    "------------------------"
+  );
+
+  intro.push(
+    "The two recommended multis should use DIFFERENT PLAYERS wherever reasonably possible."
+  );
+
+  intro.push(
+    "A player's poor performance should not normally be capable of destroying both recommendations."
+  );
+
+  intro.push(
+    "Prefer zero shared players."
+  );
+
+  intro.push(
+    "One shared player is acceptable only if there is an overwhelming evidence-based reason."
+  );
+
+  intro.push(
+    "Avoid two or more shared players unless unavoidable and explicitly justified."
   );
 
   intro.push("");
 
   intro.push(
-    "A short-priced leg may absolutely be used if the evidence suggests it has a very high probability of winning and improves the overall multi."
+    "IMPORTANT"
+  );
+
+  intro.push(
+    "---------"
+  );
+
+  intro.push(
+    "V10's score is a market-prioritisation heuristic only."
+  );
+
+  intro.push(
+    "It is NOT a verified probability."
+  );
+
+  intro.push(
+    "Do not convert the V10 score directly into probability."
+  );
+
+  intro.push(
+    "Independently verify current team selection, injuries, player role, recent statistics, matchup, weather and other relevant information."
   );
 
   intro.push("");
 
   intro.push(
-    "A long-priced leg should not be included merely because it helps reach the target odds."
+    "ANALYSIS PRIORITY"
+  );
+
+  intro.push(
+    "-----------------"
+  );
+
+  intro.push(
+    "1. Confirm player is expected to play."
+  );
+
+  intro.push(
+    "2. Confirm current role."
+  );
+
+  intro.push(
+    "3. Review recent relevant hit rate."
+  );
+
+  intro.push(
+    "4. Compare average/median to the Sportsbet line."
+  );
+
+  intro.push(
+    "5. Review opponent matchup."
+  );
+
+  intro.push(
+    "6. Consider expected game script."
+  );
+
+  intro.push(
+    "7. Assess volatility."
+  );
+
+  intro.push(
+    "8. Calculate Sportsbet implied probability."
+  );
+
+  intro.push(
+    "9. Estimate realistic true probability."
+  );
+
+  intro.push(
+    "10. Calculate approximate fair odds and value."
+  );
+
+  intro.push(
+    "11. Assess correlation between legs."
+  );
+
+  intro.push(
+    "12. Construct diversified multis."
   );
 
   intro.push("");
 
   intro.push(
-    "ANALYSIS PRIORITIES"
+    "DO NOT"
   );
 
   intro.push(
-    "-------------------"
+    "------"
   );
 
   intro.push(
-    "1. Current player availability"
+    "Do not include a leg merely because it increases combined odds."
   );
 
   intro.push(
-    "2. Confirmed team selection"
+    "Do not invent a market, player, line or price."
   );
 
   intro.push(
-    "3. Player role and expected opportunity"
+    "Do not assume a player is playing because a market exists."
   );
 
   intro.push(
-    "4. Recent relevant form"
+    "Do not use the V10 score as probability."
   );
 
   intro.push(
-    "5. Historical/recent statistical hit rate"
+    "Do not duplicate players between the two multis unless justified."
   );
 
   intro.push(
-    "6. Opponent matchup"
-  );
-
-  intro.push(
-    "7. Expected game script"
-  );
-
-  intro.push(
-    "8. Venue and conditions"
-  );
-
-  intro.push(
-    "9. Market price"
-  );
-
-  intro.push(
-    "10. Correlation between legs"
-  );
-
-  intro.push(
-    "11. Probability versus implied probability"
+    "If there is insufficient edge, recommend PASS rather than forcing a bet."
   );
 
   intro.push("");
 
   intro.push(
-    "IMPORTANT DATA RULES"
+    "FINAL OUTPUT"
   );
 
   intro.push(
-    "---------------------"
+    "------------"
   );
 
   intro.push(
-    "Use ONLY selections actually supplied in this package."
+    "MULTI A — CORE"
   );
 
   intro.push(
-    "Do not invent a player, line, market or Sportsbet price."
+    "Exact player / market / line / Sportsbet odds"
   );
 
   intro.push(
-    "If a current injury, selection or statistic cannot be verified, say so."
+    "Combined odds"
   );
 
   intro.push(
-    "Do not assume a player is playing merely because Sportsbet offers a market."
+    "Estimated true probability"
+  );
+
+  intro.push(
+    "Fair odds"
+  );
+
+  intro.push(
+    "Estimated value/edge"
+  );
+
+  intro.push(
+    "Confidence"
+  );
+
+  intro.push(
+    "Strongest leg"
+  );
+
+  intro.push(
+    "Weakest leg"
+  );
+
+  intro.push(
+    "Correlation"
+  );
+
+  intro.push(
+    "Main risks"
   );
 
   intro.push("");
 
   intro.push(
-    "VALUE ASSESSMENT"
+    "MULTI B — VALUE"
   );
 
   intro.push(
-    "----------------"
+    "Use different players from Multi A wherever reasonably possible."
   );
 
   intro.push(
-    "For important candidate legs estimate:"
-  );
-
-  intro.push(
-    "• Sportsbook implied probability"
-  );
-
-  intro.push(
-    "• Estimated true probability"
-  );
-
-  intro.push(
-    "• Estimated fair odds"
-  );
-
-  intro.push(
-    "• Approximate edge/value"
-  );
-
-  intro.push(
-    "• Confidence"
+    "Provide the same analysis fields."
   );
 
   intro.push("");
 
   intro.push(
-    "MULTI CONSTRUCTION"
-  );
-
-  intro.push(
-    "------------------"
-  );
-
-  intro.push(
-    "Prefer sensible correlation where appropriate."
-  );
-
-  intro.push(
-    "Do not treat correlation as automatically good or bad; explain it."
-  );
-
-  intro.push(
-    "Avoid stacking multiple fragile outcomes simply to reach the target."
-  );
-
-  intro.push(
-    "Use short-priced high-confidence legs when they materially improve the risk/reward profile."
+    "Also provide 3 rejected alternatives and explain why they were rejected."
   );
 
   intro.push("");
 
   intro.push(
-    "FINAL RESPONSE REQUIRED"
+    "Do not finalise until all market chunks have been supplied."
   );
 
-  intro.push(
-    "-----------------------"
-  );
 
-  intro.push(
-    "MULTI A — approximately 18.00–22.00"
-  );
-
-  intro.push(
-    "MULTI B — approximately 40.00–60.00"
-  );
-
-  intro.push("");
-
-  intro.push(
-    "For each multi provide:"
-  );
-
-  intro.push(
-    "• Exact player"
-  );
-
-  intro.push(
-    "• Exact market"
-  );
-
-  intro.push(
-    "• Exact line"
-  );
-
-  intro.push(
-    "• Exact Sportsbet odds"
-  );
-
-  intro.push(
-    "• Combined odds"
-  );
-
-  intro.push(
-    "• Estimated probability"
-  );
-
-  intro.push(
-    "• Fair odds"
-  );
-
-  intro.push(
-    "• Estimated value/edge"
-  );
-
-  intro.push(
-    "• Confidence"
-  );
-
-  intro.push(
-    "• Strongest leg"
-  );
-
-  intro.push(
-    "• Weakest leg"
-  );
-
-  intro.push(
-    "• Correlation explanation"
-  );
-
-  intro.push(
-    "• Main risks"
-  );
-
-  intro.push("");
-
-  intro.push(
-    "Also provide 2–3 rejected alternatives and explain why they were inferior."
-  );
-
-  intro.push("");
-
-  intro.push(
-    "DO NOT FINALISE THE BET UNTIL ALL MARKET CHUNKS HAVE BEEN PROVIDED."
-  );
-
+  /*
+   * Group exported markets.
+   */
 
   const grouped={};
 
 
-  eligible.forEach((m,i)=>{
+  exportMarkets.forEach(m=>{
 
     const key=
       m.market||
@@ -1782,18 +3097,20 @@ function prepareChatGPT(){
     grouped[key].push(
       compactMarketLine(
         m,
-        state.markets.indexOf(m)+1
+        m.id+1
       )
     );
 
   });
 
 
+  const MAX_CHARS=9000;
+
   const chunks=[];
 
   let current=[];
 
-  let currentLength=0;
+  let length=0;
 
 
   Object.entries(grouped)
@@ -1805,7 +3122,7 @@ function prepareChatGPT(){
 
 
       if(
-        currentLength+
+        length+
         header.length>
         MAX_CHARS&&
         current.length
@@ -1817,14 +3134,14 @@ function prepareChatGPT(){
 
         current=[];
 
-        currentLength=0;
+        length=0;
 
       }
 
 
       current.push(header);
 
-      currentLength+=header.length;
+      length+=header.length;
 
 
       rows.forEach(row=>{
@@ -1834,7 +3151,7 @@ function prepareChatGPT(){
 
 
         if(
-          currentLength+
+          length+
           line.length>
           MAX_CHARS&&
           current.length
@@ -1850,7 +3167,7 @@ function prepareChatGPT(){
           ];
 
 
-          currentLength=
+          length=
             current[0].length;
 
         }
@@ -1858,7 +3175,7 @@ function prepareChatGPT(){
 
         current.push(row);
 
-        currentLength+=line.length;
+        length+=line.length;
 
       });
 
@@ -1874,16 +3191,9 @@ function prepareChatGPT(){
   }
 
 
-  state.exportChunks=[];
-
-
-  /*
-   * Intro is chunk zero.
-   */
-
-  state.exportChunks.push(
+  state.exportChunks=[
     intro.join("\n")
-  );
+  ];
 
 
   chunks.forEach((chunk,i)=>{
@@ -1907,32 +3217,44 @@ function prepareChatGPT(){
 
   status(
     $("marketStatus"),
-    `🟢 ${eligible.length} candidate outcomes prepared into ${chunks.length} market chunks.`,
+    `🟢 V10 prepared ${exportMarkets.length} outcomes in ${chunks.length} market chunks.`,
     "ok"
   );
 
 
   diag(
     "CHATGPT PACKAGE READY\n"+
-    "Raw outcomes: "+
-    state.markets.length+
-    "\nEligible outcomes: "+
-    eligible.length+
-    "\nExcluded >10.00: "+
-    (state.markets.length-eligible.length)+
-    "\nLower-price exclusions: 0"+
-    "\nMarket chunks: "+
-    chunks.length+
-    "\nMaximum chunk size: "+
-    MAX_CHARS+
-    " characters"
+    "Raw outcomes: "+state.markets.length+"\n"+
+    "Ranked candidates: "+candidates.length+"\n"+
+    "Export outcomes: "+exportMarkets.length+"\n"+
+    "Chunks: "+chunks.length
   );
 
 }
 
 
+function updateFilterInfo(){
+
+  if(!state.markets.length){
+
+    $("filterInfo").textContent=
+      "No market data loaded.";
+
+    return;
+
+  }
+
+
+  $("filterInfo").innerHTML=
+    `<b>${state.markets.length}</b> raw outcomes • `+
+    `<b>V10 ranks candidates first</b> • `+
+    `<b>No arbitrary 10.00 cutoff</b>`;
+
+}
+
+
 /* =========================================================
-   RENDER COPY BUTTONS
+   COPY CONTROLS
 ========================================================= */
 
 function renderCopyControls(){
@@ -1962,7 +3284,6 @@ function renderCopyControls(){
   info.textContent=
     `Ready: ${state.exportChunks.length} pieces. Copy the INTRO first, then each market chunk in order.`;
 
-
   box.appendChild(info);
 
 
@@ -1972,17 +3293,10 @@ function renderCopyControls(){
       document.createElement("button");
 
 
-    if(i===0){
-
-      button.textContent=
-        "📋 COPY CHATGPT INTRO";
-
-    }else{
-
-      button.textContent=
-        `📋 COPY MARKET CHUNK ${i} OF ${state.exportChunks.length-1}`;
-
-    }
+    button.textContent=
+      i===0
+      ?"📋 COPY CHATGPT INTRO"
+      :`📋 COPY MARKET CHUNK ${i} OF ${state.exportChunks.length-1}`;
 
 
     button.onclick=async()=>{
@@ -2007,7 +3321,7 @@ function renderCopyControls(){
 
         status(
           $("marketStatus"),
-          "🟡 Clipboard access was blocked. Try again.",
+          "🟡 Clipboard access was blocked.",
           "warn"
         );
 
@@ -2075,9 +3389,7 @@ async function copyText(text){
 
 
     const result=
-      document.execCommand(
-        "copy"
-      );
+      document.execCommand("copy");
 
 
     ta.remove();
@@ -2090,238 +3402,6 @@ async function copyText(text){
     return false;
 
   }
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-function summary(){
-
-  const a=
-    [...state.selected]
-    .map(i=>state.markets[i])
-    .filter(Boolean);
-
-
-  $("count").textContent=
-    a.length;
-
-
-  $("odds").textContent=
-    a.length
-    ?a.reduce(
-      (p,x)=>p*x.odds,
-      1
-    ).toFixed(2)
-    :"—";
-
-}
-
-
-/* =========================================================
-   COMBINATION FINDER
-========================================================= */
-
-function findCombo(
-  items,
-  lo,
-  hi,
-  target
-){
-
-  let best=null;
-
-
-  function walk(
-    start,
-    chosen,
-    odds
-  ){
-
-    if(
-      chosen.length>=2&&
-      odds>=lo&&
-      odds<=hi
-    ){
-
-      const score=
-        Math.abs(
-          Math.log(
-            odds/target
-          )
-        );
-
-
-      if(
-        !best||
-        score<best.score
-      ){
-
-        best={
-          chosen:[...chosen],
-          odds,
-          score
-        };
-
-      }
-
-    }
-
-
-    if(chosen.length>=8){
-
-      return;
-
-    }
-
-
-    for(
-      let i=start;
-      i<items.length;
-      i++
-    ){
-
-      walk(
-        i+1,
-        chosen.concat(
-          items[i]
-        ),
-        odds*
-        items[i].odds
-      );
-
-    }
-
-  }
-
-
-  walk(
-    0,
-    [],
-    1
-  );
-
-
-  return best;
-
-}
-
-
-/* =========================================================
-   BASIC MULTI BUILDER
-========================================================= */
-
-function build(){
-
-  const items=
-    [...state.selected]
-    .map(i=>state.markets[i])
-    .filter(Boolean);
-
-
-  if(items.length<2){
-
-    $("results").innerHTML=
-      '<div class="status warn">'+
-      'Select at least two legs.'+
-      '</div>';
-
-    return;
-
-  }
-
-
-  const a=
-    findCombo(
-      items,
-      Number($("min20").value),
-      Number($("max20").value),
-      20
-    );
-
-
-  const b=
-    findCombo(
-      items,
-      Number($("min40").value),
-      Number($("max40").value),
-      50
-    );
-
-
-  const card=(title,x)=>
-
-    x
-
-    ?
-
-    `<div class="card">
-
-      <h3>${title}</h3>
-
-      <div class="grid">
-
-        <div class="metric">
-          Combined odds
-          <strong>
-            ${x.odds.toFixed(2)}
-          </strong>
-        </div>
-
-        <div class="metric">
-          Legs
-          <strong>
-            ${x.chosen.length}
-          </strong>
-        </div>
-
-      </div>
-
-      <p>
-
-        ${x.chosen.map(q=>
-          `<span class="pill">
-            ${esc(q.name)}
-            @
-            ${q.odds.toFixed(2)}
-          </span>`
-        ).join("")}
-
-      </p>
-
-      <div class="status warn">
-        Mathematical combination only.
-        Use ChatGPT analysis for probability,
-        value, role, matchup and correlation.
-      </div>
-
-    </div>`
-
-    :
-
-    `<div class="card">
-
-      <h3>${title}</h3>
-
-      <div class="status">
-        No combination in the requested range.
-      </div>
-
-    </div>`;
-
-
-  $("results").innerHTML=
-    card(
-      "MULTI A — ~20",
-      a
-    )+
-    card(
-      "MULTI B — 40+",
-      b
-    );
 
 }
 
@@ -2354,7 +3434,9 @@ function clearAll(){
   );
 
 
-  diag("Cleared.");
+  diag(
+    "Cleared."
+  );
 
 }
 
@@ -2412,12 +3494,16 @@ $("loadMarkets").onclick=
   loadMarkets;
 
 
-$("prepareChatGPT").onclick=
-  prepareChatGPT;
+$("analyse").onclick=
+  runEngine;
 
 
 $("build").onclick=
   build;
+
+
+$("prepareChatGPT").onclick=
+  prepareChatGPT;
 
 
 $("afl").onclick=
