@@ -196,10 +196,6 @@ details{
   border-radius:10px
 }
 
-.copybox button{
-  margin-top:6px
-}
-
 .copy-title{
   font-weight:800;
   margin-bottom:4px
@@ -208,7 +204,18 @@ details{
 .copy-note{
   font-size:12px;
   color:var(--muted);
-  line-height:1.4
+  line-height:1.45
+}
+
+.copy-button{
+  margin-top:6px
+}
+
+.filter-info{
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.5;
+  color:var(--muted)
 }
 
 @media(max-width:600px){
@@ -223,10 +230,16 @@ details{
 
 <div class="head">
   <div class="brand">BET INTELLIGENCE</div>
-  <div class="version">V9 • ChatGPT analysis build</div>
+  <div class="version">V9 • Intelligence Analysis Build</div>
 </div>
 
+
+<!-- =====================================================
+     1. API
+===================================================== -->
+
 <div class="card">
+
 <h2>🔑 1. API CONNECTION</h2>
 
 <input
@@ -249,24 +262,36 @@ details{
 <summary>Connection diagnostics</summary>
 <div id="diag" class="diag">V9 ready.</div>
 </details>
+
 </div>
 
 
+<!-- =====================================================
+     2. SPORT
+===================================================== -->
+
 <div class="card">
+
 <h2>🏟️ 2. SPORT</h2>
 
 <div class="tabs">
-<button id="afl" class="active">AFL</button>
-<button id="nrl">NRL</button>
+  <button id="afl" class="active">AFL</button>
+  <button id="nrl">NRL</button>
 </div>
 
 <div id="sportInfo" class="small">
 AFL key: aussierules_afl • NRL key: rugbyleague_nrl
 </div>
+
 </div>
 
 
+<!-- =====================================================
+     3. GAMES
+===================================================== -->
+
 <div class="card">
+
 <h2>📅 3. CURRENT GAMES</h2>
 
 <button id="refresh" disabled>
@@ -276,14 +301,20 @@ LOAD CURRENT GAMES
 <div id="games" class="status">
 Connect first.
 </div>
+
 </div>
 
 
+<!-- =====================================================
+     4. GAME + MARKETS
+===================================================== -->
+
 <div class="card">
+
 <h2>🎯 4. SELECT GAME</h2>
 
 <select id="gameSelect" disabled>
-<option value="">Select a game...</option>
+  <option value="">Select a game...</option>
 </select>
 
 <div id="selected" class="status">
@@ -299,32 +330,51 @@ No markets loaded.
 </div>
 
 
+<!-- =====================================================
+     CHATGPT EXPORT
+===================================================== -->
+
 <div class="copybox">
 
 <div class="copy-title">
-🧠 CHATGPT MARKET ANALYSIS
+🧠 CHATGPT MARKET INTELLIGENCE
 </div>
 
 <div class="copy-note">
-The app keeps the complete available market dataset but splits large
-datasets into smaller clipboard chunks so they can be pasted into
-ChatGPT without exceeding the message limit.
+The app keeps the complete Sportsbet dataset, but the ChatGPT
+export removes only individual selections above 10.00 odds.
+Short-priced selections are deliberately retained because they
+may be useful as high-confidence multipliers.
 </div>
 
-<button id="prepareChatGPT" disabled>
-🧠 PREPARE MARKETS FOR CHATGPT
+<div class="filter-info" id="filterInfo">
+No market data loaded.
+</div>
+
+<button
+  id="prepareChatGPT"
+  class="copy-button"
+  disabled
+>
+🧠 PREPARE CHATGPT ANALYSIS
 </button>
 
 <div id="copyControls"></div>
 
 </div>
 
+
 <div id="markets"></div>
 
 </div>
 
 
+<!-- =====================================================
+     5. MULTI BUILDER
+===================================================== -->
+
 <div class="card">
+
 <h2>🧠 5. MULTI BUILDER</h2>
 
 <div class="grid">
@@ -341,6 +391,7 @@ Combined odds
 
 </div>
 
+
 <div class="row">
 <input id="min20" type="number" value="18" step=".1" min="1">
 <input id="max20" type="number" value="22" step=".1" min="1">
@@ -356,10 +407,16 @@ BUILD ~20 & 40+
 </button>
 
 <div id="results"></div>
+
 </div>
 
 
+<!-- =====================================================
+     6. DATA INTEGRITY
+===================================================== -->
+
 <div class="card">
+
 <h2>🛡️ DATA INTEGRITY</h2>
 
 <div id="integrity" class="status">
@@ -367,10 +424,13 @@ No live data.
 </div>
 
 <div class="status warn">
-V9 deliberately does not invent injuries, team selections,
-player statistics, probability, EV or weather. Those require
-separate verified information.
+V9 does not invent injuries, team selections, player statistics,
+probability, EV or weather. Those require separate verified
+information. ChatGPT is intended to perform the deeper analysis
+using the market data supplied by V9 plus independently verified
+current information.
 </div>
+
 </div>
 
 </main>
@@ -403,6 +463,8 @@ const state={
 
   selected:new Set(),
 
+  exportMarkets:[],
+
   exportChunks:[]
 
 };
@@ -433,7 +495,6 @@ function esc(v){
 function status(el,text,cls=""){
 
   el.className="status "+cls;
-
   el.innerHTML=text;
 
 }
@@ -563,6 +624,8 @@ function resetResults(){
 
   state.selected.clear();
 
+  state.exportMarkets=[];
+
   state.exportChunks=[];
 
 
@@ -587,6 +650,10 @@ function resetResults(){
 
   $("marketStatus").textContent=
     "No markets loaded.";
+
+
+  $("filterInfo").textContent=
+    "No market data loaded.";
 
 
   $("copyControls").innerHTML="";
@@ -788,7 +855,7 @@ async function loadGames(){
 
       status(
         $("games"),
-        "🟡 No current/upcoming games returned.",
+        "🟡 API connection works, but no current/upcoming games were returned.",
         "warn"
       );
 
@@ -915,6 +982,8 @@ function selectGame(i){
 
   state.markets=[];
 
+  state.exportMarkets=[];
+
   state.exportChunks=[];
 
 
@@ -967,15 +1036,16 @@ function selectGame(i){
 
   $("build").disabled=true;
 
+  $("filterInfo").textContent=
+    "No market data loaded.";
+
   summary();
 
 }
 
 
 /* =========================================================
-   WORKING MARKET LIST
-   IMPORTANT:
-   Do not add unsupported market names here.
+   VALIDATED MARKET LIST
 ========================================================= */
 
 function requestedMarkets(){
@@ -1215,6 +1285,9 @@ async function loadMarkets(){
     $("prepareChatGPT").disabled=false;
 
 
+    updateFilterInfo();
+
+
     status(
       $("marketStatus"),
       `🟢 Sportsbet returned ${state.markets.length} supported outcomes for this event.`,
@@ -1232,7 +1305,7 @@ async function loadMarkets(){
     diag(
       "PASS: event-odds endpoint responded.\n"+
       "Event: "+state.game.id+"\n"+
-      "Sportsbet markets: "+state.markets.length+"\n"+
+      "Sportsbet market outcomes: "+state.markets.length+"\n"+
       "Credits remaining: "+(r.remaining??"not supplied")
     );
 
@@ -1256,7 +1329,62 @@ async function loadMarkets(){
 
 
 /* =========================================================
-   COMPACT MARKET FORMAT
+   FILTER FOR CHATGPT
+   IMPORTANT:
+   ONLY remove individual selections above 10.00.
+   DO NOT remove low-priced selections.
+========================================================= */
+
+function buildExportMarketPool(){
+
+  return state.markets.filter(m=>{
+
+    const odds=
+      Number(m.odds);
+
+
+    return(
+      Number.isFinite(odds)&&
+      odds<=10
+    );
+
+  });
+
+}
+
+
+function updateFilterInfo(){
+
+  if(!state.markets.length){
+
+    $("filterInfo").textContent=
+      "No market data loaded.";
+
+    return;
+
+  }
+
+
+  const eligible=
+    buildExportMarketPool();
+
+
+  const excluded=
+    state.markets.length-
+    eligible.length;
+
+
+  $("filterInfo").innerHTML=
+    `<b>${state.markets.length}</b> total outcomes • `+
+    `<b>${eligible.length}</b> sent to ChatGPT • `+
+    `<b>${excluded}</b> over 10.00 excluded • `+
+    `<b>0</b> excluded for being too short`;
+
+}
+
+
+/* =========================================================
+   FORMAT MARKET
 ========================================================= */
 
 function compactMarketLine(m,index){
@@ -1273,7 +1401,7 @@ function compactMarketLine(m,index){
 
 
 /* =========================================================
-   PREPARE CHATGPT EXPORT
+   PREPARE CHATGPT DATA
 ========================================================= */
 
 function prepareChatGPT(){
@@ -1285,7 +1413,7 @@ function prepareChatGPT(){
 
     status(
       $("marketStatus"),
-      "🔴 Load a game and Sportsbet markets first.",
+      "🔴 Load a game and Sportsbook markets first.",
       "bad"
     );
 
@@ -1294,33 +1422,41 @@ function prepareChatGPT(){
   }
 
 
+  const eligible=
+    buildExportMarketPool();
+
+
+  state.exportMarkets=
+    eligible;
+
+
   /*
-   * Keep each clipboard chunk comfortably below
-   * normal message limits.
+   * Keep chunks around 9,000 characters.
+   * This leaves room for the ChatGPT interface.
    */
 
-  const MAX_CHARS=10000;
+  const MAX_CHARS=9000;
 
 
   const intro=[];
 
 
   intro.push(
-    "BET INTELLIGENCE — CHATGPT MARKET ANALYSIS"
+    "BET INTELLIGENCE — CHATGPT ANALYSIS PACKAGE"
   );
 
   intro.push(
-    "=========================================="
+    "================================================"
   );
 
   intro.push("");
 
   intro.push(
-    "DATA PACKAGE"
+    "EVENT"
   );
 
   intro.push(
-    "------------"
+    "-----"
   );
 
   intro.push(
@@ -1336,7 +1472,7 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    `Game time: ${new Date(
+    `Scheduled: ${new Date(
       state.game.commence_time
     ).toLocaleString()}`
   );
@@ -1346,43 +1482,115 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    `Total market outcomes supplied: ${state.markets.length}`
+    `Raw Sportsbet outcomes: ${state.markets.length}`
+  );
+
+  intro.push(
+    `Candidate outcomes supplied: ${eligible.length}`
+  );
+
+  intro.push(
+    "Excluded: individual odds above 10.00 only"
+  );
+
+  intro.push(
+    "No lower price cutoff."
   );
 
   intro.push("");
 
   intro.push(
-    "The following market chunks together form the available market dataset for this event."
+    "CORE OBJECTIVE"
   );
 
   intro.push(
-    "Do not make final recommendations until all chunks have been supplied."
-  );
-
-  intro.push("");
-
-  intro.push(
-    "PRIMARY OBJECTIVE"
+    "--------------"
   );
 
   intro.push(
-    "-----------------"
-  );
-
-  intro.push(
-    "Find the strongest same-game multi around 20.00 odds and the strongest higher-risk multi around 40.00–60.00 odds."
+    "Construct the best same-game multi around 20.00 odds and the best higher-risk multi around 40.00–60.00 odds."
   );
 
   intro.push("");
 
   intro.push(
-    "Prioritise probability, value, sensible correlation and current verified information rather than simply selecting high-priced legs."
+    "Do NOT simply find combinations whose multiplied prices equal the target."
+  );
+
+  intro.push(
+    "The primary objective is to maximise the quality of the selections while keeping the combined odds within the target range."
   );
 
   intro.push("");
 
   intro.push(
-    "VERIFY WHERE POSSIBLE"
+    "A short-priced leg may absolutely be used if the evidence suggests it has a very high probability of winning and improves the overall multi."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "A long-priced leg should not be included merely because it helps reach the target odds."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "ANALYSIS PRIORITIES"
+  );
+
+  intro.push(
+    "-------------------"
+  );
+
+  intro.push(
+    "1. Current player availability"
+  );
+
+  intro.push(
+    "2. Confirmed team selection"
+  );
+
+  intro.push(
+    "3. Player role and expected opportunity"
+  );
+
+  intro.push(
+    "4. Recent relevant form"
+  );
+
+  intro.push(
+    "5. Historical/recent statistical hit rate"
+  );
+
+  intro.push(
+    "6. Opponent matchup"
+  );
+
+  intro.push(
+    "7. Expected game script"
+  );
+
+  intro.push(
+    "8. Venue and conditions"
+  );
+
+  intro.push(
+    "9. Market price"
+  );
+
+  intro.push(
+    "10. Correlation between legs"
+  );
+
+  intro.push(
+    "11. Probability versus implied probability"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "IMPORTANT DATA RULES"
   );
 
   intro.push(
@@ -1390,61 +1598,41 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    "• Current team selection"
+    "Use ONLY selections actually supplied in this package."
   );
 
   intro.push(
-    "• Injuries and player availability"
+    "Do not invent a player, line, market or Sportsbet price."
   );
 
   intro.push(
-    "• Player role"
+    "If a current injury, selection or statistic cannot be verified, say so."
   );
 
   intro.push(
-    "• Recent form"
-  );
-
-  intro.push(
-    "• Relevant player statistics"
-  );
-
-  intro.push(
-    "• Opponent matchup"
-  );
-
-  intro.push(
-    "• Venue"
-  );
-
-  intro.push(
-    "• Weather/conditions where relevant"
-  );
-
-  intro.push(
-    "• Goal/try scoring responsibility where relevant"
+    "Do not assume a player is playing merely because Sportsbet offers a market."
   );
 
   intro.push("");
 
   intro.push(
-    "FOR EACH CANDIDATE LEG ASSESS"
+    "VALUE ASSESSMENT"
   );
 
   intro.push(
-    "-----------------------------"
+    "----------------"
   );
 
   intro.push(
-    "• Sportsbook odds"
+    "For important candidate legs estimate:"
   );
 
   intro.push(
-    "• Implied probability"
+    "• Sportsbook implied probability"
   );
 
   intro.push(
-    "• Estimated probability"
+    "• Estimated true probability"
   );
 
   intro.push(
@@ -1452,7 +1640,93 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    "• Value/edge"
+    "• Approximate edge/value"
+  );
+
+  intro.push(
+    "• Confidence"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "MULTI CONSTRUCTION"
+  );
+
+  intro.push(
+    "------------------"
+  );
+
+  intro.push(
+    "Prefer sensible correlation where appropriate."
+  );
+
+  intro.push(
+    "Do not treat correlation as automatically good or bad; explain it."
+  );
+
+  intro.push(
+    "Avoid stacking multiple fragile outcomes simply to reach the target."
+  );
+
+  intro.push(
+    "Use short-priced high-confidence legs when they materially improve the risk/reward profile."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "FINAL RESPONSE REQUIRED"
+  );
+
+  intro.push(
+    "-----------------------"
+  );
+
+  intro.push(
+    "MULTI A — approximately 18.00–22.00"
+  );
+
+  intro.push(
+    "MULTI B — approximately 40.00–60.00"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "For each multi provide:"
+  );
+
+  intro.push(
+    "• Exact player"
+  );
+
+  intro.push(
+    "• Exact market"
+  );
+
+  intro.push(
+    "• Exact line"
+  );
+
+  intro.push(
+    "• Exact Sportsbet odds"
+  );
+
+  intro.push(
+    "• Combined odds"
+  );
+
+  intro.push(
+    "• Estimated probability"
+  );
+
+  intro.push(
+    "• Fair odds"
+  );
+
+  intro.push(
+    "• Estimated value/edge"
   );
 
   intro.push(
@@ -1460,106 +1734,38 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    "• Correlation with other legs"
+    "• Strongest leg"
+  );
+
+  intro.push(
+    "• Weakest leg"
+  );
+
+  intro.push(
+    "• Correlation explanation"
+  );
+
+  intro.push(
+    "• Main risks"
   );
 
   intro.push("");
 
   intro.push(
-    "FINAL OUTPUT"
-  );
-
-  intro.push(
-    "------------"
-  );
-
-  intro.push(
-    "MULTI A — target approximately 18.00–22.00"
-  );
-
-  intro.push(
-    "MULTI B — target approximately 40.00–60.00"
+    "Also provide 2–3 rejected alternatives and explain why they were inferior."
   );
 
   intro.push("");
 
   intro.push(
-    "For each final multi provide:"
+    "DO NOT FINALISE THE BET UNTIL ALL MARKET CHUNKS HAVE BEEN PROVIDED."
   );
 
-  intro.push(
-    "1. Exact legs"
-  );
-
-  intro.push(
-    "2. Exact Sportsbet price for every leg"
-  );
-
-  intro.push(
-    "3. Combined odds"
-  );
-
-  intro.push(
-    "4. Estimated probability"
-  );
-
-  intro.push(
-    "5. Fair odds"
-  );
-
-  intro.push(
-    "6. Estimated value"
-  );
-
-  intro.push(
-    "7. Confidence"
-  );
-
-  intro.push(
-    "8. Strongest leg"
-  );
-
-  intro.push(
-    "9. Weakest leg"
-  );
-
-  intro.push(
-    "10. Correlation"
-  );
-
-  intro.push(
-    "11. Main risks"
-  );
-
-  intro.push("");
-
-  intro.push(
-    "IMPORTANT:"
-  );
-
-  intro.push(
-    "Only use selections and prices actually supplied in the market data."
-  );
-
-  intro.push(
-    "Do not invent a Sportsbet market or price."
-  );
-
-  intro.push("");
-
-  intro.push(
-    "WAIT FOR ALL MARKET CHUNKS BEFORE MAKING FINAL RECOMMENDATIONS."
-  );
-
-
-  /*
-   * Group markets by market type.
-   */
 
   const grouped={};
 
 
-  state.markets.forEach((m,i)=>{
+  eligible.forEach((m,i)=>{
 
     const key=
       m.market||
@@ -1576,7 +1782,7 @@ function prepareChatGPT(){
     grouped[key].push(
       compactMarketLine(
         m,
-        i+1
+        state.markets.indexOf(m)+1
       )
     );
 
@@ -1594,8 +1800,8 @@ function prepareChatGPT(){
     .forEach(([market,rows])=>{
 
       const header=
-        `\n### MARKET: ${market}\n`+
-        `# Format: number | market | selection | line | odds\n`;
+        `### MARKET: ${market}\n`+
+        `# Format: source_index | market | selection | line | odds\n`;
 
 
       if(
@@ -1638,9 +1844,11 @@ function prepareChatGPT(){
             current.join("\n")
           );
 
+
           current=[
             `### MARKET CONTINUATION: ${market}\n`
           ];
+
 
           currentLength=
             current[0].length;
@@ -1670,8 +1878,7 @@ function prepareChatGPT(){
 
 
   /*
-   * First clipboard item = instructions.
-   * Remaining items = market data.
+   * Intro is chunk zero.
    */
 
   state.exportChunks.push(
@@ -1683,14 +1890,11 @@ function prepareChatGPT(){
 
     state.exportChunks.push(
 
-      "BET INTELLIGENCE MARKET DATA"+
-      ` — CHUNK ${i+1} OF ${chunks.length}`+
-      "\n"+
-      "====================================\n"+
-      "\n"+
+      "BET INTELLIGENCE MARKET DATA\n"+
+      `CHUNK ${i+1} OF ${chunks.length}\n`+
+      "====================================\n\n"+
       chunk+
-      "\n"+
-      "\n"+
+      "\n\n"+
       `END CHUNK ${i+1} OF ${chunks.length}`
 
     );
@@ -1703,21 +1907,22 @@ function prepareChatGPT(){
 
   status(
     $("marketStatus"),
-    `🟢 Prepared ${state.markets.length} outcomes into ${state.exportChunks.length} ChatGPT chunks.`,
+    `🟢 ${eligible.length} candidate outcomes prepared into ${chunks.length} market chunks.`,
     "ok"
   );
 
 
   diag(
-    "CHATGPT EXPORT READY\n"+
-    "Game: "+
-    state.game.home_team+
-    " v "+
-    state.game.away_team+
-    "\nOutcomes: "+
+    "CHATGPT PACKAGE READY\n"+
+    "Raw outcomes: "+
     state.markets.length+
-    "\nChunks: "+
-    state.exportChunks.length+
+    "\nEligible outcomes: "+
+    eligible.length+
+    "\nExcluded >10.00: "+
+    (state.markets.length-eligible.length)+
+    "\nLower-price exclusions: 0"+
+    "\nMarket chunks: "+
+    chunks.length+
     "\nMaximum chunk size: "+
     MAX_CHARS+
     " characters"
@@ -1727,7 +1932,7 @@ function prepareChatGPT(){
 
 
 /* =========================================================
-   COPY BUTTONS
+   RENDER COPY BUTTONS
 ========================================================= */
 
 function renderCopyControls(){
@@ -1746,19 +1951,19 @@ function renderCopyControls(){
   }
 
 
-  const intro=
+  const info=
     document.createElement("div");
 
 
-  intro.className=
+  info.className=
     "status ok";
 
 
-  intro.textContent=
+  info.textContent=
     `Ready: ${state.exportChunks.length} pieces. Copy the INTRO first, then each market chunk in order.`;
 
 
-  box.appendChild(intro);
+  box.appendChild(info);
 
 
   state.exportChunks.forEach((text,i)=>{
@@ -1794,7 +1999,7 @@ function renderCopyControls(){
 
         status(
           $("marketStatus"),
-          `🟢 ${i===0?"Intro":"Chunk "+i} copied. Paste it into this ChatGPT conversation.`,
+          `🟢 ${i===0?"Intro":"Chunk "+i} copied successfully.`,
           "ok"
         );
 
@@ -1917,7 +2122,7 @@ function summary(){
 
 
 /* =========================================================
-   BASIC COMBINATION FINDER
+   COMBINATION FINDER
 ========================================================= */
 
 function findCombo(
@@ -1966,9 +2171,7 @@ function findCombo(
     }
 
 
-    if(
-      chosen.length>=8
-    ){
+    if(chosen.length>=8){
 
       return;
 
@@ -2034,12 +2237,8 @@ function build(){
   const a=
     findCombo(
       items,
-      Number(
-        $("min20").value
-      ),
-      Number(
-        $("max20").value
-      ),
+      Number($("min20").value),
+      Number($("max20").value),
       20
     );
 
@@ -2047,12 +2246,8 @@ function build(){
   const b=
     findCombo(
       items,
-      Number(
-        $("min40").value
-      ),
-      Number(
-        $("max40").value
-      ),
+      Number($("min40").value),
+      Number($("max40").value),
       50
     );
 
@@ -2098,8 +2293,8 @@ function build(){
       </p>
 
       <div class="status warn">
-        This is only a mathematical combination finder.
-        ChatGPT analysis should be used for probability,
+        Mathematical combination only.
+        Use ChatGPT analysis for probability,
         value, role, matchup and correlation.
       </div>
 
@@ -2198,7 +2393,7 @@ async function changeSport(s){
 
 
 /* =========================================================
-   BUTTON EVENTS
+   EVENTS
 ========================================================= */
 
 $("connect").onclick=
