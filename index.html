@@ -173,7 +173,18 @@ async function loadGames(){
     <div class="game" data-game="${i}">
       <b>${esc(g.home_team)} v ${esc(g.away_team)}</b><br>
       <span class="small">${new Date(g.commence_time).toLocaleString()} • event ${esc(g.id)}</span>
-    </div>`).join("");
+    </div>`).join("");const gameSelect = $("gameSelect");
+gameSelect.innerHTML = `<option value="">Select a game...</option>` +
+  state.games.map((g,i) =>
+    `<option value="${i}">${esc(g.home_team)} v ${esc(g.away_team)}</option>`
+  ).join("");
+
+gameSelect.disabled = state.games.length === 0;
+gameSelect.onchange = () => {
+  if (gameSelect.value !== "") {
+    selectGame(Number(gameSelect.value));
+  }
+};
    document.querySelectorAll("[data-game]").forEach(el=>el.onclick=()=>selectGame(Number(el.dataset.game)));
    status($("games"),`🟢 ${state.games.length} current/upcoming game(s) loaded.`,"ok");
  }catch(e){status($("games"),"🔴 "+esc(e.message),"bad");diag("GAME LOAD FAIL:\n"+e.message)}
