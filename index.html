@@ -58,10 +58,7 @@ main{
   margin:10px 0
 }
 
-h1,h2,h3{
-  margin:0 0 10px
-}
-
+h1,h2,h3{margin:0 0 10px}
 h2{font-size:17px}
 h3{font-size:15px}
 
@@ -229,13 +226,7 @@ details{
   <div class="version">V9 • ChatGPT analysis build</div>
 </div>
 
-
-<!-- =====================================================
-     1. API CONNECTION
-===================================================== -->
-
 <div class="card">
-
 <h2>🔑 1. API CONNECTION</h2>
 
 <input
@@ -246,13 +237,8 @@ details{
 >
 
 <div class="row">
-  <button id="connect">
-    CONNECT & TEST
-  </button>
-
-  <button id="clear">
-    CLEAR
-  </button>
+  <button id="connect">CONNECT & TEST</button>
+  <button id="clear">CLEAR</button>
 </div>
 
 <div id="conn" class="status">
@@ -260,214 +246,137 @@ details{
 </div>
 
 <details>
-  <summary>Connection diagnostics</summary>
-  <div id="diag" class="diag">
-    V9 ready.
-  </div>
+<summary>Connection diagnostics</summary>
+<div id="diag" class="diag">V9 ready.</div>
 </details>
-
 </div>
 
 
-<!-- =====================================================
-     2. SPORT
-===================================================== -->
-
 <div class="card">
-
 <h2>🏟️ 2. SPORT</h2>
 
 <div class="tabs">
-
-<button id="afl" class="active">
-  AFL
-</button>
-
-<button id="nrl">
-  NRL
-</button>
-
+<button id="afl" class="active">AFL</button>
+<button id="nrl">NRL</button>
 </div>
 
 <div id="sportInfo" class="small">
-  AFL key: aussierules_afl • NRL key: rugbyleague_nrl
+AFL key: aussierules_afl • NRL key: rugbyleague_nrl
+</div>
 </div>
 
-</div>
-
-
-<!-- =====================================================
-     3. CURRENT GAMES
-===================================================== -->
 
 <div class="card">
-
 <h2>📅 3. CURRENT GAMES</h2>
 
 <button id="refresh" disabled>
-  LOAD CURRENT GAMES
+LOAD CURRENT GAMES
 </button>
 
 <div id="games" class="status">
-  Connect first.
+Connect first.
+</div>
 </div>
 
-</div>
-
-
-<!-- =====================================================
-     4. SELECT GAME
-===================================================== -->
 
 <div class="card">
-
 <h2>🎯 4. SELECT GAME</h2>
 
 <select id="gameSelect" disabled>
-  <option value="">
-    Select a game...
-  </option>
+<option value="">Select a game...</option>
 </select>
 
 <div id="selected" class="status">
-  No game selected.
+No game selected.
 </div>
 
 <button id="loadMarkets" disabled>
-  LOAD SPORTSBOOK MARKETS
+LOAD SPORTSBOOK MARKETS
 </button>
 
 <div id="marketStatus" class="status">
-  No markets loaded.
+No markets loaded.
 </div>
 
-
-<!-- =====================================================
-     CHATGPT EXPORT
-===================================================== -->
 
 <div class="copybox">
 
 <div class="copy-title">
-  🧠 CHATGPT MARKET ANALYSIS
+🧠 CHATGPT MARKET ANALYSIS
 </div>
 
 <div class="copy-note">
-  The app keeps the complete market dataset but splits large datasets
-  into smaller clipboard chunks so they can be pasted into ChatGPT
-  without exceeding the message limit.
+The app keeps the complete available market dataset but splits large
+datasets into smaller clipboard chunks so they can be pasted into
+ChatGPT without exceeding the message limit.
 </div>
 
 <button id="prepareChatGPT" disabled>
-  🧠 PREPARE MARKETS FOR CHATGPT
+🧠 PREPARE MARKETS FOR CHATGPT
 </button>
 
 <div id="copyControls"></div>
 
 </div>
 
-
 <div id="markets"></div>
 
 </div>
 
 
-<!-- =====================================================
-     5. MULTI BUILDER
-===================================================== -->
-
 <div class="card">
-
 <h2>🧠 5. MULTI BUILDER</h2>
 
 <div class="grid">
 
 <div class="metric">
-  Selected legs
-  <strong id="count">0</strong>
+Selected legs
+<strong id="count">0</strong>
 </div>
 
 <div class="metric">
-  Combined odds
-  <strong id="odds">—</strong>
+Combined odds
+<strong id="odds">—</strong>
 </div>
 
 </div>
 
 <div class="row">
-
-<input
-  id="min20"
-  type="number"
-  value="18"
-  step=".1"
-  min="1"
->
-
-<input
-  id="max20"
-  type="number"
-  value="22"
-  step=".1"
-  min="1"
->
-
+<input id="min20" type="number" value="18" step=".1" min="1">
+<input id="max20" type="number" value="22" step=".1" min="1">
 </div>
 
 <div class="row">
-
-<input
-  id="min40"
-  type="number"
-  value="40"
-  step=".1"
-  min="1"
->
-
-<input
-  id="max40"
-  type="number"
-  value="60"
-  step=".1"
-  min="1"
->
-
+<input id="min40" type="number" value="40" step=".1" min="1">
+<input id="max40" type="number" value="60" step=".1" min="1">
 </div>
 
 <button id="build" disabled>
-  BUILD ~20 & 40+
+BUILD ~20 & 40+
 </button>
 
 <div id="results"></div>
-
 </div>
 
 
-<!-- =====================================================
-     6. DATA INTEGRITY
-===================================================== -->
-
 <div class="card">
-
 <h2>🛡️ DATA INTEGRITY</h2>
 
 <div id="integrity" class="status">
-  No live data.
+No live data.
 </div>
 
 <div class="status warn">
-  V9 deliberately does not invent injuries, team selections,
-  player statistics, probability, EV or weather.
-  These require separate verified information.
+V9 deliberately does not invent injuries, team selections,
+player statistics, probability, EV or weather. Those require
+separate verified information.
 </div>
-
 </div>
 
 </main>
 
 
 <script>
-
 "use strict";
 
 
@@ -503,8 +412,7 @@ const state={
    HELPERS
 ========================================================= */
 
-const $=id=>
-  document.getElementById(id);
+const $=id=>document.getElementById(id);
 
 
 function esc(v){
@@ -1065,18 +973,12 @@ function selectGame(i){
 
 
 /* =========================================================
-   MARKETS
+   WORKING MARKET LIST
+   IMPORTANT:
+   Do not add unsupported market names here.
 ========================================================= */
 
 function requestedMarkets(){
-
-  /*
-   * Request the broadest markets that the current API/
-   * bookmaker combination supports for the sport.
-   *
-   * The API may return fewer markets depending on the
-   * current event and Sportsbet availability.
-   */
 
   if(state.sport==="afl"){
 
@@ -1091,12 +993,7 @@ function requestedMarkets(){
       "player_afl_fantasy_points_over",
       "player_clearances_over",
       "player_kicks_over",
-      "player_handballs_over",
-      "player_inside_50s_over",
-      "player_meters_gained_over",
-      "player_contested_possessions_over",
-      "player_uncontested_possessions_over",
-      "player_score_involvements_over"
+      "player_handballs_over"
     ].join(",");
 
   }
@@ -1106,13 +1003,7 @@ function requestedMarkets(){
     "player_try_scorer_anytime",
     "player_try_scorer_first",
     "player_try_scorer_last",
-    "player_try_scorer_over",
-    "player_tackles_over",
-    "player_runs_over",
-    "player_run_metres_over",
-    "player_passes_over",
-    "player_kicks_over",
-    "player_fantasy_points_over"
+    "player_try_scorer_over"
   ].join(",");
 
 }
@@ -1242,8 +1133,6 @@ async function loadMarkets(){
     }
 
 
-    /* Display */
-
     $("markets").innerHTML=
       state.markets.map((m,i)=>`
 
@@ -1367,17 +1256,10 @@ async function loadMarkets(){
 
 
 /* =========================================================
-   COMPACT MARKET LINE
+   COMPACT MARKET FORMAT
 ========================================================= */
 
 function compactMarketLine(m,index){
-
-  /*
-   * Deliberately remove repeated API metadata.
-   *
-   * Format:
-   * index | market | selection | line | odds
-   */
 
   return[
     index,
@@ -1413,9 +1295,8 @@ function prepareChatGPT(){
 
 
   /*
-   * Keep chunks deliberately small.
-   * This is especially important on iPhone where clipboard
-   * and message limits can be reached sooner.
+   * Keep each clipboard chunk comfortably below
+   * normal message limits.
    */
 
   const MAX_CHARS=10000;
@@ -1471,15 +1352,11 @@ function prepareChatGPT(){
   intro.push("");
 
   intro.push(
-    "IMPORTANT:"
+    "The following market chunks together form the available market dataset for this event."
   );
 
   intro.push(
-    "The following market chunks together form the complete available market dataset for this event."
-  );
-
-  intro.push(
-    "Do not analyse until all chunks have been supplied."
+    "Do not make final recommendations until all chunks have been supplied."
   );
 
   intro.push("");
@@ -1493,13 +1370,13 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    "Find the strongest same-game multi around 20.00 odds and the strongest higher-risk multi at 40.00+ odds."
+    "Find the strongest same-game multi around 20.00 odds and the strongest higher-risk multi around 40.00–60.00 odds."
   );
 
   intro.push("");
 
   intro.push(
-    "The analysis should prioritise probability, value, sensible correlation and current verified information rather than simply multiplying random high-priced selections."
+    "Prioritise probability, value, sensible correlation and current verified information rather than simply selecting high-priced legs."
   );
 
   intro.push("");
@@ -1601,7 +1478,7 @@ function prepareChatGPT(){
   );
 
   intro.push(
-    "MULTI B — target approximately 40.00–60.00, unless a materially better opportunity exists outside this range"
+    "MULTI B — target approximately 40.00–60.00"
   );
 
   intro.push("");
@@ -1657,11 +1534,11 @@ function prepareChatGPT(){
   intro.push("");
 
   intro.push(
-    "IMPORTANT MARKET RULE:"
+    "IMPORTANT:"
   );
 
   intro.push(
-    "Only use selections and prices actually supplied in the market chunks."
+    "Only use selections and prices actually supplied in the market data."
   );
 
   intro.push(
@@ -1676,8 +1553,7 @@ function prepareChatGPT(){
 
 
   /*
-   * Group the market data by market type.
-   * This makes the raw information much easier to interpret.
+   * Group markets by market type.
    */
 
   const grouped={};
@@ -1691,7 +1567,9 @@ function prepareChatGPT(){
 
 
     if(!grouped[key]){
+
       grouped[key]=[];
+
     }
 
 
@@ -1720,11 +1598,6 @@ function prepareChatGPT(){
         `# Format: number | market | selection | line | odds\n`;
 
 
-      /*
-       * If one market group itself is larger than the
-       * chunk size, split it safely by rows.
-       */
-
       if(
         currentLength+
         header.length>
@@ -1737,6 +1610,7 @@ function prepareChatGPT(){
         );
 
         current=[];
+
         currentLength=0;
 
       }
@@ -1749,7 +1623,8 @@ function prepareChatGPT(){
 
       rows.forEach(row=>{
 
-        const line=row+"\n";
+        const line=
+          row+"\n";
 
 
         if(
@@ -1795,8 +1670,8 @@ function prepareChatGPT(){
 
 
   /*
-   * Chunk 0 = instructions
-   * Chunk 1+ = market data
+   * First clipboard item = instructions.
+   * Remaining items = market data.
    */
 
   state.exportChunks.push(
@@ -1852,7 +1727,7 @@ function prepareChatGPT(){
 
 
 /* =========================================================
-   RENDER COPY BUTTONS
+   COPY BUTTONS
 ========================================================= */
 
 function renderCopyControls(){
@@ -1865,13 +1740,19 @@ function renderCopyControls(){
 
 
   if(!state.exportChunks.length){
+
     return;
+
   }
 
 
-  const intro=document.createElement("div");
+  const intro=
+    document.createElement("div");
 
-  intro.className="status ok";
+
+  intro.className=
+    "status ok";
+
 
   intro.textContent=
     `Ready: ${state.exportChunks.length} pieces. Copy the INTRO first, then each market chunk in order.`;
@@ -1908,10 +1789,7 @@ function renderCopyControls(){
       if(success){
 
         button.textContent=
-          "✅ COPIED — "+button.textContent.replace(
-            "📋 ",
-            ""
-          );
+          "✅ COPIED";
 
 
         status(
@@ -1936,7 +1814,6 @@ function renderCopyControls(){
     box.appendChild(button);
 
   });
-
 
 }
 
@@ -1964,10 +1841,6 @@ async function copyText(text){
 
   }catch(e){}
 
-
-  /*
-   * iPhone/Safari fallback
-   */
 
   try{
 
@@ -2044,7 +1917,7 @@ function summary(){
 
 
 /* =========================================================
-   COMBINATION FINDER
+   BASIC COMBINATION FINDER
 ========================================================= */
 
 function findCombo(
@@ -2096,7 +1969,9 @@ function findCombo(
     if(
       chosen.length>=8
     ){
+
       return;
+
     }
 
 
@@ -2133,7 +2008,7 @@ function findCombo(
 
 
 /* =========================================================
-   BUILD BASIC MULTIS
+   BASIC MULTI BUILDER
 ========================================================= */
 
 function build(){
@@ -2323,7 +2198,7 @@ async function changeSport(s){
 
 
 /* =========================================================
-   BUTTONS
+   BUTTON EVENTS
 ========================================================= */
 
 $("connect").onclick=
