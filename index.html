@@ -191,10 +191,27 @@ details{
   color:var(--muted)
 }
 
+.copybox{
+  margin-top:10px;
+  padding:10px;
+  background:#091622;
+  border:1px solid var(--line);
+  border-radius:10px
+}
+
+.copybox button{
+  margin-top:6px
+}
+
+.copy-title{
+  font-weight:800;
+  margin-bottom:4px
+}
+
 .copy-note{
   font-size:12px;
   color:var(--muted);
-  margin-top:5px
+  line-height:1.4
 }
 
 @media(max-width:600px){
@@ -209,11 +226,16 @@ details{
 
 <div class="head">
   <div class="brand">BET INTELLIGENCE</div>
-  <div class="version">V9 • diagnostic build</div>
+  <div class="version">V9 • ChatGPT analysis build</div>
 </div>
 
-<!-- 1 API CONNECTION -->
+
+<!-- =====================================================
+     1. API CONNECTION
+===================================================== -->
+
 <div class="card">
+
 <h2>🔑 1. API CONNECTION</h2>
 
 <input
@@ -224,8 +246,13 @@ details{
 >
 
 <div class="row">
-  <button id="connect">CONNECT & TEST</button>
-  <button id="clear">CLEAR</button>
+  <button id="connect">
+    CONNECT & TEST
+  </button>
+
+  <button id="clear">
+    CLEAR
+  </button>
 </div>
 
 <div id="conn" class="status">
@@ -234,28 +261,47 @@ details{
 
 <details>
   <summary>Connection diagnostics</summary>
-  <div id="diag" class="diag">V9 ready.</div>
+  <div id="diag" class="diag">
+    V9 ready.
+  </div>
 </details>
+
 </div>
 
 
-<!-- 2 SPORT -->
+<!-- =====================================================
+     2. SPORT
+===================================================== -->
+
 <div class="card">
+
 <h2>🏟️ 2. SPORT</h2>
 
 <div class="tabs">
-  <button id="afl" class="active">AFL</button>
-  <button id="nrl">NRL</button>
+
+<button id="afl" class="active">
+  AFL
+</button>
+
+<button id="nrl">
+  NRL
+</button>
+
 </div>
 
 <div id="sportInfo" class="small">
   AFL key: aussierules_afl • NRL key: rugbyleague_nrl
 </div>
+
 </div>
 
 
-<!-- 3 CURRENT GAMES -->
+<!-- =====================================================
+     3. CURRENT GAMES
+===================================================== -->
+
 <div class="card">
+
 <h2>📅 3. CURRENT GAMES</h2>
 
 <button id="refresh" disabled>
@@ -265,15 +311,22 @@ details{
 <div id="games" class="status">
   Connect first.
 </div>
+
 </div>
 
 
-<!-- 4 SELECT GAME / MARKETS -->
+<!-- =====================================================
+     4. SELECT GAME
+===================================================== -->
+
 <div class="card">
+
 <h2>🎯 4. SELECT GAME</h2>
 
 <select id="gameSelect" disabled>
-  <option value="">Select a game...</option>
+  <option value="">
+    Select a game...
+  </option>
 </select>
 
 <div id="selected" class="status">
@@ -288,42 +341,97 @@ details{
   No markets loaded.
 </div>
 
-<button id="copyMarkets" disabled>
-  🧠 COPY ALL MARKETS FOR CHATGPT
-</button>
+
+<!-- =====================================================
+     CHATGPT EXPORT
+===================================================== -->
+
+<div class="copybox">
+
+<div class="copy-title">
+  🧠 CHATGPT MARKET ANALYSIS
+</div>
 
 <div class="copy-note">
-  Copies the complete selected-game Sportsbet market data in a format ready to paste into ChatGPT for analysis.
+  The app keeps the complete market dataset but splits large datasets
+  into smaller clipboard chunks so they can be pasted into ChatGPT
+  without exceeding the message limit.
 </div>
+
+<button id="prepareChatGPT" disabled>
+  🧠 PREPARE MARKETS FOR CHATGPT
+</button>
+
+<div id="copyControls"></div>
+
+</div>
+
 
 <div id="markets"></div>
+
 </div>
 
 
-<!-- 5 MULTI BUILDER -->
+<!-- =====================================================
+     5. MULTI BUILDER
+===================================================== -->
+
 <div class="card">
+
 <h2>🧠 5. MULTI BUILDER</h2>
 
 <div class="grid">
-  <div class="metric">
-    Selected legs
-    <strong id="count">0</strong>
-  </div>
 
-  <div class="metric">
-    Combined odds
-    <strong id="odds">—</strong>
-  </div>
+<div class="metric">
+  Selected legs
+  <strong id="count">0</strong>
+</div>
+
+<div class="metric">
+  Combined odds
+  <strong id="odds">—</strong>
+</div>
+
 </div>
 
 <div class="row">
-  <input id="min20" type="number" value="18" step=".1" min="1">
-  <input id="max20" type="number" value="22" step=".1" min="1">
+
+<input
+  id="min20"
+  type="number"
+  value="18"
+  step=".1"
+  min="1"
+>
+
+<input
+  id="max20"
+  type="number"
+  value="22"
+  step=".1"
+  min="1"
+>
+
 </div>
 
 <div class="row">
-  <input id="min40" type="number" value="40" step=".1" min="1">
-  <input id="max40" type="number" value="60" step=".1" min="1">
+
+<input
+  id="min40"
+  type="number"
+  value="40"
+  step=".1"
+  min="1"
+>
+
+<input
+  id="max40"
+  type="number"
+  value="60"
+  step=".1"
+  min="1"
+>
+
 </div>
 
 <button id="build" disabled>
@@ -331,11 +439,16 @@ details{
 </button>
 
 <div id="results"></div>
+
 </div>
 
 
-<!-- 6 DATA INTEGRITY -->
+<!-- =====================================================
+     6. DATA INTEGRITY
+===================================================== -->
+
 <div class="card">
+
 <h2>🛡️ DATA INTEGRITY</h2>
 
 <div id="integrity" class="status">
@@ -343,15 +456,18 @@ details{
 </div>
 
 <div class="status warn">
-  V9 does not invent injuries, team selections, player statistics,
-  probability, EV or weather. Those require separate verified data.
+  V9 deliberately does not invent injuries, team selections,
+  player statistics, probability, EV or weather.
+  These require separate verified information.
 </div>
+
 </div>
 
 </main>
 
 
 <script>
+
 "use strict";
 
 
@@ -360,7 +476,9 @@ details{
 ========================================================= */
 
 const state={
+
   key:"",
+
   sport:"afl",
 
   sportKeys:{
@@ -369,9 +487,15 @@ const state={
   },
 
   games:[],
+
   game:null,
+
   markets:[],
-  selected:new Set()
+
+  selected:new Set(),
+
+  exportChunks:[]
+
 };
 
 
@@ -379,10 +503,12 @@ const state={
    HELPERS
 ========================================================= */
 
-const $=id=>document.getElementById(id);
+const $=id=>
+  document.getElementById(id);
 
 
 function esc(v){
+
   return String(v??"").replace(
     /[&<>"]/g,
     c=>({
@@ -392,69 +518,94 @@ function esc(v){
       '"':"&quot;"
     }[c])
   );
+
 }
 
 
 function status(el,text,cls=""){
+
   el.className="status "+cls;
+
   el.innerHTML=text;
+
 }
 
 
 function diag(text){
+
   $("diag").textContent=
     new Date().toLocaleString()+
     "\n"+
     text;
+
 }
 
 
 /* =========================================================
-   ODDS API
+   API
 ========================================================= */
 
 async function api(path,params={}){
 
-  const u=new URL(
-    "https://api.the-odds-api.com/v4"+path
-  );
+  const u=
+    new URL(
+      "https://api.the-odds-api.com/v4"+path
+    );
+
 
   Object.entries(params).forEach(([k,v])=>{
     u.searchParams.set(k,v);
   });
 
-  u.searchParams.set("apiKey",state.key);
+
+  u.searchParams.set(
+    "apiKey",
+    state.key
+  );
+
 
   let r;
 
+
   try{
 
-    r=await fetch(
-      u.toString(),
-      {
-        method:"GET",
-        mode:"cors",
-        cache:"no-store"
-      }
-    );
+    r=
+      await fetch(
+        u.toString(),
+        {
+          method:"GET",
+          mode:"cors",
+          cache:"no-store"
+        }
+      );
 
   }catch(e){
 
     throw new Error(
-      "NETWORK/CORS: Safari could not reach The Odds API. "+
-      "The API itself was not reached."
+      "NETWORK/CORS: Safari could not reach The Odds API."
     );
+
   }
 
-  const text=await r.text();
+
+  const text=
+    await r.text();
+
 
   let data;
 
+
   try{
-    data=JSON.parse(text);
+
+    data=
+      JSON.parse(text);
+
   }catch{
+
     data=text;
+
   }
+
 
   if(!r.ok){
 
@@ -463,16 +614,30 @@ async function api(path,params={}){
       ?data
       :JSON.stringify(data);
 
+
     throw new Error(
       "HTTP "+r.status+": "+detail
     );
+
   }
 
-  return {
+
+  return{
+
     data,
-    remaining:r.headers.get("x-requests-remaining"),
-    used:r.headers.get("x-requests-used")
+
+    remaining:
+      r.headers.get(
+        "x-requests-remaining"
+      ),
+
+    used:
+      r.headers.get(
+        "x-requests-used"
+      )
+
   };
+
 }
 
 
@@ -483,32 +648,53 @@ async function api(path,params={}){
 function resetResults(){
 
   state.games=[];
+
   state.game=null;
+
   state.markets=[];
+
   state.selected.clear();
+
+  state.exportChunks=[];
+
 
   $("games").innerHTML="";
 
+
   $("gameSelect").innerHTML=
-    `<option value="">Select a game...</option>`;
+    `<option value="">
+      Select a game...
+    </option>`;
+
 
   $("gameSelect").disabled=true;
+
 
   $("selected").textContent=
     "No game selected.";
 
+
   $("markets").innerHTML="";
+
 
   $("marketStatus").textContent=
     "No markets loaded.";
 
-  $("copyMarkets").disabled=true;
+
+  $("copyControls").innerHTML="";
+
+
+  $("prepareChatGPT").disabled=true;
+
 
   $("build").disabled=true;
 
+
   $("loadMarkets").disabled=true;
 
+
   summary();
+
 }
 
 
@@ -518,7 +704,9 @@ function resetResults(){
 
 async function connect(){
 
-  state.key=$("key").value.trim();
+  state.key=
+    $("key").value.trim();
+
 
   if(!state.key){
 
@@ -529,7 +717,9 @@ async function connect(){
     );
 
     return;
+
   }
+
 
   status(
     $("conn"),
@@ -537,42 +727,52 @@ async function connect(){
     "warn"
   );
 
+
   diag(
     "Testing: GET /v4/sports\n"+
     "Key present: YES\n"+
     "Key storage: MEMORY ONLY"
   );
 
+
   try{
 
-    const r=await api("/sports");
+    const r=
+      await api("/sports");
+
 
     const sports=
       Array.isArray(r.data)
       ?r.data
       :[];
 
+
     const afl=
       sports.find(
         x=>x.key===state.sportKeys.afl
       );
+
 
     const nrl=
       sports.find(
         x=>x.key===state.sportKeys.nrl
       );
 
+
     if(!afl&&!nrl){
 
       throw new Error(
         "API responded successfully, but neither AFL nor NRL is currently returned."
       );
+
     }
+
 
     $("sportInfo").innerHTML=
       `AFL: ${afl?"🟢 available":"🔴 unavailable"} • `+
       `NRL: ${nrl?"🟢 available":"🔴 unavailable"} • `+
       `Credits remaining: ${esc(r.remaining??"not supplied")}`;
+
 
     status(
       $("conn"),
@@ -580,7 +780,9 @@ async function connect(){
       "ok"
     );
 
+
     $("refresh").disabled=false;
+
 
     diag(
       "PASS: /v4/sports responded.\n"+
@@ -589,7 +791,9 @@ async function connect(){
       "Credits remaining: "+(r.remaining??"not supplied")
     );
 
+
     await loadGames();
+
 
   }catch(e){
 
@@ -599,20 +803,25 @@ async function connect(){
       "bad"
     );
 
+
     diag(
       "FAIL:\n"+e.message
     );
+
   }
+
 }
 
 
 /* =========================================================
-   LOAD CURRENT GAMES
+   LOAD GAMES
 ========================================================= */
 
 async function loadGames(){
 
-  const key=state.sportKeys[state.sport];
+  const key=
+    state.sportKeys[state.sport];
+
 
   status(
     $("games"),
@@ -620,28 +829,45 @@ async function loadGames(){
     "warn"
   );
 
+
   resetResults();
+
 
   try{
 
-    const r=await api(
-      "/sports/"+encodeURIComponent(key)+"/events"
-    );
+    const r=
+      await api(
+        "/sports/"+
+        encodeURIComponent(key)+
+        "/events"
+      );
+
 
     const all=
       Array.isArray(r.data)
       ?r.data
       :[];
 
-    const now=Date.now();
+
+    const now=
+      Date.now();
+
 
     state.games=
       all
       .filter(g=>{
-        const t=Date.parse(g.commence_time);
 
-        return Number.isFinite(t)&&
-          t>now-8*60*60*1000;
+        const t=
+          Date.parse(
+            g.commence_time
+          );
+
+
+        return(
+          Number.isFinite(t)&&
+          t>now-8*60*60*1000
+        );
+
       })
       .sort(
         (a,b)=>
@@ -649,19 +875,19 @@ async function loadGames(){
           Date.parse(b.commence_time)
       );
 
+
     if(!state.games.length){
 
       status(
         $("games"),
-        "🟡 API connection works, but there are no current/upcoming games returned for this sport.",
+        "🟡 No current/upcoming games returned.",
         "warn"
       );
 
       return;
+
     }
 
-
-    /* Game cards */
 
     $("games").innerHTML=
       state.games.map((g,i)=>`
@@ -680,7 +906,9 @@ async function loadGames(){
           <br>
 
           <span class="small">
-            ${new Date(g.commence_time).toLocaleString()}
+            ${new Date(
+              g.commence_time
+            ).toLocaleString()}
             • event ${esc(g.id)}
           </span>
 
@@ -689,9 +917,9 @@ async function loadGames(){
       `).join("");
 
 
-    /* Game dropdown */
+    const gameSelect=
+      $("gameSelect");
 
-    const gameSelect=$("gameSelect");
 
     gameSelect.innerHTML=
       `<option value="">
@@ -704,6 +932,7 @@ async function loadGames(){
           ${esc(g.away_team)}
         </option>`
       ).join("");
+
 
     gameSelect.disabled=false;
 
@@ -754,11 +983,13 @@ async function loadGames(){
       "bad"
     );
 
+
     diag(
-      "GAME LOAD FAIL:\n"+
-      e.message
+      "GAME LOAD FAIL:\n"+e.message
     );
+
   }
+
 }
 
 
@@ -768,11 +999,15 @@ async function loadGames(){
 
 function selectGame(i){
 
-  state.game=state.games[i];
+  state.game=
+    state.games[i];
+
 
   state.selected.clear();
 
   state.markets=[];
+
+  state.exportChunks=[];
 
 
   document
@@ -793,23 +1028,29 @@ function selectGame(i){
 
 
   $("selected").innerHTML=`
+
     <b>
       ${esc(state.game.home_team)}
       v
       ${esc(state.game.away_team)}
     </b>
+
     <br>
+
     <span class="small">
       ${new Date(
         state.game.commence_time
       ).toLocaleString()}
     </span>
+
   `;
 
 
   $("loadMarkets").disabled=false;
 
-  $("copyMarkets").disabled=true;
+  $("prepareChatGPT").disabled=true;
+
+  $("copyControls").innerHTML="";
 
   $("markets").innerHTML="";
 
@@ -819,14 +1060,23 @@ function selectGame(i){
   $("build").disabled=true;
 
   summary();
+
 }
 
 
 /* =========================================================
-   REQUESTED MARKETS
+   MARKETS
 ========================================================= */
 
 function requestedMarkets(){
+
+  /*
+   * Request the broadest markets that the current API/
+   * bookmaker combination supports for the sport.
+   *
+   * The API may return fewer markets depending on the
+   * current event and Sportsbet availability.
+   */
 
   if(state.sport==="afl"){
 
@@ -834,7 +1084,19 @@ function requestedMarkets(){
       "player_disposals",
       "player_disposals_over",
       "player_goal_scorer_anytime",
-      "player_goals_scored_over"
+      "player_goals_scored_over",
+      "player_marks_over",
+      "player_tackles_over",
+      "player_afl_fantasy_points",
+      "player_afl_fantasy_points_over",
+      "player_clearances_over",
+      "player_kicks_over",
+      "player_handballs_over",
+      "player_inside_50s_over",
+      "player_meters_gained_over",
+      "player_contested_possessions_over",
+      "player_uncontested_possessions_over",
+      "player_score_involvements_over"
     ].join(",");
 
   }
@@ -844,13 +1106,20 @@ function requestedMarkets(){
     "player_try_scorer_anytime",
     "player_try_scorer_first",
     "player_try_scorer_last",
-    "player_try_scorer_over"
+    "player_try_scorer_over",
+    "player_tackles_over",
+    "player_runs_over",
+    "player_run_metres_over",
+    "player_passes_over",
+    "player_kicks_over",
+    "player_fantasy_points_over"
   ].join(",");
+
 }
 
 
 /* =========================================================
-   LOAD SPORTSBOOK MARKETS
+   LOAD MARKETS
 ========================================================= */
 
 async function loadMarkets(){
@@ -865,31 +1134,39 @@ async function loadMarkets(){
   );
 
 
-  $("copyMarkets").disabled=true;
+  $("prepareChatGPT").disabled=true;
+
+  $("copyControls").innerHTML="";
 
 
   try{
 
     const path=
       "/sports/"+
-      encodeURIComponent(state.game.sport_key)+
+      encodeURIComponent(
+        state.game.sport_key
+      )+
       "/events/"+
-      encodeURIComponent(state.game.id)+
+      encodeURIComponent(
+        state.game.id
+      )+
       "/odds";
 
 
-    const r=await api(
-      path,
-      {
-        regions:"au",
-        bookmakers:"sportsbet",
-        oddsFormat:"decimal",
-        markets:requestedMarkets()
-      }
-    );
+    const r=
+      await api(
+        path,
+        {
+          regions:"au",
+          bookmakers:"sportsbet",
+          oddsFormat:"decimal",
+          markets:requestedMarkets()
+        }
+      );
 
 
-    const data=r.data||{};
+    const data=
+      r.data||{};
 
 
     const bookmaker=
@@ -904,6 +1181,7 @@ async function loadMarkets(){
       throw new Error(
         "The selected event returned no Sportsbet bookmaker data."
       );
+
     }
 
 
@@ -919,6 +1197,7 @@ async function loadMarkets(){
             const price=
               Number(o.price);
 
+
             if(
               Number.isFinite(price)&&
               price>1
@@ -931,11 +1210,14 @@ async function loadMarkets(){
                   o.name||
                   "Outcome",
 
-                market:m.key,
+                market:
+                  m.key,
 
-                line:o.point,
+                line:
+                  o.point,
 
-                odds:price,
+                odds:
+                  price,
 
                 lastUpdate:
                   m.last_update||
@@ -956,10 +1238,11 @@ async function loadMarkets(){
       throw new Error(
         "Sportsbet was returned, but no supported player markets are currently open for this event."
       );
+
     }
 
 
-    /* Display markets */
+    /* Display */
 
     $("markets").innerHTML=
       state.markets.map((m,i)=>`
@@ -1010,8 +1293,6 @@ async function loadMarkets(){
       `).join("");
 
 
-    /* Manual selection */
-
     document
       .querySelectorAll("[data-leg]")
       .forEach(c=>{
@@ -1020,6 +1301,7 @@ async function loadMarkets(){
 
           const i=
             Number(c.dataset.leg);
+
 
           if(c.checked){
 
@@ -1031,6 +1313,7 @@ async function loadMarkets(){
 
           }
 
+
           summary();
 
         };
@@ -1040,7 +1323,7 @@ async function loadMarkets(){
 
     $("build").disabled=false;
 
-    $("copyMarkets").disabled=false;
+    $("prepareChatGPT").disabled=false;
 
 
     status(
@@ -1073,20 +1356,45 @@ async function loadMarkets(){
       "bad"
     );
 
+
     diag(
-      "MARKET LOAD FAIL:\n"+
-      e.message
+      "MARKET LOAD FAIL:\n"+e.message
     );
 
   }
+
 }
 
 
 /* =========================================================
-   COPY ALL MARKETS FOR CHATGPT
+   COMPACT MARKET LINE
 ========================================================= */
 
-async function copyAllMarkets(){
+function compactMarketLine(m,index){
+
+  /*
+   * Deliberately remove repeated API metadata.
+   *
+   * Format:
+   * index | market | selection | line | odds
+   */
+
+  return[
+    index,
+    m.market||"",
+    m.name||"",
+    m.line!=null?m.line:"",
+    Number(m.odds).toFixed(2)
+  ].join(" | ");
+
+}
+
+
+/* =========================================================
+   PREPARE CHATGPT EXPORT
+========================================================= */
+
+function prepareChatGPT(){
 
   if(
     !state.game||
@@ -1100,382 +1408,616 @@ async function copyAllMarkets(){
     );
 
     return;
+
   }
 
 
-  const lines=[];
+  /*
+   * Keep chunks deliberately small.
+   * This is especially important on iPhone where clipboard
+   * and message limits can be reached sooner.
+   */
+
+  const MAX_CHARS=10000;
 
 
-  lines.push(
-    "BET INTELLIGENCE — COMPLETE SPORTSBOOK MARKET DATA"
+  const intro=[];
+
+
+  intro.push(
+    "BET INTELLIGENCE — CHATGPT MARKET ANALYSIS"
   );
 
-  lines.push(
-    "=================================================="
+  intro.push(
+    "=========================================="
   );
 
-  lines.push(
-    ""
+  intro.push("");
+
+  intro.push(
+    "DATA PACKAGE"
   );
 
-
-  /* Game information */
-
-  lines.push(
-    "GAME INFORMATION"
+  intro.push(
+    "------------"
   );
 
-  lines.push(
-    "----------------"
-  );
-
-  lines.push(
+  intro.push(
     `Sport: ${state.sport.toUpperCase()}`
   );
 
-  lines.push(
-    `Home team: ${state.game.home_team}`
+  intro.push(
+    `Game: ${state.game.home_team} v ${state.game.away_team}`
   );
 
-  lines.push(
-    `Away team: ${state.game.away_team}`
-  );
-
-  lines.push(
+  intro.push(
     `Event ID: ${state.game.id}`
   );
 
-  lines.push(
-    `Sport key: ${state.game.sport_key}`
-  );
-
-  lines.push(
+  intro.push(
     `Game time: ${new Date(
       state.game.commence_time
     ).toLocaleString()}`
   );
 
-  lines.push(
+  intro.push(
     "Sportsbook: Sportsbet"
   );
 
-  lines.push(
-    `Total outcomes loaded: ${state.markets.length}`
+  intro.push(
+    `Total market outcomes supplied: ${state.markets.length}`
   );
 
-  lines.push("");
+  intro.push("");
 
-
-  /* Market data */
-
-  lines.push(
-    "ALL AVAILABLE SPORTSBOOK OUTCOMES"
+  intro.push(
+    "IMPORTANT:"
   );
 
-  lines.push(
-    "---------------------------------"
+  intro.push(
+    "The following market chunks together form the complete available market dataset for this event."
   );
+
+  intro.push(
+    "Do not analyse until all chunks have been supplied."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "PRIMARY OBJECTIVE"
+  );
+
+  intro.push(
+    "-----------------"
+  );
+
+  intro.push(
+    "Find the strongest same-game multi around 20.00 odds and the strongest higher-risk multi at 40.00+ odds."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "The analysis should prioritise probability, value, sensible correlation and current verified information rather than simply multiplying random high-priced selections."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "VERIFY WHERE POSSIBLE"
+  );
+
+  intro.push(
+    "---------------------"
+  );
+
+  intro.push(
+    "• Current team selection"
+  );
+
+  intro.push(
+    "• Injuries and player availability"
+  );
+
+  intro.push(
+    "• Player role"
+  );
+
+  intro.push(
+    "• Recent form"
+  );
+
+  intro.push(
+    "• Relevant player statistics"
+  );
+
+  intro.push(
+    "• Opponent matchup"
+  );
+
+  intro.push(
+    "• Venue"
+  );
+
+  intro.push(
+    "• Weather/conditions where relevant"
+  );
+
+  intro.push(
+    "• Goal/try scoring responsibility where relevant"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "FOR EACH CANDIDATE LEG ASSESS"
+  );
+
+  intro.push(
+    "-----------------------------"
+  );
+
+  intro.push(
+    "• Sportsbook odds"
+  );
+
+  intro.push(
+    "• Implied probability"
+  );
+
+  intro.push(
+    "• Estimated probability"
+  );
+
+  intro.push(
+    "• Estimated fair odds"
+  );
+
+  intro.push(
+    "• Value/edge"
+  );
+
+  intro.push(
+    "• Confidence"
+  );
+
+  intro.push(
+    "• Correlation with other legs"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "FINAL OUTPUT"
+  );
+
+  intro.push(
+    "------------"
+  );
+
+  intro.push(
+    "MULTI A — target approximately 18.00–22.00"
+  );
+
+  intro.push(
+    "MULTI B — target approximately 40.00–60.00, unless a materially better opportunity exists outside this range"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "For each final multi provide:"
+  );
+
+  intro.push(
+    "1. Exact legs"
+  );
+
+  intro.push(
+    "2. Exact Sportsbet price for every leg"
+  );
+
+  intro.push(
+    "3. Combined odds"
+  );
+
+  intro.push(
+    "4. Estimated probability"
+  );
+
+  intro.push(
+    "5. Fair odds"
+  );
+
+  intro.push(
+    "6. Estimated value"
+  );
+
+  intro.push(
+    "7. Confidence"
+  );
+
+  intro.push(
+    "8. Strongest leg"
+  );
+
+  intro.push(
+    "9. Weakest leg"
+  );
+
+  intro.push(
+    "10. Correlation"
+  );
+
+  intro.push(
+    "11. Main risks"
+  );
+
+  intro.push("");
+
+  intro.push(
+    "IMPORTANT MARKET RULE:"
+  );
+
+  intro.push(
+    "Only use selections and prices actually supplied in the market chunks."
+  );
+
+  intro.push(
+    "Do not invent a Sportsbet market or price."
+  );
+
+  intro.push("");
+
+  intro.push(
+    "WAIT FOR ALL MARKET CHUNKS BEFORE MAKING FINAL RECOMMENDATIONS."
+  );
+
+
+  /*
+   * Group the market data by market type.
+   * This makes the raw information much easier to interpret.
+   */
+
+  const grouped={};
 
 
   state.markets.forEach((m,i)=>{
 
-    lines.push(
+    const key=
+      m.market||
+      "unknown";
 
-      `${i+1}. `+
 
-      `Market=${m.market} | `+
+    if(!grouped[key]){
+      grouped[key]=[];
+    }
 
-      `Selection=${m.name} | `+
 
-      `Line=${m.line!=null?m.line:"N/A"} | `+
+    grouped[key].push(
+      compactMarketLine(
+        m,
+        i+1
+      )
+    );
 
-      `Odds=${m.odds.toFixed(3)} | `+
+  });
 
-      `LastUpdate=${m.lastUpdate||"N/A"}`
+
+  const chunks=[];
+
+  let current=[];
+
+  let currentLength=0;
+
+
+  Object.entries(grouped)
+    .forEach(([market,rows])=>{
+
+      const header=
+        `\n### MARKET: ${market}\n`+
+        `# Format: number | market | selection | line | odds\n`;
+
+
+      /*
+       * If one market group itself is larger than the
+       * chunk size, split it safely by rows.
+       */
+
+      if(
+        currentLength+
+        header.length>
+        MAX_CHARS&&
+        current.length
+      ){
+
+        chunks.push(
+          current.join("\n")
+        );
+
+        current=[];
+        currentLength=0;
+
+      }
+
+
+      current.push(header);
+
+      currentLength+=header.length;
+
+
+      rows.forEach(row=>{
+
+        const line=row+"\n";
+
+
+        if(
+          currentLength+
+          line.length>
+          MAX_CHARS&&
+          current.length
+        ){
+
+          chunks.push(
+            current.join("\n")
+          );
+
+          current=[
+            `### MARKET CONTINUATION: ${market}\n`
+          ];
+
+          currentLength=
+            current[0].length;
+
+        }
+
+
+        current.push(row);
+
+        currentLength+=line.length;
+
+      });
+
+    });
+
+
+  if(current.length){
+
+    chunks.push(
+      current.join("\n")
+    );
+
+  }
+
+
+  state.exportChunks=[];
+
+
+  /*
+   * Chunk 0 = instructions
+   * Chunk 1+ = market data
+   */
+
+  state.exportChunks.push(
+    intro.join("\n")
+  );
+
+
+  chunks.forEach((chunk,i)=>{
+
+    state.exportChunks.push(
+
+      "BET INTELLIGENCE MARKET DATA"+
+      ` — CHUNK ${i+1} OF ${chunks.length}`+
+      "\n"+
+      "====================================\n"+
+      "\n"+
+      chunk+
+      "\n"+
+      "\n"+
+      `END CHUNK ${i+1} OF ${chunks.length}`
 
     );
 
   });
 
 
-  lines.push("");
+  renderCopyControls();
 
-  lines.push(
-    "CHATGPT ANALYSIS INSTRUCTIONS"
-  );
 
-  lines.push(
-    "-----------------------------"
-  );
-
-  lines.push(
-    "This is live sportsbook market data for the selected game."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "Primary objective:"
-  );
-
-  lines.push(
-    "Identify the strongest same-game multi around 20.00 odds and the strongest higher-risk multi at 40.00+ odds."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "Do not simply select combinations because their odds multiply to the target."
-  );
-
-  lines.push(
-    "First identify the best individual selections based on probability, value, role, matchup and current information."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "Independently verify current information where possible, including:"
-  );
-
-  lines.push(
-    "- team selection"
-  );
-
-  lines.push(
-    "- injuries and availability"
-  );
-
-  lines.push(
-    "- player role"
-  );
-
-  lines.push(
-    "- recent form"
-  );
-
-  lines.push(
-    "- relevant player statistics"
-  );
-
-  lines.push(
-    "- opponent matchup"
-  );
-
-  lines.push(
-    "- venue"
-  );
-
-  lines.push(
-    "- weather/conditions where relevant"
-  );
-
-  lines.push(
-    "- goal/try scoring responsibility where relevant"
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "For each serious candidate, assess:"
-  );
-
-  lines.push(
-    "- estimated probability"
-  );
-
-  lines.push(
-    "- sportsbook implied probability"
-  );
-
-  lines.push(
-    "- estimated fair odds"
-  );
-
-  lines.push(
-    "- value/edge"
-  );
-
-  lines.push(
-    "- confidence"
-  );
-
-  lines.push(
-    "- correlation with other potential legs"
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "Recommended Multi A:"
-  );
-
-  lines.push(
-    "Target approximately 18.00–22.00 odds."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "Recommended Multi B:"
-  );
-
-  lines.push(
-    "Target 40.00+ odds, preferably approximately 40.00–60.00 unless a materially better opportunity exists outside that range."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "For each recommended multi provide:"
-  );
-
-  lines.push(
-    "1. Every leg and exact sportsbook price."
-  );
-
-  lines.push(
-    "2. Combined odds."
-  );
-
-  lines.push(
-    "3. Estimated probability."
-  );
-
-  lines.push(
-    "4. Fair odds."
-  );
-
-  lines.push(
-    "5. Estimated value."
-  );
-
-  lines.push(
-    "6. Confidence score."
-  );
-
-  lines.push(
-    "7. Strongest leg."
-  );
-
-  lines.push(
-    "8. Weakest leg."
-  );
-
-  lines.push(
-    "9. Correlation considerations."
-  );
-
-  lines.push(
-    "10. Main risks that could cause the multi to fail."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "IMPORTANT:"
-  );
-
-  lines.push(
-    "Use only markets and prices supplied above when constructing the final multis."
-  );
-
-  lines.push(
-    "Do not invent a price or market that is not in this data."
-  );
-
-  lines.push(
-    "If current information cannot be independently verified, explicitly say so rather than guessing."
-  );
-
-  lines.push(
-    ""
-  );
-
-  lines.push(
-    "END BET INTELLIGENCE MARKET DATA"
+  status(
+    $("marketStatus"),
+    `🟢 Prepared ${state.markets.length} outcomes into ${state.exportChunks.length} ChatGPT chunks.`,
+    "ok"
   );
 
 
-  const text=lines.join("\n");
+  diag(
+    "CHATGPT EXPORT READY\n"+
+    "Game: "+
+    state.game.home_team+
+    " v "+
+    state.game.away_team+
+    "\nOutcomes: "+
+    state.markets.length+
+    "\nChunks: "+
+    state.exportChunks.length+
+    "\nMaximum chunk size: "+
+    MAX_CHARS+
+    " characters"
+  );
 
-
-  try{
-
-    await navigator.clipboard.writeText(text);
-
-    status(
-      $("marketStatus"),
-      `🟢 ${state.markets.length} outcomes copied. Paste the data into ChatGPT for analysis.`,
-      "ok"
-    );
-
-  }catch(e){
-
-    /* iPhone/Safari fallback */
-
-    const ta=
-      document.createElement("textarea");
-
-    ta.value=text;
-
-    ta.style.position="fixed";
-    ta.style.left="-9999px";
-
-    document.body.appendChild(ta);
-
-    ta.focus();
-    ta.select();
-
-    let copied=false;
-
-    try{
-      copied=document.execCommand("copy");
-    }catch{}
-
-    ta.remove();
-
-
-    if(copied){
-
-      status(
-        $("marketStatus"),
-        `🟢 ${state.markets.length} outcomes copied to clipboard.`,
-        "ok"
-      );
-
-    }else{
-
-      status(
-        $("marketStatus"),
-        "🟡 Clipboard access was blocked. Select and copy the market data manually.",
-        "warn"
-      );
-
-    }
-
-  }
 }
 
 
 /* =========================================================
-   MULTI SUMMARY
+   RENDER COPY BUTTONS
+========================================================= */
+
+function renderCopyControls(){
+
+  const box=
+    $("copyControls");
+
+
+  box.innerHTML="";
+
+
+  if(!state.exportChunks.length){
+    return;
+  }
+
+
+  const intro=document.createElement("div");
+
+  intro.className="status ok";
+
+  intro.textContent=
+    `Ready: ${state.exportChunks.length} pieces. Copy the INTRO first, then each market chunk in order.`;
+
+
+  box.appendChild(intro);
+
+
+  state.exportChunks.forEach((text,i)=>{
+
+    const button=
+      document.createElement("button");
+
+
+    if(i===0){
+
+      button.textContent=
+        "📋 COPY CHATGPT INTRO";
+
+    }else{
+
+      button.textContent=
+        `📋 COPY MARKET CHUNK ${i} OF ${state.exportChunks.length-1}`;
+
+    }
+
+
+    button.onclick=async()=>{
+
+      const success=
+        await copyText(text);
+
+
+      if(success){
+
+        button.textContent=
+          "✅ COPIED — "+button.textContent.replace(
+            "📋 ",
+            ""
+          );
+
+
+        status(
+          $("marketStatus"),
+          `🟢 ${i===0?"Intro":"Chunk "+i} copied. Paste it into this ChatGPT conversation.`,
+          "ok"
+        );
+
+      }else{
+
+        status(
+          $("marketStatus"),
+          "🟡 Clipboard access was blocked. Try again.",
+          "warn"
+        );
+
+      }
+
+    };
+
+
+    box.appendChild(button);
+
+  });
+
+
+}
+
+
+/* =========================================================
+   CLIPBOARD
+========================================================= */
+
+async function copyText(text){
+
+  try{
+
+    if(
+      navigator.clipboard&&
+      navigator.clipboard.writeText
+    ){
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      return true;
+
+    }
+
+  }catch(e){}
+
+
+  /*
+   * iPhone/Safari fallback
+   */
+
+  try{
+
+    const ta=
+      document.createElement("textarea");
+
+
+    ta.value=text;
+
+    ta.style.position="fixed";
+
+    ta.style.left="-9999px";
+
+    ta.style.top="0";
+
+
+    document.body.appendChild(ta);
+
+    ta.focus();
+
+    ta.select();
+
+    ta.setSelectionRange(
+      0,
+      ta.value.length
+    );
+
+
+    const result=
+      document.execCommand(
+        "copy"
+      );
+
+
+    ta.remove();
+
+
+    return result;
+
+  }catch(e){
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   SUMMARY
 ========================================================= */
 
 function summary(){
@@ -1497,6 +2039,7 @@ function summary(){
       1
     ).toFixed(2)
     :"—";
+
 }
 
 
@@ -1528,7 +2071,9 @@ function findCombo(
 
       const score=
         Math.abs(
-          Math.log(odds/target)
+          Math.log(
+            odds/target
+          )
         );
 
 
@@ -1548,7 +2093,11 @@ function findCombo(
     }
 
 
-    if(chosen.length>=8)return;
+    if(
+      chosen.length>=8
+    ){
+      return;
+    }
 
 
     for(
@@ -1559,8 +2108,11 @@ function findCombo(
 
       walk(
         i+1,
-        chosen.concat(items[i]),
-        odds*items[i].odds
+        chosen.concat(
+          items[i]
+        ),
+        odds*
+        items[i].odds
       );
 
     }
@@ -1568,9 +2120,15 @@ function findCombo(
   }
 
 
-  walk(0,[],1);
+  walk(
+    0,
+    [],
+    1
+  );
+
 
   return best;
+
 }
 
 
@@ -1594,14 +2152,19 @@ function build(){
       '</div>';
 
     return;
+
   }
 
 
   const a=
     findCombo(
       items,
-      Number($("min20").value),
-      Number($("max20").value),
+      Number(
+        $("min20").value
+      ),
+      Number(
+        $("max20").value
+      ),
       20
     );
 
@@ -1609,8 +2172,12 @@ function build(){
   const b=
     findCombo(
       items,
-      Number($("min40").value),
-      Number($("max40").value),
+      Number(
+        $("min40").value
+      ),
+      Number(
+        $("max40").value
+      ),
       50
     );
 
@@ -1644,6 +2211,7 @@ function build(){
       </div>
 
       <p>
+
         ${x.chosen.map(q=>
           `<span class="pill">
             ${esc(q.name)}
@@ -1651,10 +2219,13 @@ function build(){
             ${q.odds.toFixed(2)}
           </span>`
         ).join("")}
+
       </p>
 
       <div class="status warn">
-        Model probability and EV are intentionally withheld until verified statistical inputs are available.
+        This is only a mathematical combination finder.
+        ChatGPT analysis should be used for probability,
+        value, role, matchup and correlation.
       </div>
 
     </div>`
@@ -1673,8 +2244,15 @@ function build(){
 
 
   $("results").innerHTML=
-    card("MULTI A — ~20",a)+
-    card("MULTI B — 40+",b);
+    card(
+      "MULTI A — ~20",
+      a
+    )+
+    card(
+      "MULTI B — 40+",
+      b
+    );
+
 }
 
 
@@ -1692,33 +2270,39 @@ function clearAll(){
 
   $("refresh").disabled=true;
 
+
   status(
     $("conn"),
     "Key cleared. Nothing is saved.",
     "ok"
   );
 
+
   status(
     $("integrity"),
     "No live data."
   );
 
+
   diag("Cleared.");
+
 }
 
 
 /* =========================================================
-   CHANGE SPORT
+   SPORT CHANGE
 ========================================================= */
 
 async function changeSport(s){
 
   state.sport=s;
 
+
   $("afl").classList.toggle(
     "active",
     s==="afl"
   );
+
 
   $("nrl").classList.toggle(
     "active",
@@ -1734,6 +2318,7 @@ async function changeSport(s){
     await connect();
 
   }
+
 }
 
 
@@ -1741,23 +2326,36 @@ async function changeSport(s){
    BUTTONS
 ========================================================= */
 
-$("connect").onclick=connect;
+$("connect").onclick=
+  connect;
 
-$("clear").onclick=clearAll;
 
-$("refresh").onclick=loadGames;
+$("clear").onclick=
+  clearAll;
 
-$("loadMarkets").onclick=loadMarkets;
 
-$("copyMarkets").onclick=copyAllMarkets;
+$("refresh").onclick=
+  loadGames;
 
-$("build").onclick=build;
 
-$("afl").onclick=()=>
-  changeSport("afl");
+$("loadMarkets").onclick=
+  loadMarkets;
 
-$("nrl").onclick=()=>
-  changeSport("nrl");
+
+$("prepareChatGPT").onclick=
+  prepareChatGPT;
+
+
+$("build").onclick=
+  build;
+
+
+$("afl").onclick=
+  ()=>changeSport("afl");
+
+
+$("nrl").onclick=
+  ()=>changeSport("nrl");
 
 </script>
 
