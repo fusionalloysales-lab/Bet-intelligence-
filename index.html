@@ -1,115 +1,294 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>BET INTELLIGENCE V12</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BET INTELLIGENCE V13</title>
+
 <style>
-:root{--bg:#0a0f16;--panel:#121a24;--panel2:#172231;--line:#26364a;--text:#eaf1f8;--muted:#92a4b7;--good:#48d597;--warn:#f5bd58;--bad:#ff6b72;--blue:#5aa9ff;--purple:#a88cff;--shadow:0 14px 40px rgba(0,0,0,.28)}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#091019,#0d141e 45%,#091019);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}.wrap{max-width:1500px;margin:auto;padding:16px}.top{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:14px}.brand h1{font-size:clamp(22px,4vw,34px);margin:0;letter-spacing:.04em}.brand .sub{color:var(--muted);font-size:13px;margin-top:4px}.badge{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#0e1621;color:var(--good);font-weight:800;font-size:12px}.grid{display:grid;grid-template-columns:360px 1fr;gap:14px}@media(max-width:950px){.grid{grid-template-columns:1fr}.wrap{padding:10px}}.card{background:rgba(18,26,36,.96);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}.card h2{font-size:15px;margin:0;padding:14px 16px;border-bottom:1px solid var(--line);letter-spacing:.03em}.body{padding:14px}.field{margin-bottom:12px}.field label{display:block;color:var(--muted);font-size:12px;font-weight:700;margin:0 0 6px}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;background:#0c141e;color:var(--text);border:1px solid #2b3b4e;border-radius:10px;padding:11px 12px;outline:none}textarea{min-height:76px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(90,169,255,.12)}button{border:0;border-radius:10px;padding:11px 13px;font-weight:800;cursor:pointer;background:#243448;color:var(--text)}button.primary{background:linear-gradient(135deg,#318ff4,#6267e8)}button.good{background:#173b31;color:#78e9b7;border:1px solid #285a48}button.warn{background:#3c2f16;color:#ffd47f;border:1px solid #645028}button.danger{background:#3a1d22;color:#ff9ca3;border:1px solid #633038}button:disabled{opacity:.45;cursor:not-allowed}.btns{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:12px;line-height:1.45;padding:10px;border-radius:10px;background:#0c141e;border:1px solid var(--line);color:var(--muted);margin-top:10px}.status.good{color:var(--good)}.status.bad{color:var(--bad)}.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);background:#0d151f}.tab{padding:13px 16px;white-space:nowrap;color:var(--muted);cursor:pointer;font-weight:800;font-size:13px;border-bottom:2px solid transparent}.tab.active{color:var(--text);border-bottom-color:var(--blue);background:#131e2a}.pane{display:none}.pane.active{display:block}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line)}.toolbar .grow{flex:1}.search{max-width:320px}.tableWrap{overflow:auto;max-height:67vh}.marketTable{width:100%;border-collapse:collapse;min-width:1080px}.marketTable th{position:sticky;top:0;background:#111b27;z-index:2;text-align:left;color:#9db0c4;font-size:11px;padding:10px;border-bottom:1px solid var(--line)}.marketTable td{padding:9px 10px;border-bottom:1px solid #1f2c3c;font-size:12px;vertical-align:middle}.marketTable tr:hover{background:#131e2a}.marketTable .name{font-weight:800;font-size:13px}.score{display:inline-block;min-width:38px;text-align:center;padding:5px 7px;border-radius:7px;font-weight:900}.s90{background:#173b31;color:#78e9b7}.s80{background:#183247;color:#7fc6ff}.s70{background:#3a321c;color:#ffd47f}.sLow{background:#3a1d22;color:#ff9ca3}.tier{font-weight:900;font-size:11px}.tier.floor{color:var(--good)}.tier.sweet{color:var(--blue)}.tier.ceiling{color:var(--warn)}.tier.over{color:var(--bad)}.reject{color:var(--bad);font-weight:800}.miniInput{width:68px;padding:7px 8px}.check{width:auto;transform:scale(1.15)}.muted{color:var(--muted)}.cards2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}@media(max-width:760px){.cards2{grid-template-columns:1fr}}.multi{border:1px solid var(--line);background:#0d151f;border-radius:14px;overflow:hidden}.multiHead{padding:14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.multiHead h3{margin:0;font-size:15px}.oddsBig{font-size:22px;font-weight:950}.legs{padding:8px 12px}.leg{display:flex;justify-content:space-between;gap:10px;padding:10px 4px;border-bottom:1px dashed #273648}.leg:last-child{border-bottom:0}.legMain{font-weight:800}.legSub{font-size:11px;color:var(--muted);margin-top:3px}.empty{padding:34px;text-align:center;color:var(--muted)}.metricGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}@media(max-width:600px){.metricGrid{grid-template-columns:repeat(2,1fr)}}.metric{background:#0d151f;border:1px solid var(--line);border-radius:10px;padding:10px}.metric b{display:block;font-size:18px}.metric span{font-size:10px;color:var(--muted);text-transform:uppercase}.auditTable{width:100%;border-collapse:collapse;min-width:980px}.auditTable td,.auditTable th{padding:9px;border-bottom:1px solid var(--line);font-size:12px;text-align:left}.note{font-size:12px;color:var(--muted);line-height:1.5}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 7px;margin:2px;font-size:10px;color:#b8c7d6}.hidden{display:none!important}.footer{color:#6f8398;font-size:11px;text-align:center;padding:18px}.jsonBox{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;white-space:pre-wrap;word-break:break-word;background:#081019;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:430px;overflow:auto}.sectionTitle{margin:16px 0 8px;font-weight:900;font-size:13px}.switchline{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+:root{
+  --bg:#081019;
+  --panel:#111b27;
+  --line:#26384d;
+  --text:#edf4fb;
+  --muted:#93a6b9;
+  --good:#58d99f;
+  --warn:#f1c466;
+  --bad:#ff7379;
+  --blue:#62a9ff
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#07101a,#0a121c 50%,#07101a);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  min-height:100vh
+}
+.wrap{max-width:1060px;margin:auto;padding:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}
+.top h1{margin:0;font-size:clamp(23px,5vw,34px);letter-spacing:.03em}
+.sub{color:var(--muted);font-size:12px;margin-top:4px}
+.badge{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 10px;
+  color:var(--good);
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap
+}
+.card{
+  background:rgba(17,27,39,.97);
+  border:1px solid var(--line);
+  border-radius:15px;
+  margin:12px 0;
+  overflow:hidden
+}
+.card h2{font-size:14px;margin:0;padding:13px 14px;border-bottom:1px solid var(--line)}
+.body{padding:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:720px){
+  .grid,.grid2{grid-template-columns:1fr}
+  .wrap{padding:9px}
+}
+label{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-bottom:5px}
+input,select,button{font:inherit}
+input,select{
+  width:100%;
+  background:#08121c;
+  color:var(--text);
+  border:1px solid #30445b;
+  border-radius:10px;
+  padding:11px 12px;
+  outline:none
+}
+button{
+  border:0;
+  border-radius:10px;
+  padding:11px 13px;
+  font-weight:900;
+  cursor:pointer;
+  background:#26394f;
+  color:var(--text)
+}
+button.primary{background:linear-gradient(135deg,#348ff4,#5f68e8)}
+button.good{background:#173a30;border:1px solid #2c5e4c;color:#7de9ba}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.status{
+  margin-top:10px;
+  padding:10px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0a141e;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45
+}
+.status.good{color:var(--good)}
+.status.bad{color:var(--bad)}
+.status.warn{color:var(--warn)}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+@media(max-width:720px){.games{grid-template-columns:1fr}}
+.game{padding:11px;border:1px solid var(--line);border-radius:10px;background:#0a141e;cursor:pointer}
+.game.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(98,169,255,.13)}
+.game b{font-size:13px}
+.small{font-size:11px;color:var(--muted)}
+.metricGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+@media(max-width:620px){.metricGrid{grid-template-columns:repeat(2,1fr)}}
+.metric{border:1px solid var(--line);border-radius:10px;background:#0a141e;padding:10px}
+.metric strong{display:block;font-size:20px}
+.metric span{font-size:10px;color:var(--muted);text-transform:uppercase}
+.list{margin-top:10px;max-height:430px;overflow:auto}
+.leg{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 4px;border-bottom:1px solid #203044}
+.leg:last-child{border-bottom:0}
+.leg b{font-size:13px}
+.price{font-weight:950}
+.pill{
+  display:inline-block;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:3px 6px;
+  margin:2px 2px 0 0;
+  font-size:10px;
+  color:#b7c7d6
+}
+.export{
+  white-space:pre-wrap;
+  word-break:break-word;
+  background:#071019;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  max-height:520px;
+  overflow:auto;
+  font:11px/1.48 ui-monospace,SFMono-Regular,Menlo,monospace
+}
+.note{font-size:11px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+.footer{text-align:center;color:#6e8398;font-size:10px;padding:15px 0 25px}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--muted);font-size:11px}
+.diag{white-space:pre-wrap;color:#9fb1c5;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}
 </style>
 </head>
+
 <body>
 <div class="wrap">
-  <div class="top">
-    <div class="brand"><h1>BET INTELLIGENCE V12</h1><div class="sub">Exact-line intelligence • multi suitability • common-failure control • results audit</div></div>
-    <div class="badge">V12 QUALITY FIRST</div>
+
+<div class="top">
+  <div>
+    <h1>BET INTELLIGENCE V13</h1>
+    <div class="sub">Load → choose match → restrict candidates → export for verified analysis</div>
   </div>
-  <div class="grid">
-    <aside class="card">
-      <h2>CONNECTION & MATCH</h2>
-      <div class="body">
-        <div class="field"><label>The Odds API Key</label><input id="apiKey" type="password" placeholder="Paste key each session" autocomplete="off"></div>
-        <div class="row">
-          <div class="field"><label>Sport</label><select id="sport"><option value="aussierules_afl">AFL</option><option value="rugbyleague_nrl">NRL</option></select></div>
-          <div class="field"><label>Bookmaker</label><select id="bookmaker"><option value="sportsbet">Sportsbet</option><option value="ladbrokes_au">Ladbrokes</option><option value="tab">TAB</option></select></div>
-        </div>
-        <div class="btns"><button class="primary" id="connectBtn">Connect</button><button id="clearBtn">Clear</button></div>
-        <div id="status" class="status">Paste API key and connect.</div>
-        <div class="field" style="margin-top:12px"><label>Game</label><select id="gameSelect" disabled><option>No games loaded</option></select></div>
-        <div class="btns"><button class="good" id="loadMarketsBtn" disabled>Load Markets</button><button id="demoBtn">Load Demo</button></div>
+  <div class="badge">PROBABILITY FIRST</div>
+</div>
 
-        <div class="sectionTitle">V12 Builder Targets</div>
-        <div class="row3">
-          <div class="field"><label>Core Min</label><input id="coreMin" type="number" value="15" step="1"></div>
-          <div class="field"><label>Core Target</label><input id="coreTarget" type="number" value="20" step="1"></div>
-          <div class="field"><label>Core Max</label><input id="coreMax" type="number" value="25" step="1"></div>
-        </div>
-        <div class="row">
-          <div class="field"><label>High Target</label><input id="highTarget" type="number" value="40" step="1"></div>
-          <div class="field"><label>Max Shared Players</label><select id="maxOverlap"><option value="0">0 preferred</option><option value="1">1 maximum</option></select></div>
-        </div>
-        <div class="switchline"><input id="strictMode" class="check" type="checkbox" checked><label for="strictMode">Strict V12 rejection rules</label></div>
+<section class="card">
+<h2>1. LOAD DATA</h2>
+<div class="body">
 
-        <div class="sectionTitle">Context Intelligence</div>
-        <div class="note">Odds alone cannot verify injuries, roles or matchup. Use these controls to add known match intelligence before building.</div>
-        <div class="row" style="margin-top:9px">
-          <div class="field"><label>Expected game environment</label><select id="gameEnv"><option value="neutral">Neutral</option><option value="high">High volume / scoring</option><option value="low">Low volume / scoring</option><option value="uncertain">Uncertain</option></select></div>
-          <div class="field"><label>Overall information quality</label><select id="infoQuality"><option value="85">Verified / strong</option><option value="75" selected>Reasonable</option><option value="65">Incomplete</option><option value="55">Poor</option></select></div>
-        </div>
-        <div class="field"><label>Match notes for ChatGPT export</label><textarea id="matchNotes" placeholder="Confirmed outs, role changes, weather, matchup notes..."></textarea></div>
-        <div class="btns"><button class="warn" id="buildBtn">Build V12 Multis</button></div>
-      </div>
-    </aside>
+<div class="grid2">
+<div>
+<label>The Odds API key</label>
+<input id="apiKey" type="password" placeholder="Paste key for this session" autocomplete="off">
+</div>
 
-    <main class="card">
-      <div class="tabs">
-        <div class="tab active" data-pane="markets">Markets</div>
-        <div class="tab" data-pane="multis">V12 Multis</div>
-        <div class="tab" data-pane="audit">Results Audit</div>
-        <div class="tab" data-pane="export">ChatGPT Export</div>
-      </div>
+<div>
+<label>Sport</label>
+<select id="sport">
+<option value="aussierules_afl">AFL</option>
+<option value="rugbyleague_nrl">NRL</option>
+</select>
+</div>
+</div>
 
-      <section id="pane-markets" class="pane active">
-        <div class="toolbar"><input id="search" class="search" placeholder="Filter player / market"><select id="marketFilter" style="max-width:220px"><option value="">All markets</option></select><div class="grow"></div><button id="autoScoreBtn">Re-score</button><button id="selectStrongBtn">Select Strong</button><button id="clearSelectBtn">Clear Selection</button></div>
-        <div class="tableWrap"><table class="marketTable"><thead><tr><th>Use</th><th>Player / Selection</th><th>Market</th><th>Line</th><th>Odds</th><th>Tier</th><th>Player</th><th>Bet</th><th>Multi</th><th>Vol.</th><th>Role</th><th>Pathways</th><th>Injury</th><th>Status</th></tr></thead><tbody id="marketBody"></tbody></table><div id="marketEmpty" class="empty">Connect and load a game, or use Demo.</div></div>
-      </section>
+<div class="row" style="margin-top:10px">
+<button id="connectBtn" class="primary">LOAD CURRENT GAMES</button>
+<button id="clearBtn">CLEAR</button>
+</div>
 
-      <section id="pane-multis" class="pane">
-        <div class="cards2">
-          <div class="multi"><div class="multiHead"><div><h3>CORE / SECOND CHANCE</h3><div class="muted" style="font-size:11px">Probability first • target only if quality survives</div></div><div id="coreOdds" class="oddsBig">—</div></div><div id="coreLegs" class="legs"><div class="empty">Build V12 multis.</div></div></div>
-          <div class="multi"><div class="multiHead"><div><h3>HIGHER RETURN</h3><div class="muted" style="font-size:11px">Independent construction • controlled aggression</div></div><div id="highOdds" class="oddsBig">—</div></div><div id="highLegs" class="legs"><div class="empty">Build V12 multis.</div></div></div>
-        </div>
-        <div class="body">
-          <div id="multiSummary" class="status">No multis built yet.</div>
-          <div class="metricGrid"><div class="metric"><b id="bestBet">—</b><span>Best bet score</span></div><div class="metric"><b id="coreConf">—</b><span>Core confidence</span></div><div class="metric"><b id="highConf">—</b><span>High confidence</span></div><div class="metric"><b id="rejectedCount">0</b><span>Rejected markets</span></div></div>
-        </div>
-      </section>
+<div id="status" class="status">Paste your API key and load current games.</div>
+<div id="games" class="games"></div>
 
-      <section id="pane-audit" class="pane">
-        <div class="toolbar"><div class="grow note">Enter actual results after the match. V12 records the miss reason instead of calling an injury-affected miss a success.</div><button id="addBuiltToAuditBtn">Add Built Legs</button><button id="saveAuditBtn">Save Audit</button><button class="danger" id="resetAuditBtn">Reset Audit</button></div>
-        <div class="tableWrap"><table class="auditTable"><thead><tr><th>Player</th><th>Selection</th><th>Target</th><th>Odds</th><th>Actual</th><th>Result</th><th>Margin</th><th>Failure reason</th><th>Pre Bet</th><th>Pre Multi</th></tr></thead><tbody id="auditBody"></tbody></table><div id="auditEmpty" class="empty">No audited legs.</div></div>
-      </section>
+</div>
+</section>
 
-      <section id="pane-export" class="pane">
-        <div class="toolbar"><div class="grow note">Copy this pack into ChatGPT. It contains only V12-relevant markets, your intelligence settings, and the builder output.</div><button id="refreshExportBtn">Refresh Export</button><button class="primary" id="copyExportBtn">Copy</button><button id="downloadExportBtn">Download TXT</button></div>
-        <div class="body"><div id="exportBox" class="jsonBox">Build or select markets to generate export.</div></div>
-      </section>
-    </main>
-  </div>
-  <div class="footer">BET INTELLIGENCE V12 is an analysis tool only. It does not place bets. API key remains in this browser session only.</div>
+
+<section id="setupCard" class="card hidden">
+<h2>2. SELECT MATCH & RESTRICTIONS</h2>
+<div class="body">
+
+<div id="selectedGame" class="status good">No game selected.</div>
+
+<div class="grid" style="margin-top:10px">
+
+<div>
+<label>Team focus</label>
+<select id="teamFocus">
+<option value="both">Both teams</option>
+<option value="home">Home team only</option>
+<option value="away">Away team only</option>
+</select>
+</div>
+
+<div>
+<label>Candidate filter</label>
+<select id="profile">
+<option value="strict" selected>Strict — safest shortlist</option>
+<option value="balanced">Balanced</option>
+<option value="wide">Wide — more candidates</option>
+</select>
+</div>
+
+<div>
+<label>Maximum candidates</label>
+<select id="cap">
+<option>24</option>
+<option selected>36</option>
+<option>50</option>
+<option>70</option>
+</select>
+</div>
+
+</div>
+
+<div class="note" style="margin-top:10px">
+Team focus is passed to ChatGPT for verification. The odds feed does not reliably identify each player's club, so V13 will not guess player-team mapping in the browser.
+</div>
+
+<div class="row" style="margin-top:10px">
+<button id="marketsBtn" class="good">LOAD & FILTER PLAYER MARKETS</button>
+</div>
+
+<div id="marketStatus" class="status">Ready to load the selected match.</div>
+
+</div>
+</section>
+
+
+<section id="shortlistCard" class="card hidden">
+<h2>3. V13 CANDIDATE SHORTLIST</h2>
+<div class="body">
+
+<div class="metricGrid">
+<div class="metric"><strong id="rawCount">0</strong><span>Raw outcomes</span></div>
+<div class="metric"><strong id="shortCount">0</strong><span>Export candidates</span></div>
+<div class="metric"><strong id="removedCount">0</strong><span>Removed</span></div>
+<div class="metric"><strong id="quota">—</strong><span>API remaining</span></div>
+</div>
+
+<div id="shortlist" class="list"></div>
+
+<div class="note" style="margin-top:10px">
+V13 prefers safer alternate lines, removes unders/no selections and duplicate outcomes, limits repeated exposure to one player, and never turns bookmaker odds into a fabricated performance model.
+</div>
+
+</div>
+</section>
+
+
+<section id="exportCard" class="card hidden">
+<h2>4. CREATE EXPORT</h2>
+<div class="body">
+
+<div class="row">
+<button id="createExportBtn" class="primary">CREATE V13 EXPORT</button>
+<button id="copyBtn" disabled>COPY</button>
+<button id="downloadBtn" disabled>DOWNLOAD TXT</button>
+</div>
+
+<div id="exportBox" class="export" style="margin-top:10px">
+Create export after markets are loaded.
+</div>
+
+</div>
+</section>
+
+
+<section class="card">
+<div class="body note">
+<b>V13 model rule:</b> the browser only filters verified market data. ChatGPT must independently verify selection, injury, role, last-five results, previous head-to-head performance, venue/matchup and conditions before recommending a leg. No bet is forced to reach target odds.
+
+<details>
+<summary>Diagnostics</summary>
+<div id="diag" class="diag">Ready.</div>
+</details>
+</div>
+</section>
+
+<div class="footer">
+BET INTELLIGENCE V13 is analysis support only. It does not place bets. API key is not stored.
+</div>
+
 </div>
 
 <script>
 'use strict';
 
 const API='https://api.the-odds-api.com/v4';
-
-const MARKET_NAMES={
-player_disposals:'Disposals O/U',
-player_disposals_over:'Disposals Over',
-player_goal_scorer_anytime:'Anytime Goal',
-player_goals_scored_over:'Goals Over',
-player_marks_over:'Marks Over',
-player_tackles_over:'Tackles Over',
-player_clearances_over:'Clearances Over',
-player_kicks_over:'Kicks Over',
-player_handballs_over:'Handballs Over',
-player_afl_fantasy_points:'AFL Fantasy O/U',
-player_afl_fantasy_points_over:'AFL Fantasy Over',
-player_try_scorer_anytime:'Anytime Try',
-player_try_scorer_over:'Tries Over'
-};
 
 const AFL_MARKETS=[
 'player_disposals_over',
@@ -120,7 +299,9 @@ const AFL_MARKETS=[
 'player_tackles_over',
 'player_clearances_over',
 'player_kicks_over',
-'player_handballs_over'
+'player_handballs_over',
+'player_afl_fantasy_points',
+'player_afl_fantasy_points_over'
 ];
 
 const NRL_MARKETS=[
@@ -128,384 +309,33 @@ const NRL_MARKETS=[
 'player_try_scorer_over'
 ];
 
-let state={
+const MARKET_LABEL={
+player_disposals_over:'Disposals',
+player_disposals:'Disposals',
+player_goals_scored_over:'Goals',
+player_goal_scorer_anytime:'Anytime goal',
+player_marks_over:'Marks',
+player_tackles_over:'Tackles',
+player_clearances_over:'Clearances',
+player_kicks_over:'Kicks',
+player_handballs_over:'Handballs',
+player_afl_fantasy_points:'Fantasy',
+player_afl_fantasy_points_over:'Fantasy',
+player_try_scorer_anytime:'Anytime try',
+player_try_scorer_over:'Tries'
+};
+
+const state={
 events:[],
-markets:[],
-built:{core:[],high:[]},
-audit:[],
+game:null,
+raw:[],
+short:[],
 quota:null
 };
 
 const $=id=>document.getElementById(id);
-const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const productOdds=legs=>legs.reduce((p,x)=>p*Number(x.price||1),1);
-const playerKey=x=>(x.player||x.name||'').trim().toLowerCase();
 
-function setStatus(msg,type=''){
-const el=$('status');
-el.textContent=msg;
-el.className='status'+(type?' '+type:'');
-}
-
-function safeNum(v,d=0){
-const n=Number(v);
-return Number.isFinite(n)?n:d;
-}
-
-function marketsForSport(){
-return $('sport').value==='aussierules_afl'?AFL_MARKETS:NRL_MARKETS;
-}
-
-function tierFor(m){
-if(m.market.includes('goal')||m.market.includes('try'))
-return m.price<=1.55?'FLOOR':m.price<=2.4?'SWEET':m.price<=4.5?'CEILING':'OVEREXTENDED';
-
-const line=safeNum(m.point,0);
-const base=marketBase(m.market);
-const relative=line/base;
-
-if(relative<=.82)return 'FLOOR';
-if(relative<=1.05)return 'SWEET';
-if(relative<=1.22)return 'CEILING';
-return 'OVEREXTENDED';
-}
-
-function marketBase(k){
-return ({
-player_disposals_over:24.5,
-player_disposals:24.5,
-player_marks_over:5.5,
-player_tackles_over:4.5,
-player_clearances_over:4.5,
-player_kicks_over:14.5,
-player_handballs_over:10.5,
-player_afl_fantasy_points:85.5,
-player_afl_fantasy_points_over:85.5,
-player_goals_scored_over:1.5,
-player_try_scorer_over:1.5
-}[k]||1);
-}
-
-function baseScores(m){
-const tier=tierFor(m);
-const iq=safeNum($('infoQuality').value,75);
-const implied=1/safeNum(m.price,2);
-const market=m.market;
-
-let role=75;
-let path=74;
-let vol=70;
-let injury=90;
-
-if(market.includes('disposals')){
-role=82;
-path=84;
-vol=80;
-}
-else if(market.includes('kicks')||market.includes('handballs')){
-role=78;
-path=73;
-vol=74;
-}
-else if(market.includes('marks')){
-role=72;
-path=68;
-vol=66;
-}
-else if(market.includes('tackles')||market.includes('clearances')){
-role=76;
-path=71;
-vol=70;
-}
-else if(market.includes('goal')||market.includes('try')){
-role=74;
-path=67;
-vol=56;
-}
-
-if(tier==='FLOOR'){
-vol+=9;
-path+=5;
-}
-else if(tier==='SWEET'){
-vol+=4;
-}
-else if(tier==='CEILING'){
-vol-=10;
-path-=8;
-}
-else{
-vol-=22;
-path-=15;
-}
-
-const player=clamp(
-role*.35+
-path*.25+
-vol*.15+
-injury*.1+
-iq*.15,
-45,
-95
-);
-
-let pricePenalty=0;
-
-if(implied<.2)pricePenalty=10;
-else if(implied<.35)pricePenalty=5;
-
-const bet=clamp(
-player-
-(tier==='CEILING'?6:tier==='OVEREXTENDED'?16:0)-
-pricePenalty,
-40,
-95
-);
-
-const multi=clamp(
-bet+
-(vol-70)*.25+
-(path-70)*.15-
-(market.includes('goal')||market.includes('try')?4:0),
-35,
-96
-);
-
-return {
-tier,
-role:Math.round(role),
-path:Math.round(path),
-vol:Math.round(vol),
-injury,
-player:Math.round(player),
-bet:Math.round(bet),
-multi:Math.round(multi)
-};
-}
-
-function scoreMarket(m){
-const b=baseScores(m);
-const o=m.override||{};
-
-const role=safeNum(o.role,b.role);
-const path=safeNum(o.path,b.path);
-const vol=safeNum(o.vol,b.vol);
-const injury=safeNum(o.injury,b.injury);
-const iq=safeNum($('infoQuality').value,75);
-
-const player=clamp(
-role*.35+
-path*.25+
-vol*.15+
-injury*.1+
-iq*.15,
-0,
-100
-);
-
-const tier=o.tier||b.tier;
-
-let bet=player-(tier==='CEILING'?6:tier==='OVEREXTENDED'?16:0);
-
-if(injury<70)bet-=8;
-if(role<65)bet-=7;
-
-const multi=clamp(
-bet+
-(vol-70)*.25+
-(path-70)*.15-
-(m.market.includes('goal')||m.market.includes('try')?4:0),
-0,
-100
-);
-
-const strict=$('strictMode').checked;
-
-let reject='';
-
-if(tier==='OVEREXTENDED')reject='Overextended line';
-else if(injury<60)reject='Injury uncertainty';
-else if(role<60)reject='Unclear/weak role';
-else if(strict&&bet<70)reject='Bet confidence <70';
-else if(strict&&multi<70)reject='Multi score <70';
-
-return {
-...b,
-tier,
-role:Math.round(role),
-path:Math.round(path),
-vol:Math.round(vol),
-injury:Math.round(injury),
-player:Math.round(player),
-bet:Math.round(clamp(bet,0,100)),
-multi:Math.round(multi),
-reject
-};
-}
-
-function normalizeOutcome(outcome,market,event){
-const desc=outcome.description||outcome.name||'Unknown';
-const side=(outcome.name||'').toLowerCase();
-
-if(side==='under'||side==='no')return null;
-
-const player=(outcome.description||outcome.name||'').trim();
-
-return {
-id:crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2),
-player,
-name:outcome.name||player,
-market,
-point:outcome.point??null,
-price:safeNum(outcome.price,0),
-eventId:event.id,
-home:event.home_team,
-away:event.away_team,
-selected:false,
-override:{}
-};
-}
-
-async function getJson(url){
-const r=await fetch(url);
-
-state.quota={
-remaining:r.headers.get('x-requests-remaining'),
-used:r.headers.get('x-requests-used')
-};
-
-if(!r.ok){
-let t=await r.text();
-throw new Error(`HTTP ${r.status}: ${t.slice(0,220)}`);
-}
-
-return r.json();
-}
-
-async function connect(){
-const key=$('apiKey').value.trim();
-
-if(!key)return setStatus('Enter your API key first.','bad');
-
-setStatus('Checking key and loading events…');
-$('connectBtn').disabled=true;
-
-try{
-const sports=await getJson(`${API}/sports?apiKey=${encodeURIComponent(key)}`);
-
-const sk=$('sport').value;
-
-if(!sports.some(s=>s.key===sk&&s.active)){
-setStatus('Connected, but selected sport is not currently active.','bad');
-}
-
-const events=await getJson(`${API}/sports/${sk}/events?apiKey=${encodeURIComponent(key)}`);
-
-state.events=events.sort(
-(a,b)=>new Date(a.commence_time)-new Date(b.commence_time)
-);
-
-$('gameSelect').innerHTML=state.events.length
-?state.events.map((e,i)=>`<option value="${i}">${esc(e.away_team)} @ ${esc(e.home_team)} — ${new Date(e.commence_time).toLocaleString()}</option>`).join('')
-:'<option>No games available</option>';
-
-$('gameSelect').disabled=!state.events.length;
-$('loadMarketsBtn').disabled=!state.events.length;
-
-setStatus(
-`Connected. ${state.events.length} event(s) loaded.${quotaText()}`,
-'good'
-);
-
-}
-catch(e){
-setStatus(`Connection failed: ${e.message}`,'bad');
-}
-finally{
-$('connectBtn').disabled=false;
-}
-}
-
-async function loadMarkets(){
-const key=$('apiKey').value.trim();
-const event=state.events[safeNum($('gameSelect').value,0)];
-
-if(!event)return;
-
-$('loadMarketsBtn').disabled=true;
-setStatus('Loading player markets for selected event…');
-
-try{
-const mk=marketsForSport().join(',');
-const book=$('bookmaker').value;
-
-const url=
-`${API}/sports/${$('sport').value}/events/${event.id}/odds`+
-`?apiKey=${encodeURIComponent(key)}`+
-`&regions=au`+
-`&bookmakers=${encodeURIComponent(book)}`+
-`&oddsFormat=decimal`+
-`&markets=${encodeURIComponent(mk)}`;
-
-const data=await getJson(url);
-
-const b=
-(data.bookmakers||[]).find(x=>x.key===book)||
-(data.bookmakers||[])[0];
-
-let rows=[];
-
-for(const market of (b?.markets||[])){
-for(const out of market.outcomes||[]){
-const x=normalizeOutcome(out,market.key,event);
-
-if(x&&x.price>1&&x.price<=10){
-rows.push(x);
-}
-}
-}
-
-state.markets=dedupe(rows);
-
-renderMarkets();
-populateFilters();
-
-setStatus(
-`${state.markets.length} qualifying market outcomes loaded from ${b?.title||book}.${quotaText()}`,
-'good'
-);
-
-}
-catch(e){
-setStatus(`Market load failed: ${e.message}`,'bad');
-}
-finally{
-$('loadMarketsBtn').disabled=false;
-}
-}
-
-function quotaText(){
-return state.quota?.remaining
-?` API requests remaining: ${state.quota.remaining}.`
-:'';
-}
-
-function dedupe(rows){
-const map=new Map();
-
-for(const r of rows){
-const k=[r.player,r.market,r.point,r.name].join('|');
-
-if(!map.has(k)||map.get(k).price<r.price){
-map.set(k,r);
-}
-}
-
-return [...map.values()];
-}
-
-function esc(s){
-return String(s??'').replace(
+const esc=s=>String(s??'').replace(
 /[&<>"']/g,
 c=>({
 '&':'&amp;',
@@ -515,1114 +345,674 @@ c=>({
 "'":'&#039;'
 }[c])
 );
+
+const num=(v,d=0)=>Number.isFinite(Number(v))?Number(v):d;
+
+function log(x){
+$('diag').textContent=
+new Date().toLocaleTimeString()+'\n'+
+(typeof x==='string'?x:JSON.stringify(x,null,2));
 }
 
-function scoreClass(n){
-return n>=90?'s90':
-n>=80?'s80':
-n>=70?'s70':
-'sLow';
+function status(msg,type=''){
+$('status').textContent=msg;
+$('status').className='status'+(type?' '+type:'');
 }
 
-function tierClass(t){
-return t==='FLOOR'?'floor':
-t==='SWEET'?'sweet':
-t==='CEILING'?'ceiling':
-'over';
+function marketStatus(msg,type=''){
+$('marketStatus').textContent=msg;
+$('marketStatus').className='status'+(type?' '+type:'');
 }
 
-function renderMarkets(){
+function currentMarkets(){
+return $('sport').value==='aussierules_afl'
+? AFL_MARKETS
+: NRL_MARKETS;
+}
 
-const q=$('search').value.toLowerCase();
-const mf=$('marketFilter').value;
+function profileRules(){
 
-let visible=0;
+const p=$('profile').value;
 
-$('marketBody').innerHTML=state.markets.map((m,i)=>{
+if(p==='strict'){
+return{
+minOdds:1.10,
+maxOdds:2.25,
+maxPerPlayer:1
+};
+}
 
-const s=scoreMarket(m);
-m.score=s;
+if(p==='balanced'){
+return{
+minOdds:1.08,
+maxOdds:3.00,
+maxPerPlayer:2
+};
+}
 
-const show=
-(!q||(m.player+' '+m.market).toLowerCase().includes(q))&&
-(!mf||m.market===mf);
+return{
+minOdds:1.05,
+maxOdds:5.00,
+maxPerPlayer:3
+};
 
-if(show)visible++;
+}
+
+function resetAfterGame(){
+state.raw=[];
+state.short=[];
+$('shortlistCard').classList.add('hidden');
+$('exportCard').classList.add('hidden');
+$('exportBox').textContent='Create export after markets are loaded.';
+$('copyBtn').disabled=true;
+$('downloadBtn').disabled=true;
+}
+
+async function getJson(url){
+
+const res=await fetch(url);
+
+const remaining=res.headers.get('x-requests-remaining');
+
+if(remaining!==null){
+state.quota=remaining;
+}
+
+let data;
+
+try{
+data=await res.json();
+}catch{
+throw new Error(`HTTP ${res.status}`);
+}
+
+if(!res.ok){
+throw new Error(data?.message||data?.error||`HTTP ${res.status}`);
+}
+
+return data;
+}
+
+async function loadGames(){
+
+const key=$('apiKey').value.trim();
+
+if(!key){
+status('Enter your Odds API key first.','bad');
+return;
+}
+
+status('Loading current games…','warn');
+$('connectBtn').disabled=true;
+
+try{
+
+const sport=$('sport').value;
+
+const url=
+`${API}/sports/${encodeURIComponent(sport)}/events?apiKey=${encodeURIComponent(key)}&dateFormat=iso`;
+
+const data=await getJson(url);
+
+const now=Date.now();
+
+state.events=(Array.isArray(data)?data:[])
+.filter(x=>new Date(x.commence_time).getTime()>now-6*60*60*1000)
+.sort((a,b)=>new Date(a.commence_time)-new Date(b.commence_time));
+
+renderGames();
+
+if(!state.events.length){
+status('No current/upcoming games returned for this sport.','warn');
+}else{
+status(`Loaded ${state.events.length} current/upcoming game(s). Select the match you want to analyse.`,'good');
+}
+
+log({
+events:state.events.length,
+quota:state.quota
+});
+
+}catch(e){
+
+status('Game load failed: '+e.message,'bad');
+log(e.message);
+
+}finally{
+
+$('connectBtn').disabled=false;
+
+}
+
+}
+
+function renderGames(){
+
+$('games').innerHTML=state.events.map((g,i)=>{
+
+const dt=new Date(g.commence_time);
 
 return `
-<tr data-index="${i}" class="${show?'':'hidden'}">
+<div class="game" data-index="${i}">
+<b>${esc(g.away_team)} @ ${esc(g.home_team)}</b>
+<div class="small">${esc(dt.toLocaleString())}</div>
+</div>
+`;
 
-<td>
-<input
-class="check useCheck"
-data-i="${i}"
-type="checkbox"
-${m.selected?'checked':''}>
-</td>
-
-<td>
-<div class="name">${esc(m.player)}</div>
-<div class="muted">${esc(m.name)}</div>
-</td>
-
-<td>${esc(MARKET_NAMES[m.market]||m.market)}</td>
-
-<td>${m.point??'—'}</td>
-
-<td><b>${m.price.toFixed(2)}</b></td>
-
-<td>
-<span class="tier ${tierClass(s.tier)}">
-${s.tier}
-</span>
-</td>
-
-<td>
-<span class="score ${scoreClass(s.player)}">
-${s.player}
-</span>
-</td>
-
-<td>
-<span class="score ${scoreClass(s.bet)}">
-${s.bet}
-</span>
-</td>
-
-<td>
-<span class="score ${scoreClass(s.multi)}">
-${s.multi}
-</span>
-</td>
-
-<td>
-<input
-class="miniInput scoreEdit"
-data-k="vol"
-data-i="${i}"
-type="number"
-min="0"
-max="100"
-value="${s.vol}">
-</td>
-
-<td>
-<input
-class="miniInput scoreEdit"
-data-k="role"
-data-i="${i}"
-type="number"
-min="0"
-max="100"
-value="${s.role}">
-</td>
-
-<td>
-<input
-class="miniInput scoreEdit"
-data-k="path"
-data-i="${i}"
-type="number"
-min="0"
-max="100"
-value="${s.path}">
-</td>
-
-<td>
-<input
-class="miniInput scoreEdit"
-data-k="injury"
-data-i="${i}"
-type="number"
-min="0"
-max="100"
-value="${s.injury}">
-</td>
-
-<td>
-${s.reject
-?`<span class="reject">REJECT: ${esc(s.reject)}</span>`
-:'<span style="color:var(--good);font-weight:800">QUALIFY</span>'
-}
-</td>
-
-</tr>`;
 }).join('');
 
-$('marketEmpty').classList.toggle('hidden',visible>0);
+document.querySelectorAll('.game').forEach(el=>{
 
-updateRejected();
-refreshExport();
+el.onclick=()=>selectGame(Number(el.dataset.index));
+
+});
+
 }
 
-function populateFilters(){
+function selectGame(i){
 
-const ms=[...new Set(state.markets.map(x=>x.market))];
+state.game=state.events[i];
 
-$('marketFilter').innerHTML=
-'<option value="">All markets</option>'+
-ms.map(
-m=>`<option value="${m}">${esc(MARKET_NAMES[m]||m)}</option>`
-).join('');
-}
-
-function commonFailurePenalty(legs,candidate){
-
-let p=0;
-
-const sameMarket=legs.filter(
-x=>x.market===candidate.market
-).length;
-
-if(sameMarket>=2){
-p+=6*sameMarket;
-}
-
-const samePlayer=legs.some(
-x=>playerKey(x)===playerKey(candidate)
+document.querySelectorAll('.game').forEach(
+(x,n)=>x.classList.toggle('selected',n===i)
 );
 
-if(samePlayer){
-p+=50;
+$('setupCard').classList.remove('hidden');
+
+$('selectedGame').textContent=
+`${state.game.away_team} @ ${state.game.home_team}`;
+
+resetAfterGame();
+
+marketStatus('Match selected. Choose restrictions then load player markets.');
+
 }
 
-if(
-legs.length>=3&&
-(
-candidate.market.includes('disposals')||
-candidate.market.includes('kicks')||
-candidate.market.includes('handballs')
-)&&
-legs.filter(
-x=>
-x.market.includes('disposals')||
-x.market.includes('kicks')||
-x.market.includes('handballs')
-).length>=2
-){
-p+=8;
+function normalizeOutcome(o,market){
+
+const name=String(o.name||'').trim();
+const description=String(o.description||'').trim();
+
+const lowerName=name.toLowerCase();
+
+if(lowerName==='under' || lowerName==='no'){
+return null;
 }
 
-return p;
+let player=description || name;
+
+if(lowerName==='over' && description){
+player=description;
 }
 
-function eligible(mode,excludePlayers=new Set()){
-
-return state.markets
-.filter(
-m=>m.selected||state.markets.every(x=>!x.selected)
-)
-.map(m=>{
-m.score=scoreMarket(m);
-return m;
-})
-.filter(
-m=>
-!m.score.reject&&
-!excludePlayers.has(playerKey(m))&&
-(
-mode==='core'
-?m.score.bet>=80&&m.score.multi>=82
-:m.score.bet>=70&&m.score.multi>=70
-)
-);
+if(!player){
+return null;
 }
 
-function buildOne(mode,excludePlayers=new Set()){
+const odds=Number(o.price);
 
-const target=
-mode==='core'
-?safeNum($('coreTarget').value,20)
-:safeNum($('highTarget').value,40);
-
-const min=
-mode==='core'
-?safeNum($('coreMin').value,15)
-:target;
-
-let pool=eligible(mode,excludePlayers);
-
-pool.sort((a,b)=>
-(
-b.score.multi+
-(mode==='high'?Math.log(b.price)*8:0)
-)-
-(
-a.score.multi+
-(mode==='high'?Math.log(a.price)*8:0)
-)
-);
-
-let legs=[];
-let odds=1;
-
-while(pool.length&&legs.length<7){
-
-let best=null;
-let bestUtility=-999;
-
-for(const c of pool){
-
-const penalty=commonFailurePenalty(legs,c);
-
-let utility=c.score.multi-penalty;
-
-if(mode==='core'&&c.score.tier==='CEILING'){
-utility-=10;
+if(!Number.isFinite(odds) || odds<=1){
+return null;
 }
 
-if(mode==='high'){
-utility+=Math.min(12,Math.log(c.price)*6);
+const line=
+o.point===undefined || o.point===null
+? null
+: Number(o.point);
+
+return{
+player,
+market,
+line:Number.isFinite(line)?line:null,
+name,
+odds
+};
+
 }
 
-if(utility>bestUtility){
-bestUtility=utility;
-best=c;
-}
-}
+function dedupe(rows){
 
-if(!best||bestUtility<(mode==='core'?75:64)){
-break;
-}
+const map=new Map();
 
-const next=odds*best.price;
+for(const r of rows){
 
-if(
-mode==='core'&&
-odds>=min&&
-Math.abs(target-odds)<Math.abs(target-next)
-){
-break;
+const key=[
+r.player.toLowerCase(),
+r.market,
+r.line,
+r.name.toLowerCase()
+].join('|');
+
+if(!map.has(key) || map.get(key).odds<r.odds){
+map.set(key,r);
 }
 
-legs.push(best);
-odds=next;
+}
 
-pool=pool.filter(
-x=>x!==best&&playerKey(x)!==playerKey(best)
+return [...map.values()];
+
+}
+
+function conservativePick(group){
+
+const withLine=group.filter(
+x=>x.line!==null && Number.isFinite(Number(x.line))
 );
 
-if(odds>=target){
-break;
+if(withLine.length){
+
+withLine.sort(
+(a,b)=>Number(a.line)-Number(b.line) || a.odds-b.odds
+);
+
+return withLine[0];
+
 }
+
+return [...group].sort((a,b)=>a.odds-b.odds)[0];
+
 }
 
-if(mode==='core'&&odds<min){
+function makeShortlist(rows){
 
-for(const c of pool){
+const rules=profileRules();
 
-if(legs.length>=7)break;
+let eligible=rows.filter(
+x=>x.odds>=rules.minOdds && x.odds<=rules.maxOdds
+);
 
-if(commonFailurePenalty(legs,c)>12){
+const groups=new Map();
+
+for(const x of eligible){
+
+const k=x.player.toLowerCase()+'|'+x.market;
+
+if(!groups.has(k)){
+groups.set(k,[]);
+}
+
+groups.get(k).push(x);
+
+}
+
+let picked=[...groups.values()]
+.map(conservativePick)
+.filter(Boolean);
+
+/*
+Higher implied probability first.
+This is only an odds-market filtering step.
+It is NOT treated as the final model probability.
+*/
+picked.sort(
+(a,b)=>(1/a.odds)-(1/b.odds)
+);
+
+const perPlayer=new Map();
+const out=[];
+
+for(const x of picked){
+
+const k=x.player.toLowerCase();
+const n=perPlayer.get(k)||0;
+
+if(n>=rules.maxPerPlayer){
 continue;
 }
 
-legs.push(c);
-odds*=c.price;
+out.push(x);
+perPlayer.set(k,n+1);
 
-if(odds>=min){
-break;
-}
-}
 }
 
-return legs;
+const cap=num($('cap').value,36);
+
+return out.slice(0,cap);
+
 }
 
-function buildMultis(){
+async function loadMarkets(){
 
-if(!state.markets.length){
-return setStatus('Load markets first.','bad');
+if(!state.game){
+marketStatus('Select a game first.','bad');
+return;
 }
 
-state.markets.forEach(
-m=>m.score=scoreMarket(m)
-);
+const key=$('apiKey').value.trim();
 
-const core=buildOne('core');
-
-const maxO=safeNum(
-$('maxOverlap').value,
-0
-);
-
-let exclude=new Set(
-core.map(playerKey)
-);
-
-let high=buildOne(
-'high',
-exclude
-);
-
-if(!high.length&&maxO===1){
-
-exclude=new Set(
-core.slice(1).map(playerKey)
-);
-
-high=buildOne(
-'high',
-exclude
-);
+if(!key){
+marketStatus('API key is missing.','bad');
+return;
 }
 
-state.built={
-core,
-high
-};
-
-renderMultis();
-switchPane('multis');
-refreshExport();
-}
-
-function renderMultis(){
-
-const {core,high}=state.built;
-
-renderMulti(
-'core',
-core
+marketStatus(
+'Checking Sportsbet markets for this event…',
+'warn'
 );
 
-renderMulti(
-'high',
-high
+$('marketsBtn').disabled=true;
+
+resetAfterGame();
+
+try{
+
+const sport=
+state.game.sport_key || $('sport').value;
+
+const base=
+`${API}/sports/${encodeURIComponent(sport)}/events/${encodeURIComponent(state.game.id)}`;
+
+const availability=await getJson(
+`${base}/markets?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet`
 );
 
-const all=state.markets
-.filter(m=>!m.score?.reject)
-.sort(
-(a,b)=>
-(b.score?.bet||0)-
-(a.score?.bet||0)
-);
+const availBook=
+(availability.bookmakers||[])
+.find(x=>x.key==='sportsbet');
 
-$('bestBet').textContent=
-all[0]
-?`${all[0].score.bet}/100`
-:'—';
-
-$('coreConf').textContent=
-confidence(core);
-
-$('highConf').textContent=
-confidence(high);
-
-updateRejected();
-
-let messages=[];
-
-const co=productOdds(core);
-const ho=productOdds(high);
-
-if(
-core.length&&
-co<safeNum($('coreMin').value,15)
-){
-messages.push(
-`Core stopped at ${co.toFixed(2)}x rather than forcing a weaker leg.`
+if(!availBook){
+throw new Error(
+'Sportsbet currently has no market list for this event.'
 );
 }
 
-if(
-!high.length||
-ho<safeNum($('highTarget').value,40)
-){
-messages.push(
-'No qualifying 40+ multi could be built under the current V12 thresholds.'
+const available=
+new Set((availBook.markets||[]).map(x=>x.key));
+
+const requested=
+currentMarkets().filter(x=>available.has(x));
+
+if(!requested.length){
+throw new Error(
+'Sportsbet has no supported V13 player-prop markets open for this event yet. Try again closer to game time.'
 );
 }
 
-if(!messages.length){
-messages.push(
-'Both multis meet current builder thresholds. Review external role/injury intelligence before using them.'
+marketStatus(
+`Found ${requested.length} supported player market(s). Loading prices…`,
+'warn'
+);
+
+const url=
+`${base}/odds?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet&oddsFormat=decimal&markets=${encodeURIComponent(requested.join(','))}`;
+
+const data=await getJson(url);
+
+const book=
+(data.bookmakers||[])
+.find(x=>x.key==='sportsbet');
+
+if(!book){
+throw new Error(
+'Sportsbet was not returned for the player-market odds request.'
 );
 }
 
-$('multiSummary').textContent=
-messages.join(' ');
+let rows=[];
+
+for(const m of book.markets||[]){
+
+for(const o of m.outcomes||[]){
+
+const x=normalizeOutcome(o,m.key);
+
+if(x){
+rows.push(x);
 }
 
-function confidence(legs){
-
-if(!legs.length){
-return '—';
 }
 
-return Math.round(
-legs.reduce(
-(s,x)=>s+x.score.multi,
-0
-)/legs.length
-)+'/100';
 }
 
-function renderMulti(prefix,legs){
+state.raw=dedupe(rows);
+state.short=makeShortlist(state.raw);
 
-$(prefix+'Odds').textContent=
-legs.length
-?productOdds(legs).toFixed(2)+'x'
-:'—';
+renderShortlist();
 
-$(prefix+'Legs').innerHTML=
-legs.length
-?legs.map(x=>`
+$('shortlistCard').classList.remove('hidden');
+$('exportCard').classList.remove('hidden');
+
+marketStatus(
+`Loaded ${state.raw.length} usable Sportsbet outcomes across ${requested.length} available player markets. V13 retained ${state.short.length} candidates under the ${$('profile').value} filter.`,
+'good'
+);
+
+log({
+bookmaker:book.title,
+availablePlayerMarkets:requested,
+raw:state.raw.length,
+short:state.short.length,
+profile:$('profile').value,
+quota:state.quota
+});
+
+}catch(e){
+
+marketStatus(
+'Market load failed: '+e.message,
+'bad'
+);
+
+log(e.message);
+
+}finally{
+
+$('marketsBtn').disabled=false;
+
+}
+
+}
+
+function renderShortlist(){
+
+const removed=
+Math.max(0,state.raw.length-state.short.length);
+
+$('rawCount').textContent=state.raw.length;
+$('shortCount').textContent=state.short.length;
+$('removedCount').textContent=removed;
+$('quota').textContent=state.quota??'—';
+
+$('shortlist').innerHTML=
+state.short.length
+?
+state.short.map((x,i)=>`
+
 <div class="leg">
 
 <div>
 
-<div class="legMain">
-${esc(x.player)} — ${selectionText(x)}
+<b>${i+1}. ${esc(x.player)}</b>
+
+<div>
+
+<span class="pill">
+${esc(MARKET_LABEL[x.market]||x.market)}
+</span>
+
+${x.line!==null
+? `<span class="pill">line ${esc(x.line)}</span>`
+: ''
+}
+
+<span class="pill">
+implied ${(100/x.odds).toFixed(1)}%
+</span>
+
 </div>
 
-<div class="legSub">
-Bet ${x.score.bet}
-•
-Multi ${x.score.multi}
-•
-${x.score.tier}
+</div>
+
+<div class="price">
+${x.odds.toFixed(2)}
 </div>
 
 </div>
 
-<b>${x.price.toFixed(2)}</b>
-
-</div>
 `).join('')
-:'<div class="empty">No qualifying multi.</div>';
-}
 
-function selectionText(x){
+:
 
-const n=
-MARKET_NAMES[x.market]||
-x.market;
-
-if(x.point!=null){
-return `${n} ${x.point}`;
-}
-
-return n;
-}
-
-function updateRejected(){
-
-$('rejectedCount').textContent=
-state.markets.filter(
-m=>scoreMarket(m).reject
-).length;
-}
-
-function addBuiltToAudit(){
-
-const unique=dedupe([
-...state.built.core,
-...state.built.high
-]);
-
-for(const x of unique){
-
-if(
-!state.audit.some(
-a=>a.marketId===x.id
-)
-){
-
-state.audit.push({
-marketId:x.id,
-player:x.player,
-selection:selectionText(x),
-target:x.point,
-odds:x.price,
-actual:'',
-result:'',
-margin:'',
-reason:'',
-preBet:x.score.bet,
-preMulti:x.score.multi
-});
-
-}
-}
-
-renderAudit();
-}
-
-function renderAudit(){
-
-$('auditBody').innerHTML=
-state.audit.map((a,i)=>`
-
-<tr>
-
-<td>${esc(a.player)}</td>
-
-<td>${esc(a.selection)}</td>
-
-<td>${a.target??'—'}</td>
-
-<td>${Number(a.odds).toFixed(2)}</td>
-
-<td>
-<input
-class="miniInput auditActual"
-data-i="${i}"
-value="${esc(a.actual)}">
-</td>
-
-<td class="auditResult">
-${esc(a.result||'—')}
-</td>
-
-<td class="auditMargin">
-${esc(a.margin||'—')}
-</td>
-
-<td>
-<select
-class="auditReason"
-data-i="${i}">
-<option value="">Select</option>
-
-${[
-'NORMAL VARIANCE',
-'BAD LINE SELECTION',
-'BAD PLAYER SELECTION',
-'ROLE CHANGE',
-'GAME SCRIPT',
-'MATCHUP',
-'INJURY AFFECTED',
-'OTHER'
-].map(
-r=>`<option ${a.reason===r?'selected':''}>${r}</option>`
-).join('')}
-
-</select>
-</td>
-
-<td>${a.preBet}</td>
-
-<td>${a.preMulti}</td>
-
-</tr>
-
-`).join('');
-
-$('auditEmpty').classList.toggle(
-'hidden',
-state.audit.length>0
-);
-}
-
-function recalcAudit(i){
-
-const a=state.audit[i];
-const v=Number(a.actual);
-
-if(!Number.isFinite(v)){
-
-a.result='';
-a.margin='';
-
-return renderAudit();
-}
-
-if(a.target==null){
-
-a.result='ENTER HIT/MISS VIA REASON';
-a.margin='—';
-
-}
-else{
-
-const threshold=Number(a.target);
-
-a.margin=
-(v-threshold).toFixed(1);
-
-a.result=
-v>threshold
-?'HIT'
-:'MISS';
+'<div class="status warn">No candidates survived this filter. Use Balanced/Wide only if you deliberately want more options.</div>';
 
 }
 
-renderAudit();
-saveAudit();
+function focusText(){
+
+const v=$('teamFocus').value;
+
+if(v==='home'){
+return state.game?.home_team||'Home team';
 }
 
-function saveAudit(){
+if(v==='away'){
+return state.game?.away_team||'Away team';
+}
 
-localStorage.setItem(
-'betIntelV12Audit',
-JSON.stringify(state.audit)
-);
+return 'Both teams';
 
-refreshExport();
 }
 
 function exportText(){
 
-const event=
-state.events[
-safeNum($('gameSelect').value,0)
-]||{};
+const g=state.game||{};
+const p=$('profile').value.toUpperCase();
 
-const chosen=
-state.markets.filter(
-m=>m.selected
+const lines=[];
+
+lines.push('BET INTELLIGENCE V13 ANALYSIS PACK');
+lines.push('================================');
+lines.push(`Sport: ${$('sport').value}`);
+lines.push(`Game: ${g.away_team||'-'} @ ${g.home_team||'-'}`);
+lines.push('Bookmaker: Sportsbet');
+lines.push(`Team focus: ${focusText()}`);
+lines.push(`Candidate filter: ${p}`);
+lines.push(`Raw usable outcomes: ${state.raw.length}`);
+lines.push(`V13 candidates: ${state.short.length}`);
+
+lines.push('');
+
+lines.push('V13 BROWSER RULES APPLIED');
+lines.push('- Removed Under/No outcomes.');
+lines.push('- Removed duplicate outcomes.');
+lines.push('- Applied price range from the selected filter.');
+lines.push('- For alternate over lines on the same player/market, preferred the lowest available line that survived the filter.');
+lines.push('- Restricted repeated player exposure and capped candidate count.');
+lines.push('- No player form, injury, role or historical performance was invented in-browser.');
+
+lines.push('');
+
+lines.push('CANDIDATES');
+
+lines.push(
+'# player | market | line | odds | market_implied_probability'
 );
 
-const source=
-chosen.length
-?chosen
-:state.markets
-.filter(
-m=>!scoreMarket(m).reject
-)
-.slice(0,80);
+state.short.forEach(x=>{
 
-let out=[];
-
-out.push(
-'BET INTELLIGENCE V12 ANALYSIS PACK'
-);
-
-out.push(
-'================================'
-);
-
-out.push(
-`Sport: ${$('sport').value}`
-);
-
-out.push(
-`Game: ${event.away_team||'Demo'} @ ${event.home_team||'Demo'}`
-);
-
-out.push(
-`Bookmaker: ${$('bookmaker').value}`
-);
-
-out.push(
-`Information quality: ${$('infoQuality').value}/100`
-);
-
-out.push(
-`Game environment: ${$('gameEnv').value}`
-);
-
-out.push(
-`Match notes: ${$('matchNotes').value||'None supplied'}`
-);
-
-out.push('');
-
-out.push(
-'V12 RULE: Verify current teams/injuries/roles externally before final recommendations. Do not infer these from odds.'
-);
-
-out.push('');
-
-out.push('MARKETS');
-
-out.push(
-'# player | market | line | odds | tier | player_conf | bet_conf | multi_score | volatility | role | pathways | injury | status'
-);
-
-source.forEach(m=>{
-
-const s=scoreMarket(m);
-
-out.push(
-`${m.player} | ${m.market} | ${m.point??'-'} | ${m.price.toFixed(2)} | ${s.tier} | ${s.player} | ${s.bet} | ${s.multi} | ${s.vol} | ${s.role} | ${s.path} | ${s.injury} | ${s.reject?'REJECT '+s.reject:'QUALIFY'}`
+lines.push(
+`${x.player} | ${x.market} | ${x.line??'-'} | ${x.odds.toFixed(2)} | ${(1/x.odds).toFixed(4)}`
 );
 
 });
 
-out.push('');
-out.push('BUILDER OUTPUT');
+lines.push('');
 
-for(
-const [label,legs]
-of [
-['CORE',state.built.core],
-['HIGH',state.built.high]
-]
-){
+lines.push('TASK FOR CHATGPT — V13');
 
-out.push(
-`${label} MULTI — ${
-legs.length
-?productOdds(legs).toFixed(2)+'x'
-:'NO QUALIFYING MULTI'
-}`
+lines.push(
+'Independently verify every candidate before recommendation. Never infer player availability or role from odds.'
 );
 
-legs.forEach(x=>
-out.push(
-`- ${x.player} | ${x.market} | ${x.point??'-'} | ${x.price.toFixed(2)} | Bet ${x.score.bet} | Multi ${x.score.multi}`
-)
+lines.push(
+'1. Verify final/current team selection, injuries/late changes, recent role, venue, matchup and material weather. Reject any player not reasonably established as playing.'
 );
+
+lines.push(
+'2. Retrieve the player actual result for this exact stat in each of the last 5 completed games.'
+);
+
+lines.push(
+'3. Re-score the exact Sportsbet line, not merely the player. Calculate raw last-5 hit rate and describe the result distribution.'
+);
+
+lines.push(
+'4. OUTLIER CONTROL: use robust probability judgement. Do not let one extreme high or low game dominate the estimate. Compare median and typical range with the exact line. If an apparent outlier was caused by injury/substitution or a clearly different role, tag it separately rather than silently deleting it.'
+);
+
+lines.push(
+'5. Compare the same stat to the most recent previous meeting between these teams where the player participated, but treat one H2H game as supporting context rather than a standalone prediction.'
+);
+
+lines.push(
+'6. Estimate model probability for the exact line using last-5 consistency, role stability, matchup/H2H context and current conditions. Compare it with market implied probability. Reject weak or overextended lines.'
+);
+
+lines.push(
+'7. Prefer conservative alternate lines when the probability gain is material. Avoid several legs that require the same unlikely game script. Explicitly account for correlation.'
+);
+
+lines.push(
+'8. Return only two multis: (A) best Core / higher-probability multi and (B) best Higher Return multi. Prefer zero shared players. Never force target odds; fewer stronger legs are better than padding.'
+);
+
+lines.push(
+'9. For each final leg internally assess estimated probability, implied probability, last-5 consistency, role stability, H2H/matchup, injury/sub risk, correlation and value.'
+);
+
+lines.push(
+'10. Output only: Multi 1 selections + approximate odds + confidence; Multi 2 selections + approximate odds + confidence; Best bet; Weakest selected leg; one short warning if material.'
+);
+
+return lines.join('\n');
 
 }
 
-if(state.audit.length){
+function createExport(){
 
-out.push('');
-out.push('RESULTS AUDIT');
-
-state.audit.forEach(a=>
-
-out.push(
-`${a.player} | ${a.selection} | actual ${a.actual||'-'} | ${a.result||'-'} | margin ${a.margin||'-'} | ${a.reason||'-'}`
-)
-
-);
-}
-
-out.push('');
-
-out.push(
-'TASK FOR CHATGPT: Independently verify current team selection, injuries, recent role, form, matchup and game conditions. Re-score exact lines. Reject weak legs. Return only the best Core multi and Higher Return multi. Never force target odds. Prefer zero shared players. Explicitly identify the weakest leg and best bet.'
-);
-
-return out.join('\n');
-}
-
-function refreshExport(){
+if(!state.short.length){
 
 $('exportBox').textContent=
-exportText();
-}
+'No qualifying candidates to export.';
 
-function demo(){
-
-state.events=[{
-id:'demo',
-away_team:'Away Team',
-home_team:'Home Team',
-commence_time:new Date().toISOString()
-}];
-
-$('gameSelect').innerHTML=
-'<option value="0">Demo Match</option>';
-
-$('gameSelect').disabled=false;
-
-const names=[
-'Alpha Mid',
-'Bravo Mid',
-'Charlie Wing',
-'Delta Forward',
-'Echo Defender',
-'Foxtrot Mid',
-'Golf Forward',
-'Hotel Mid'
-];
-
-const mk=
-$('sport').value==='aussierules_afl'
-?[
-'player_disposals_over',
-'player_disposals_over',
-'player_marks_over',
-'player_goals_scored_over',
-'player_kicks_over',
-'player_tackles_over',
-'player_goal_scorer_anytime',
-'player_clearances_over'
-]
-:[
-'player_try_scorer_anytime',
-'player_try_scorer_anytime',
-'player_try_scorer_over',
-'player_try_scorer_anytime',
-'player_try_scorer_over',
-'player_try_scorer_anytime',
-'player_try_scorer_anytime',
-'player_try_scorer_over'
-];
-
-state.markets=
-names.map((n,i)=>({
-
-id:'d'+i,
-player:n,
-name:'Over',
-market:mk[i],
-
-point:
-mk[i].includes('disposals')
-?17.5+i*2
-:mk[i].includes('marks')
-?4.5
-:mk[i].includes('kicks')
-?13.5
-:mk[i].includes('tackles')
-?4.5
-:mk[i].includes('clearances')
-?3.5
-:mk[i].includes('_over')
-?0.5
-:null,
-
-price:[
-1.55,
-1.72,
-1.83,
-1.95,
-1.75,
-1.86,
-2.35,
-1.9
-][i],
-
-eventId:'demo',
-
-selected:false,
-
-override:{}
-
-}));
-
-renderMarkets();
-populateFilters();
-
-setStatus(
-'Demo markets loaded. Adjust intelligence scores and build.',
-'good'
-);
-}
-
-function switchPane(p){
-
-document.querySelectorAll('.tab')
-.forEach(
-x=>x.classList.toggle(
-'active',
-x.dataset.pane===p
-)
-);
-
-document.querySelectorAll('.pane')
-.forEach(
-x=>x.classList.toggle(
-'active',
-x.id==='pane-'+p
-)
-);
-}
-
-$('connectBtn').onclick=
-connect;
-
-$('loadMarketsBtn').onclick=
-loadMarkets;
-
-$('demoBtn').onclick=
-demo;
-
-$('buildBtn').onclick=
-buildMultis;
-
-$('clearBtn').onclick=()=>{
-
-state.events=[];
-state.markets=[];
-state.built={
-core:[],
-high:[]
-};
-
-$('apiKey').value='';
-
-$('gameSelect').innerHTML=
-'<option>No games loaded</option>';
-
-$('gameSelect').disabled=true;
-$('loadMarketsBtn').disabled=true;
-
-renderMarkets();
-renderMultis();
-
-setStatus(
-'Cleared. API key removed from page.'
-);
-
-};
-
-$('search').oninput=
-renderMarkets;
-
-$('marketFilter').onchange=
-renderMarkets;
-
-$('autoScoreBtn').onclick=
-renderMarkets;
-
-$('strictMode').onchange=
-renderMarkets;
-
-$('infoQuality').onchange=
-renderMarkets;
-
-$('marketBody').addEventListener(
-'change',
-e=>{
-
-const i=
-safeNum(
-e.target.dataset.i,
--1
-);
-
-if(i<0)return;
-
-if(
-e.target.classList.contains(
-'useCheck'
-)
-){
-state.markets[i].selected=
-e.target.checked;
-}
-
-if(
-e.target.classList.contains(
-'scoreEdit'
-)
-){
-
-state.markets[i].override[
-e.target.dataset.k
-]=clamp(
-safeNum(
-e.target.value,
-70
-),
-0,
-100
-);
-
-renderMarkets();
-}
+return;
 
 }
-);
 
-$('selectStrongBtn').onclick=()=>{
+$('exportBox').textContent=exportText();
 
-state.markets.forEach(m=>
-m.selected=
-!scoreMarket(m).reject&&
-scoreMarket(m).multi>=80
-);
-
-renderMarkets();
-};
-
-$('clearSelectBtn').onclick=()=>{
-
-state.markets.forEach(
-m=>m.selected=false
-);
-
-renderMarkets();
-};
-
-$('addBuiltToAuditBtn').onclick=
-addBuiltToAudit;
-
-$('auditBody').addEventListener(
-'change',
-e=>{
-
-const i=
-safeNum(
-e.target.dataset.i,
--1
-);
-
-if(i<0)return;
-
-if(
-e.target.classList.contains(
-'auditActual'
-)
-){
-
-state.audit[i].actual=
-e.target.value;
-
-recalcAudit(i);
-}
-
-if(
-e.target.classList.contains(
-'auditReason'
-)
-){
-
-state.audit[i].reason=
-e.target.value;
-
-saveAudit();
-}
+$('copyBtn').disabled=false;
+$('downloadBtn').disabled=false;
 
 }
-);
 
-$('saveAuditBtn').onclick=
-saveAudit;
-
-$('resetAuditBtn').onclick=()=>{
-
-state.audit=[];
-
-saveAudit();
-renderAudit();
-
-};
-
-$('refreshExportBtn').onclick=
-refreshExport;
-
-$('copyExportBtn').onclick=
-async()=>{
-
-refreshExport();
+async function copyExport(){
 
 try{
 
-await navigator.clipboard.writeText(
-$('exportBox').textContent
-);
+await navigator.clipboard.writeText(exportText());
 
-$('copyExportBtn').textContent=
-'Copied';
+const b=$('copyBtn');
+const old=b.textContent;
+
+b.textContent='COPIED';
 
 setTimeout(
-()=>
-$('copyExportBtn').textContent=
-'Copy',
-1200
+()=>b.textContent=old,
+1000
 );
 
-}
-catch{
+}catch{
 
 alert(
-'Copy is blocked by this browser. Select the export text manually.'
+'Clipboard access is blocked. Select the export text manually.'
 );
 
 }
 
-};
+}
 
-$('downloadExportBtn').onclick=()=>{
+function downloadExport(){
 
 const blob=
 new Blob(
@@ -1630,52 +1020,151 @@ new Blob(
 {type:'text/plain'}
 );
 
+const url=
+URL.createObjectURL(blob);
+
 const a=
 document.createElement('a');
 
-a.href=
-URL.createObjectURL(blob);
+a.href=url;
+a.download='bet-intelligence-v13-export.txt';
 
-a.download=
-'bet-intelligence-v12-export.txt';
+document.body.appendChild(a);
 
 a.click();
+a.remove();
 
 setTimeout(
-()=>URL.revokeObjectURL(a.href),
+()=>URL.revokeObjectURL(url),
 500
+);
+
+}
+
+$('connectBtn').onclick=loadGames;
+
+$('clearBtn').onclick=()=>{
+
+state.events=[];
+state.game=null;
+state.raw=[];
+state.short=[];
+
+$('apiKey').value='';
+$('games').innerHTML='';
+
+$('setupCard').classList.add('hidden');
+$('shortlistCard').classList.add('hidden');
+$('exportCard').classList.add('hidden');
+
+status(
+'Cleared. API key is not stored.'
+);
+
+log('Cleared.');
+
+};
+
+$('marketsBtn').onclick=loadMarkets;
+
+$('createExportBtn').onclick=createExport;
+
+$('copyBtn').onclick=copyExport;
+
+$('downloadBtn').onclick=downloadExport;
+
+$('sport').onchange=()=>{
+
+state.events=[];
+state.game=null;
+
+$('games').innerHTML='';
+
+$('setupCard').classList.add('hidden');
+$('shortlistCard').classList.add('hidden');
+$('exportCard').classList.add('hidden');
+
+status(
+'Sport changed. Load current games.'
 );
 
 };
 
-document.querySelectorAll('.tab')
-.forEach(
-t=>t.onclick=
-()=>switchPane(
-t.dataset.pane
-)
-);
+$('profile').onchange=()=>{
 
-try{
+if(state.raw.length){
 
-state.audit=
-JSON.parse(
-localStorage.getItem(
-'betIntelV12Audit'
-)||'[]'
-);
+state.short=makeShortlist(state.raw);
 
-}
-catch{
+renderShortlist();
 
-state.audit=[];
+$('exportBox').textContent=
+'Restrictions changed. Create a new export.';
+
+$('copyBtn').disabled=true;
+$('downloadBtn').disabled=true;
 
 }
 
-renderAudit();
-renderMarkets();
-renderMultis();
-refreshExport();
+};
+
+$('cap').onchange=$('profile').onchange;
+
+
+/*
+SECOND-PASS BASIC TESTS
+
+These do not replace live API testing, but allow quick checks
+from the browser console:
+
+BetIntelligenceV13Tests.implied()
+BetIntelligenceV13Tests.removesUnder()
+BetIntelligenceV13Tests.conservativeLine()
+BetIntelligenceV13Tests.dedupe()
+*/
+
+window.BetIntelligenceV13Tests={
+
+implied:()=>
+Math.abs((1/2)-0.5)<1e-12,
+
+removesUnder:()=>
+normalizeOutcome(
+{
+name:'Under',
+description:'Test',
+price:1.9,
+point:20.5
+},
+'player_disposals_over'
+)===null,
+
+conservativeLine:()=>
+conservativePick([
+{line:24.5,odds:1.9},
+{line:19.5,odds:1.4},
+{line:21.5,odds:1.6}
+]).line===19.5,
+
+dedupe:()=>
+dedupe([
+{
+player:'A',
+market:'x',
+line:1,
+name:'Over',
+odds:1.5
+},
+{
+player:'A',
+market:'x',
+line:1,
+name:'Over',
+odds:1.6
+}
+]).length===1
+
+};
 
 </script>
 </body>
