@@ -1,655 +1,1564 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BET INTELLIGENCE V17</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>BET INTELLIGENCE AFL — Player Intelligence Trial</title>
+
 <style>
-:root{--bg:#081019;--panel:#111b27;--line:#26384d;--text:#edf4fb;--muted:#93a6b9;--good:#58d99f;--warn:#f1c466;--bad:#ff7379;--blue:#62a9ff;--purple:#a78bfa}
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(180deg,#07101a,#0a121c 50%,#07101a);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
-.wrap{max-width:1180px;margin:auto;padding:14px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}.top h1{margin:0;font-size:clamp(23px,5vw,34px);letter-spacing:.03em}.sub{color:var(--muted);font-size:12px;margin-top:4px}.badge{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--good);font-size:11px;font-weight:900;white-space:nowrap}
-.card{background:rgba(17,27,39,.97);border:1px solid var(--line);border-radius:15px;margin:12px 0;overflow:hidden}.card h2{font-size:14px;margin:0;padding:13px 14px;border-bottom:1px solid var(--line)}.body{padding:14px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}@media(max-width:720px){.grid,.grid2{grid-template-columns:1fr}.wrap{padding:9px}}
-label{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-bottom:5px}input,select,button,textarea{font:inherit}input,select,textarea{width:100%;background:#08121c;color:var(--text);border:1px solid #30445b;border-radius:10px;padding:11px 12px;outline:none}button{border:0;border-radius:10px;padding:11px 13px;font-weight:900;cursor:pointer;background:#26394f;color:var(--text)}button.primary{background:linear-gradient(135deg,#348ff4,#5f68e8)}button.good{background:#173a30;border:1px solid #2c5e4c;color:#7de9ba}button.purple{background:#2a2143;border:1px solid #5a478d;color:#d9ccff}button:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:8px;flex-wrap:wrap}
-.status{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#0a141e;color:var(--muted);font-size:12px;line-height:1.45}.status.good{color:var(--good)}.status.bad{color:var(--bad)}.status.warn{color:var(--warn)}.games{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}@media(max-width:720px){.games{grid-template-columns:1fr}}.game{padding:11px;border:1px solid var(--line);border-radius:10px;background:#0a141e;cursor:pointer}.game.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(98,169,255,.13)}.small{font-size:11px;color:var(--muted)}
-.metricGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}@media(max-width:760px){.metricGrid{grid-template-columns:repeat(2,1fr)}}.metric{border:1px solid var(--line);border-radius:10px;background:#0a141e;padding:10px}.metric strong{display:block;font-size:20px}.metric span{font-size:10px;color:var(--muted);text-transform:uppercase}.export{white-space:pre-wrap;word-break:break-word;background:#071019;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:720px;overflow:auto;font:11px/1.48 ui-monospace,SFMono-Regular,Menlo,monospace}.note{font-size:11px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.footer{text-align:center;color:#6e8398;font-size:10px;padding:15px 0 25px}.trustGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}@media(max-width:700px){.trustGrid{grid-template-columns:1fr 1fr}}.trust{border:1px solid var(--line);border-radius:10px;background:#0a141e;padding:9px}.trust b{display:block;font-size:11px}.trust span{font-size:10px;color:var(--warn)}details{margin-top:10px}summary{cursor:pointer;color:var(--muted);font-size:11px}.diag{white-space:pre-wrap;color:#9fb1c5;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}
+:root{
+  --bg:#0b1020;
+  --panel:#121a2d;
+  --panel2:#172238;
+  --text:#eef3ff;
+  --muted:#9fb0cc;
+  --line:#263754;
+  --good:#55d38a;
+  --warn:#ffc857;
+  --bad:#ff6b6b;
+  --accent:#72a7ff;
+  --chip:#1f2d49;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#07101d,#0b1020 28%);
+  color:var(--text);
+}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:18px;
+}
+
+.hero{
+  padding:18px 0 10px;
+}
+
+.hero h1{
+  font-size:24px;
+  margin:0 0 6px;
+}
+
+.hero p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:12px;
+}
+
+.card{
+  grid-column:span 12;
+  background:rgba(18,26,45,.96);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:15px;
+  box-shadow:0 14px 40px rgba(0,0,0,.16);
+}
+
+@media(min-width:860px){
+  .half{
+    grid-column:span 6;
+  }
+
+  .third{
+    grid-column:span 4;
+  }
+
+  .twoThird{
+    grid-column:span 8;
+  }
+}
+
+h2{
+  font-size:16px;
+  margin:0 0 10px;
+}
+
+h3{
+  font-size:14px;
+  margin:14px 0 8px;
+}
+
+.muted,
+.help{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.status{
+  font-size:13px;
+  margin-top:9px;
+  min-height:18px;
+}
+
+.good{
+  color:var(--good);
+}
+
+.warn{
+  color:var(--warn);
+}
+
+.bad{
+  color:var(--bad);
+}
+
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin:9px 0 5px;
+}
+
+input,
+select,
+textarea,
+button{
+  font:inherit;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  background:#0d1526;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 11px;
+  outline:none;
+}
+
+textarea{
+  min-height:135px;
+  resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--accent);
+}
+
+.row{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.row>*{
+  flex:1;
+}
+
+.row .auto{
+  flex:0 0 auto;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  font-weight:700;
+  cursor:pointer;
+  background:var(--accent);
+  color:#07101d;
+}
+
+.btn.secondary{
+  background:#253653;
+  color:var(--text);
+  border:1px solid #354b70;
+}
+
+.btn.goodbtn{
+  background:var(--good);
+}
+
+.btn.warnbtn{
+  background:var(--warn);
+}
+
+.btn:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+@media(min-width:700px){
+  .kpis{
+    grid-template-columns:repeat(5,1fr);
+  }
+}
+
+.kpi{
+  background:#0d1526;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+}
+
+.kpi b{
+  display:block;
+  font-size:18px;
+}
+
+.kpi span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.tableWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  min-width:860px;
+}
+
+th,
+td{
+  padding:8px 9px;
+  border-bottom:1px solid #22314c;
+  text-align:left;
+  white-space:nowrap;
+}
+
+th{
+  position:sticky;
+  top:0;
+  background:#15213a;
+  color:#bdd0ee;
+  z-index:1;
+}
+
+tr:last-child td{
+  border-bottom:0;
+}
+
+.pill{
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:999px;
+  background:var(--chip);
+  font-size:11px;
+}
+
+.pill.good{
+  background:rgba(85,211,138,.12);
+}
+
+.pill.warn{
+  background:rgba(255,200,87,.12);
+}
+
+.pill.bad{
+  background:rgba(255,107,107,.12);
+}
+
+.lock{
+  border:1px dashed #4d5f7e;
+  background:#0e1728;
+  border-radius:12px;
+  padding:12px;
+  margin-top:10px;
+}
+
+.mono{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.small{
+  font-size:11px;
+}
+
+.right{
+  text-align:right;
+}
+
+.sep{
+  height:1px;
+  background:var(--line);
+  margin:12px 0;
+}
+
+.notice{
+  padding:10px 12px;
+  border-radius:10px;
+  background:#0d1628;
+  border:1px solid var(--line);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.notice strong{
+  color:#fff;
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
-<div class="top">
-  <div>
-    <h1>BET INTELLIGENCE V17</h1>
-    <div class="sub">Proven V16 API plumbing → full market retention → compact pass 1 → exact ladder pass 2</div>
+  <div class="hero">
+    <h1>BET INTELLIGENCE AFL — Player Intelligence Trial 0.1</h1>
+
+    <p>
+      Independent disposal projections first.
+      Sportsbet prices second.
+      This trial is designed to test whether BET INTELLIGENCE can add information
+      rather than reorganise bookmaker opinions.
+    </p>
   </div>
-  <div class="badge">DATA ENGINE</div>
+
+  <div class="grid">
+
+    <section class="card half">
+
+      <h2>1. The Odds API + AFL game</h2>
+
+      <label>API key</label>
+
+      <div class="row">
+
+        <input
+          id="apiKey"
+          type="password"
+          autocomplete="off"
+          placeholder="Paste The Odds API key"
+        />
+
+        <button
+          class="btn secondary auto"
+          id="saveKeyBtn"
+        >
+          Save
+        </button>
+
+      </div>
+
+      <div
+        class="row"
+        style="margin-top:9px"
+      >
+
+        <button
+          class="btn"
+          id="loadGamesBtn"
+        >
+          Load AFL games
+        </button>
+
+        <button
+          class="btn secondary"
+          id="clearBtn"
+        >
+          Clear trial
+        </button>
+
+      </div>
+
+      <label>Game</label>
+
+      <select id="gameSelect">
+        <option value="">Load games first</option>
+      </select>
+
+      <button
+        class="btn secondary"
+        id="loadUniverseBtn"
+        style="margin-top:9px;width:100%"
+        disabled
+      >
+        Load player universe — keep prices hidden
+      </button>
+
+      <div
+        id="apiStatus"
+        class="status muted"
+      ></div>
+
+      <div class="help">
+        The Sportsbet response is used only to identify players with disposal markets.
+        Prices are stored but are not shown to the model or ranking process until you
+        freeze the independent projections.
+      </div>
+
+    </section>
+
+
+    <section class="card half">
+
+      <h2>2. Independent AFL history</h2>
+
+      <div class="notice">
+        <strong>Required CSV columns:</strong>
+        player, team, date, disposals.
+
+        <strong>Recommended:</strong>
+        tog, opponent, venue.
+
+        Dates should be YYYY-MM-DD.
+        TOG should be a percentage such as 82.5.
+      </div>
+
+      <label>Upload CSV</label>
+
+      <input
+        id="csvFile"
+        type="file"
+        accept=".csv,text/csv"
+      />
+
+      <label>Or paste CSV</label>
+
+      <textarea
+        id="csvText"
+        placeholder="player,team,date,opponent,venue,disposals,tog
+Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
+      ></textarea>
+
+      <div
+        class="row"
+        style="margin-top:9px"
+      >
+
+        <button
+          class="btn"
+          id="importCsvBtn"
+        >
+          Import history
+        </button>
+
+        <button
+          class="btn secondary"
+          id="templateBtn"
+        >
+          Insert template
+        </button>
+
+      </div>
+
+      <div
+        id="dataStatus"
+        class="status muted"
+      ></div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>3. Price-blind model controls</h2>
+
+      <div class="grid">
+
+        <div class="third">
+
+          <label>
+            Recency half-life (days)
+          </label>
+
+          <input
+            id="halfLife"
+            type="number"
+            min="30"
+            max="730"
+            step="10"
+            value="180"
+          />
+
+        </div>
+
+        <div class="third">
+
+          <label>
+            Shrinkage strength (pseudo-games)
+          </label>
+
+          <input
+            id="shrinkGames"
+            type="number"
+            min="1"
+            max="30"
+            step="1"
+            value="8"
+          />
+
+        </div>
+
+        <div class="third">
+
+          <label>
+            Minimum history games
+          </label>
+
+          <input
+            id="minGames"
+            type="number"
+            min="3"
+            max="30"
+            step="1"
+            value="8"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="help">
+
+        Baseline model:
+        exponentially weighted disposal rate per TOG,
+        shrunk toward the match-player population,
+        with shrunk predictive variance.
+
+        It intentionally starts simpler than the final model
+        so we can measure whether added complexity genuinely helps.
+
+      </div>
+
+      <div
+        class="row"
+        style="margin-top:12px"
+      >
+
+        <button
+          class="btn goodbtn"
+          id="buildBtn"
+          disabled
+        >
+          Build independent projections
+        </button>
+
+        <button
+          class="btn warnbtn"
+          id="freezeBtn"
+          disabled
+        >
+          Freeze projections
+        </button>
+
+      </div>
+
+      <div
+        id="modelStatus"
+        class="status muted"
+      ></div>
+
+    </section>
+
+
+    <section
+      class="card"
+      id="summaryCard"
+    >
+
+      <h2>Model summary</h2>
+
+      <div class="kpis">
+
+        <div class="kpi">
+          <b id="kpiUniverse">0</b>
+          <span>market players</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiModelled">0</b>
+          <span>modelled</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiHistory">0</b>
+          <span>history rows</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiCoverage">0%</b>
+          <span>player coverage</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiFrozen">NO</b>
+          <span>price-blind freeze</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>4. Independent player projections</h2>
+
+      <div class="help">
+        These projections contain no Sportsbet price or implied probability.
+        Expected TOG can be manually overridden before freezing if verified role
+        information justifies it.
+      </div>
+
+      <div
+        class="tableWrap"
+        style="margin-top:10px"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Player</th>
+              <th>Team</th>
+              <th>Games</th>
+              <th>L5</th>
+              <th>L10</th>
+              <th>Season*</th>
+              <th>Expected TOG</th>
+              <th>Mean</th>
+              <th>Median</th>
+              <th>SD</th>
+              <th>Data quality</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="projectionBody">
+
+            <tr>
+              <td
+                colspan="11"
+                class="muted"
+              >
+                Load player universe and history, then build the model.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <div
+        class="small muted"
+        style="margin-top:7px"
+      >
+        *Season is the selected game's calendar year and only uses games dated
+        before the selected match.
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>5. Price reveal + full ladder valuation</h2>
+
+      <div
+        id="priceLock"
+        class="lock"
+      >
+
+        <b>
+          Sportsbet prices locked.
+        </b>
+
+        <div
+          class="muted"
+          style="margin-top:4px"
+        >
+          Build and freeze the independent model first.
+          This is intentional.
+        </div>
+
+      </div>
+
+
+      <div
+        id="valuationPanel"
+        class="hidden"
+      >
+
+        <div class="row">
+
+          <div>
+
+            <label>
+              Minimum model edge (percentage points)
+            </label>
+
+            <input
+              id="minEdge"
+              type="number"
+              min="0"
+              max="30"
+              step="0.5"
+              value="4"
+            />
+
+          </div>
+
+
+          <div>
+
+            <label>
+              Minimum model probability
+            </label>
+
+            <input
+              id="minProb"
+              type="number"
+              min="40"
+              max="99"
+              step="1"
+              value="65"
+            />
+
+          </div>
+
+
+          <div>
+
+            <label>
+              Maximum single-leg odds
+            </label>
+
+            <input
+              id="maxOdds"
+              type="number"
+              min="1.01"
+              max="10"
+              step="0.05"
+              value="3"
+            />
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn"
+          id="rankBtn"
+          style="margin-top:10px"
+        >
+          Rank all Sportsbet disposal lines
+        </button>
+
+
+        <div
+          id="rankStatus"
+          class="status muted"
+        ></div>
+
+
+        <div
+          class="tableWrap"
+          style="margin-top:10px"
+        >
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Line</th>
+                <th>Sportsbet</th>
+                <th>Break-even</th>
+                <th>BI probability</th>
+                <th>Fair odds</th>
+                <th>Edge pp</th>
+                <th>EV</th>
+                <th>Quality</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="valuationBody">
+
+              <tr>
+                <td
+                  colspan="11"
+                  class="muted"
+                >
+                  Freeze projections to unlock.
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>6. Trial export</h2>
+
+      <div class="help">
+        Export the frozen pre-match model and price comparison before the bounce.
+        This is the record used later for calibration, ROI and closing-line-value testing.
+      </div>
+
+      <div
+        class="row"
+        style="margin-top:10px"
+      >
+
+        <button
+          class="btn secondary"
+          id="copyAuditBtn"
+          disabled
+        >
+          Copy audit pack
+        </button>
+
+        <button
+          class="btn secondary"
+          id="downloadAuditBtn"
+          disabled
+        >
+          Download JSON
+        </button>
+
+      </div>
+
+
+      <textarea
+        id="auditText"
+        readonly
+        placeholder="Frozen audit output will appear here."
+      ></textarea>
+
+    </section>
+
+  </div>
+
 </div>
 
-<section class="card">
-<h2>1. LOAD CURRENT GAMES</h2>
-<div class="body">
-
-<div class="grid2">
-<div>
-<label>The Odds API key</label>
-<input id="apiKey" type="password" placeholder="Paste key for this session" autocomplete="off">
-</div>
-
-<div>
-<label>Sport</label>
-<select id="sport">
-<option value="aussierules_afl">AFL</option>
-<option value="rugbyleague_nrl">NRL</option>
-</select>
-</div>
-</div>
-
-<div class="row" style="margin-top:10px">
-<button id="connectBtn" class="primary">LOAD CURRENT GAMES</button>
-<button id="clearBtn">CLEAR</button>
-</div>
-
-<div id="status" class="status">
-Paste your API key and load current games.
-</div>
-
-<div id="games" class="games"></div>
-
-</div>
-</section>
-
-<section id="setupCard" class="card hidden">
-<h2>2. SELECT MATCH & EXPORT RANGE</h2>
-
-<div class="body">
-
-<div id="selectedGame" class="status good">
-No game selected.
-</div>
-
-<div class="grid" style="margin-top:10px">
-
-<div>
-<label>Team focus</label>
-<select id="teamFocus">
-<option value="both">Both teams</option>
-<option value="home">Home team only</option>
-<option value="away">Away team only</option>
-</select>
-</div>
-
-<div>
-<label>Minimum individual odds exported</label>
-<select id="minOdds">
-<option value="1.05">1.05</option>
-<option value="1.08" selected>1.08 — recommended</option>
-<option value="1.10">1.10</option>
-<option value="1.15">1.15</option>
-</select>
-</div>
-
-<div>
-<label>Maximum individual odds exported</label>
-<select id="maxOdds">
-<option value="3">3.00</option>
-<option value="4">4.00</option>
-<option value="5" selected>5.00 — recommended</option>
-<option value="6">6.00</option>
-<option value="8">8.00</option>
-</select>
-</div>
-
-</div>
-
-<div class="note" style="margin-top:10px">
-V17 retains every player/market ladder internally. The export range only removes irrelevant tail prices from the ChatGPT packs; it does not shortlist players or markets.
-</div>
-
-<div class="row" style="margin-top:10px">
-<button id="marketsBtn" class="good">
-LOAD COMPLETE SPORTSBET PLAYER DATA
-</button>
-</div>
-
-<div id="marketStatus" class="status">
-Ready to load the selected match.
-</div>
-
-</div>
-</section>
-
-<section id="universeCard" class="card hidden">
-<h2>3. COMPLETE MARKET UNIVERSE</h2>
-
-<div class="body">
-
-<div class="metricGrid">
-
-<div class="metric">
-<strong id="rawCount">0</strong>
-<span>Raw outcomes</span>
-</div>
-
-<div class="metric">
-<strong id="ladderCount">0</strong>
-<span>All ladders</span>
-</div>
-
-<div class="metric">
-<strong id="usefulCount">0</strong>
-<span>Useful ladders</span>
-</div>
-
-<div class="metric">
-<strong id="playerCount">0</strong>
-<span>Unique players</span>
-</div>
-
-<div class="metric">
-<strong id="marketCount">0</strong>
-<span>Markets loaded</span>
-</div>
-
-<div class="metric">
-<strong id="quota">—</strong>
-<span>API remaining</span>
-</div>
-
-</div>
-
-<div id="universeSummary" class="status good">
-Loaded universe.
-</div>
-
-</div>
-</section>
-
-<section id="discoveryCard" class="card hidden">
-<h2>4. MARKET DISCOVERY & TRUST</h2>
-
-<div class="body">
-
-<div id="marketDiscovery" class="status">
-No discovery data.
-</div>
-
-<div class="trustGrid">
-
-<div class="trust">
-<b>Market / odds</b>
-<span>VERIFIED — Sportsbet via The Odds API</span>
-</div>
-
-<div class="trust">
-<b>Selection</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-<div class="trust">
-<b>Role / injury / minutes</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-<div class="trust">
-<b>Form / matchup / weather</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-</div>
-
-</div>
-</section>
-
-<section id="compactCard" class="card hidden">
-<h2>5. PASS 1 — COMPACT UNIVERSE PACK</h2>
-
-<div class="body">
-
-<div class="note">
-Paste this pack first. Every useful player/market appears once. V17 uses exact price landmarks and a stable ladder ID without duplicating the full ladder.
-</div>
-
-<div class="row" style="margin-top:10px">
-
-<button id="createCompactBtn" class="primary">
-CREATE COMPACT PACK
-</button>
-
-<button id="copyCompactBtn" disabled>
-COPY COMPACT PACK
-</button>
-
-</div>
-
-<div id="compactBox" class="export" style="margin-top:10px">
-Create the compact universe pack after markets are loaded.
-</div>
-
-</div>
-</section>
-
-<section id="lookupCard" class="card hidden">
-<h2>6. PASS 2 — REQUESTED FULL LADDERS</h2>
-
-<div class="body">
-
-<label>Ladder IDs requested by ChatGPT</label>
-
-<textarea
-  id="ladderIds"
-  rows="3"
-  placeholder="Example: DISPO-014, GOALS-003, TACKL-007">
-</textarea>
-
-<div class="note" style="margin-top:7px">
-Paste only the IDs requested after Pass 1. V17 returns their exact useful ladders.
-</div>
-
-<div class="row" style="margin-top:10px">
-
-<button id="exportSelectedBtn" class="good">
-EXPORT REQUESTED LADDERS
-</button>
-
-<button id="copySelectedBtn" disabled>
-COPY REQUESTED LADDERS
-</button>
-
-</div>
-
-<div id="selectedBox" class="export" style="margin-top:10px">
-No ladder IDs requested yet.
-</div>
-
-</div>
-</section>
-
-<section class="card">
-<h2>7. POST-MATCH AUDIT LOG</h2>
-
-<div class="body">
-
-<div class="grid2">
-
-<div>
-<label>Completed-leg audit line</label>
-
-<textarea
-  id="auditInput"
-  rows="3"
-  placeholder="Player | market | line | odds | actual | HIT/MISS | reason">
-</textarea>
-</div>
-
-<div>
-<label>Allowed failure classifications</label>
-
-<div class="status" style="margin-top:0">
-Variance · Bad line selection · Incorrect role assumption · Injury/substitution · Team-selection error · Matchup error · Correlation error · Data-quality problem · Model error
-</div>
-</div>
-
-</div>
-
-<div class="row" style="margin-top:10px">
-
-<button id="saveAuditBtn" class="purple">
-SAVE AUDIT LINE
-</button>
-
-<button id="clearAuditBtn">
-CLEAR AUDIT HISTORY
-</button>
-
-</div>
-
-<div id="auditStatus" class="status">
-Audit history is stored locally in this browser only.
-</div>
-
-<details>
-<summary>Stored audit history</summary>
-
-<div id="auditHistory" class="export" style="margin-top:8px;max-height:260px">
-No audit history.
-</div>
-
-</details>
-
-</div>
-</section>
-
-<section class="card">
-<div class="body note">
-
-<b>V17 architecture:</b>
-V16's proven API/event/market-loading path is preserved. V17 changes only how loaded data is compressed and exported.
-
-<details>
-<summary>Diagnostics</summary>
-<div id="diag" class="diag">Ready.</div>
-</details>
-
-</div>
-</section>
-
-<div class="footer">
-BET INTELLIGENCE V17 — Sportsbet data acquisition and structured analysis support only.
-</div>
-
-</div>
 
 <script>
+(() => {
+
 'use strict';
 
-const API='https://api.the-odds-api.com/v4';
 
-const KNOWN_AFL_MARKETS=[
-  'player_disposals_over',
-  'player_disposals',
-  'player_goals_scored_over',
-  'player_goal_scorer_anytime',
-  'player_marks_over',
-  'player_tackles_over',
-  'player_clearances_over',
-  'player_kicks_over',
-  'player_handballs_over',
-  'player_afl_fantasy_points',
-  'player_afl_fantasy_points_over',
-  'player_hitouts_over',
-  'player_hitouts'
-];
+const SPORT = 'aussierules_afl';
 
-const KNOWN_NRL_MARKETS=[
-  'player_try_scorer_anytime',
-  'player_try_scorer_over',
-  'player_try_scorer_first',
-  'player_try_scorer_last',
-  'player_points',
-  'player_points_over',
-  'player_tackles_over',
-  'player_run_metres_over'
-];
+const API = 'https://api.the-odds-api.com/v4';
 
-const FAMILY={
-  player_disposals_over:'disposals',
-  player_disposals:'disposals',
 
-  player_goals_scored_over:'goals',
-  player_goal_scorer_anytime:'goals',
+const state = {
 
-  player_marks_over:'marks',
-  player_tackles_over:'tackles',
-  player_clearances_over:'clearances',
+  games: [],
 
-  player_kicks_over:'kicks',
-  player_handballs_over:'handballs',
+  selectedGame: null,
 
-  player_afl_fantasy_points:'fantasy',
-  player_afl_fantasy_points_over:'fantasy',
+  history: [],
 
-  player_hitouts_over:'hitouts',
-  player_hitouts:'hitouts',
+  marketResponse: null,
 
-  player_try_scorer_anytime:'tries',
-  player_try_scorer_over:'tries',
-  player_try_scorer_first:'tries',
-  player_try_scorer_last:'tries',
+  players: [],
 
-  player_points:'points',
-  player_points_over:'points',
+  marketLines: [],
 
-  player_run_metres_over:'run_metres'
+  projections: [],
+
+  frozen: null,
+
+  valuations: []
+
 };
 
-const NON_PLAYER_PREFIXES=[
-  'h2h',
-  'spreads',
-  'totals',
-  'alternate_',
-  'team_'
-];
 
-const PRICE_LANDMARKS=[
-  1.10,
-  1.30,
-  1.50,
-  1.80,
-  2.20,
-  3.00,
-  4.00
-];
+const $ = id => document.getElementById(id);
 
-const state={
-  events:[],
-  game:null,
-  raw:[],
-  ladders:new Map(),
-  quota:null,
-  availableMarkets:[],
-  requestedMarkets:[],
-  unknownMarkets:[]
-};
 
-const $=id=>document.getElementById(id);
+const fmt = (n,d=1) =>
+  Number.isFinite(n)
+    ? n.toFixed(d)
+    : '—';
 
-const esc=s=>
-  String(s??'')
-    .replace(
-      /[&<>"']/g,
-      c=>({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#039;'
-      }[c])
-    );
 
-const num=(v,d=0)=>
-  Number.isFinite(Number(v))
-    ? Number(v)
-    : d;
+const pct = (n,d=1) =>
+  Number.isFinite(n)
+    ? (100*n).toFixed(d)+'%'
+    : '—';
 
-const implied=o=>
-  o>1
-    ? 1/o
-    : 0;
 
-function log(x){
+const esc = s =>
+  String(s ?? '').replace(
+    /[&<>"']/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[c])
+  );
 
-  $('diag').textContent=
-    new Date().toLocaleTimeString()+
-    '\n'+
-    (
-      typeof x==='string'
-        ? x
-        : JSON.stringify(x,null,2)
-    );
+
+const norm = s =>
+  String(s ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+
+
+const clamp = (x,a,b) =>
+  Math.max(
+    a,
+    Math.min(b,x)
+  );
+
+
+function setStatus(
+  id,
+  msg,
+  cls='muted'
+){
+
+  const el=$(id);
+
+  el.className='status '+cls;
+
+  el.textContent=msg;
 
 }
 
-function status(msg,type=''){
 
-  $('status').textContent=msg;
+function weightedMean(
+  values,
+  weights
+){
 
-  $('status').className=
-    'status'+
-    (
-      type
-        ? ' '+type
-        : ''
-    );
+  let sw=0;
+
+  let s=0;
+
+  for(
+    let i=0;
+    i<values.length;
+    i++
+  ){
+
+    if(
+      Number.isFinite(values[i]) &&
+      Number.isFinite(weights[i]) &&
+      weights[i]>0
+    ){
+
+      sw+=weights[i];
+
+      s+=values[i]*weights[i];
+
+    }
+
+  }
+
+  return sw
+    ? s/sw
+    : NaN;
 
 }
 
-function marketStatus(msg,type=''){
 
-  $('marketStatus').textContent=msg;
-
-  $('marketStatus').className=
-    'status'+
-    (
-      type
-        ? ' '+type
-        : ''
-    );
-
-}
-
-function inferFamily(market){
-
-  if(FAMILY[market])
-    return FAMILY[market];
-
-  const k=
-    String(market||'')
-      .toLowerCase();
-
-  if(k.includes('disposal')) return 'disposals';
-  if(k.includes('goal')) return 'goals';
-  if(k.includes('mark')) return 'marks';
-  if(k.includes('tackle')) return 'tackles';
-  if(k.includes('clearance')) return 'clearances';
-  if(k.includes('kick')) return 'kicks';
-  if(k.includes('handball')) return 'handballs';
-  if(k.includes('fantasy')) return 'fantasy';
-
-  if(
-    k.includes('hitout') ||
-    k.includes('hit_out')
-  )
-    return 'hitouts';
-
-  if(k.includes('try')) return 'tries';
-  if(k.includes('run_met')) return 'run_metres';
-  if(k.includes('point')) return 'points';
-
-  return 'other';
-}
-
-function isPlayerMarketKey(k){
+function effectiveN(weights){
 
   const s=
-    String(k||'');
+    weights.reduce(
+      (a,b)=>a+b,
+      0
+    );
 
-  if(!s.startsWith('player_'))
-    return false;
+  const s2=
+    weights.reduce(
+      (a,b)=>a+b*b,
+      0
+    );
 
-  return !NON_PLAYER_PREFIXES.some(
-    p=>s.startsWith(p)
-  );
+  return s2
+    ? s*s/s2
+    : 0;
+
 }
 
-async function getJson(url){
 
-  let r;
+function weightedVariance(
+  values,
+  weights,
+  mean
+){
 
-  try{
+  let sw=0;
 
-    r=
-      await fetch(
-        url,
-        {
-          cache:'no-store'
-        }
+  let s=0;
+
+  for(
+    let i=0;
+    i<values.length;
+    i++
+  ){
+
+    if(
+      Number.isFinite(values[i]) &&
+      Number.isFinite(weights[i]) &&
+      weights[i]>0
+    ){
+
+      sw+=weights[i];
+
+      s+=
+        weights[i] *
+        (values[i]-mean)**2;
+
+    }
+
+  }
+
+  return sw
+    ? s/sw
+    : NaN;
+
+}
+
+
+function mean(arr){
+
+  const v=
+    arr.filter(
+      Number.isFinite
+    );
+
+  return v.length
+    ? v.reduce(
+        (a,b)=>a+b,
+        0
+      ) / v.length
+    : NaN;
+
+}
+
+
+function median(arr){
+
+  const v=
+    arr
+      .filter(Number.isFinite)
+      .sort(
+        (a,b)=>a-b
       );
 
-  }
-  catch(e){
+  if(!v.length)
+    return NaN;
 
-    throw new Error(
-      (
-        location.protocol==='file:'
-          ? 'Browser/network blocked the request from a local file. Host V17 on GitHub Pages/HTTPS. '
-          : ''
-      )+
-      e.message
+  const m=
+    Math.floor(
+      v.length/2
     );
 
-  }
+  return v.length%2
+    ? v[m]
+    : (v[m-1]+v[m])/2;
 
-  state.quota=
-    r.headers.get(
-      'x-requests-remaining'
+}
+
+
+function erf(x){
+
+  const sign=
+    x<0
+      ? -1
+      : 1;
+
+  x=
+    Math.abs(x);
+
+  const a1=.254829592;
+  const a2=-.284496736;
+  const a3=1.421413741;
+  const a4=-1.453152027;
+  const a5=1.061405429;
+  const p=.3275911;
+
+  const t=
+    1/(1+p*x);
+
+  const y=
+    1-
+    (
+      (
+        (
+          (
+            (
+              a5*t+a4
+            )*t+a3
+          )*t+a2
+        )*t+a1
+      )*t
+    ) *
+    Math.exp(
+      -x*x
     );
 
-  if($('quota'))
-    $('quota').textContent=
-      state.quota??'—';
+  return sign*y;
 
-  const text=
-    await r.text();
+}
 
-  let data;
 
-  try{
+function normalCDF(
+  x,
+  mu,
+  sd
+){
 
-    data=
-      JSON.parse(text);
+  if(!(sd>0))
+    return x<mu
+      ? 0
+      : 1;
 
-  }
-  catch{
-
-    data=text;
-
-  }
-
-  if(!r.ok){
-
-    throw new Error(
-      'HTTP '+
-      r.status+
-      ' — '+
-      (
-        typeof data==='string'
-          ? data.slice(0,300)
-          : JSON.stringify(data).slice(0,300)
+  return .5 *
+    (
+      1 +
+      erf(
+        (x-mu) /
+        (
+          sd *
+          Math.SQRT2
+        )
       )
     );
 
-  }
-
-  return data;
 }
 
-function resetAfterGame(){
 
-  state.raw=[];
+function overProbability(
+  line,
+  mu,
+  sd
+){
 
-  state.ladders=
-    new Map();
-
-  state.availableMarkets=[];
-
-  state.requestedMarkets=[];
-
-  state.unknownMarkets=[];
-
-  [
-    'universeCard',
-    'discoveryCard',
-    'compactCard',
-    'lookupCard'
-  ]
-  .forEach(
-    id=>
-      $(id)
-        .classList
-        .add('hidden')
+  return clamp(
+    1-
+    normalCDF(
+      line+0.5,
+      mu,
+      sd
+    ),
+    0.001,
+    0.999
   );
 
-  $('compactBox').textContent=
-    'Create the compact universe pack after markets are loaded.';
-
-  $('selectedBox').textContent=
-    'No ladder IDs requested yet.';
-
-  $('copyCompactBtn').disabled=true;
-
-  $('copySelectedBtn').disabled=true;
 }
+
+
+function parseCSV(text){
+
+  const rows=[];
+
+  let row=[];
+
+  let cell='';
+
+  let q=false;
+
+  for(
+    let i=0;
+    i<text.length;
+    i++
+  ){
+
+    const c=text[i];
+
+    const n=text[i+1];
+
+    if(c==='"'){
+
+      if(
+        q &&
+        n==='"'
+      ){
+
+        cell+='"';
+
+        i++;
+
+      }
+
+      else{
+
+        q=!q;
+
+      }
+
+    }
+
+    else if(
+      c===',' &&
+      !q
+    ){
+
+      row.push(cell);
+
+      cell='';
+
+    }
+
+    else if(
+      (
+        c==='\n' ||
+        c==='\r'
+      ) &&
+      !q
+    ){
+
+      if(
+        c==='\r' &&
+        n==='\n'
+      )
+        i++;
+
+      row.push(cell);
+
+      if(
+        row.some(
+          x=>
+            String(x)
+              .trim() !== ''
+        )
+      )
+        rows.push(row);
+
+      row=[];
+
+      cell='';
+
+    }
+
+    else{
+
+      cell+=c;
+
+    }
+
+  }
+
+  row.push(cell);
+
+  if(
+    row.some(
+      x=>
+        String(x)
+          .trim() !== ''
+    )
+  )
+    rows.push(row);
+
+  if(rows.length<2)
+    return [];
+
+  const headers=
+    rows
+      .shift()
+      .map(
+        h=>
+          norm(h)
+            .replace(/ /g,'_')
+      );
+
+  return rows.map(
+    r=>
+      Object.fromEntries(
+        headers.map(
+          (h,i)=>[
+            h,
+            (r[i]??'').trim()
+          ]
+        )
+      )
+  );
+
+}
+
+
+function historyFromCSV(text){
+
+  const raw=
+    parseCSV(text);
+
+
+  const aliases={
+
+    player:[
+      'player',
+      'player_name',
+      'name'
+    ],
+
+    team:[
+      'team',
+      'club'
+    ],
+
+    date:[
+      'date',
+      'game_date',
+      'match_date'
+    ],
+
+    opponent:[
+      'opponent',
+      'opp'
+    ],
+
+    venue:[
+      'venue',
+      'ground'
+    ],
+
+    disposals:[
+      'disposals',
+      'disp',
+      'd'
+    ],
+
+    tog:[
+      'tog',
+      'time_on_ground',
+      'tog_percent',
+      'percentage_game_played'
+    ]
+
+  };
+
+
+  const pick=(
+    r,
+    key
+  )=>{
+
+    for(
+      const a
+      of aliases[key]
+    ){
+
+      if(
+        r[a]!==undefined &&
+        r[a]!==''
+      )
+        return r[a];
+
+    }
+
+    return '';
+
+  };
+
+
+  const out=[];
+
+
+  for(
+    const r
+    of raw
+  ){
+
+    const player=
+      pick(
+        r,
+        'player'
+      );
+
+    const team=
+      pick(
+        r,
+        'team'
+      );
+
+    const dateRaw=
+      pick(
+        r,
+        'date'
+      );
+
+    const disposals=
+      Number(
+        pick(
+          r,
+          'disposals'
+        )
+      );
+
+    const togRaw=
+      pick(
+        r,
+        'tog'
+      );
+
+    const tog=
+      togRaw===''
+        ? NaN
+        : Number(
+            String(togRaw)
+              .replace(
+                '%',
+                ''
+              )
+          );
+
+
+    const date=
+      new Date(
+        dateRaw+
+        'T12:00:00'
+      );
+
+
+    if(
+      !player ||
+      !Number.isFinite(disposals) ||
+      Number.isNaN(
+        date.getTime()
+      )
+    )
+      continue;
+
+
+    out.push({
+
+      player,
+
+      playerKey:
+        norm(player),
+
+      team,
+
+      teamKey:
+        norm(team),
+
+      date,
+
+      dateISO:
+        dateRaw,
+
+      opponent:
+        pick(
+          r,
+          'opponent'
+        ),
+
+      venue:
+        pick(
+          r,
+          'venue'
+        ),
+
+      disposals,
+
+      tog:
+        Number.isFinite(tog) &&
+        tog>0
+          ? clamp(
+              tog,
+              20,
+              100
+            )
+          : NaN
+
+    });
+
+  }
+
+
+  return out.sort(
+    (a,b)=>
+      a.date-b.date
+  );
+
+}
+
+
+async function apiFetch(url){
+
+  const res=
+    await fetch(
+      url,
+      {
+        headers:{
+          'Accept':
+            'application/json'
+        }
+      }
+    );
+
+
+  if(!res.ok){
+
+    let t='';
+
+    try{
+
+      t=
+        await res.text();
+
+    }
+    catch{}
+
+
+    throw new Error(
+      `API ${res.status}: ${
+        t.slice(0,220) ||
+        res.statusText
+      }`
+    );
+
+  }
+
+
+  return res.json();
+
+}
+
 
 async function loadGames(){
 
@@ -658,1475 +1567,2186 @@ async function loadGames(){
       .value
       .trim();
 
-  if(!key)
-    return status(
+
+  if(!key){
+
+    setStatus(
+      'apiStatus',
       'Enter your API key first.',
       'bad'
     );
 
-  status(
-    'Loading current games…',
-    'warn'
+    return;
+
+  }
+
+
+  setStatus(
+    'apiStatus',
+    'Loading upcoming AFL games…'
   );
 
-  $('connectBtn').disabled=true;
-
-  resetAfterGame();
 
   try{
 
-    const sport=
-      $('sport').value;
+    const url=
+      `${API}/sports/${SPORT}/events` +
+      `?apiKey=${encodeURIComponent(key)}` +
+      `&dateFormat=iso`;
 
-    const data=
-      await getJson(
-        `${API}/sports/${encodeURIComponent(sport)}/events?apiKey=${encodeURIComponent(key)}`
-      );
 
-    state.events=
-      (
-        Array.isArray(data)
-          ? data
-          : []
-      )
-      .sort(
-        (a,b)=>
-          Date.parse(a.commence_time)-
-          Date.parse(b.commence_time)
-      );
+    const games=
+      await apiFetch(url);
 
-    $('games').innerHTML=
-      state.events.length
-        ?
-        state.events
-          .map(
-            (g,i)=>
-              `
-              <div class="game" data-game="${i}">
-                <b>
-                  ${esc(g.away_team)}
-                  @
-                  ${esc(g.home_team)}
-                </b>
 
-                <div class="small">
-                  ${new Date(g.commence_time).toLocaleString()}
-                </div>
-              </div>
-              `
-          )
-          .join('')
-        :
-        `
-        <div class="status">
-          No current/upcoming games returned.
-        </div>
-        `;
+    state.games=
+      Array.isArray(games)
+        ? games
+        : [];
 
-    document
-      .querySelectorAll('[data-game]')
-      .forEach(
-        el=>
-          el.onclick=
-            ()=>
-              selectGame(
-                num(el.dataset.game)
-              )
-      );
 
-    status(
-      `Loaded ${state.events.length} current/upcoming game(s). Select one. ${
-        state.quota!==null
-          ? 'API remaining: '+state.quota+'.'
-          : ''
-      }`,
+    const sel=
+      $('gameSelect');
+
+
+    sel.innerHTML=
+      '<option value="">Select a game</option>' +
+
+      state.games
+        .map(
+          g=>
+            `<option value="${esc(g.id)}">` +
+            `${esc(g.away_team)} @ ${esc(g.home_team)}` +
+            ` — ${new Date(g.commence_time).toLocaleString()}` +
+            `</option>`
+        )
+        .join('');
+
+
+    setStatus(
+      'apiStatus',
+      `${state.games.length} AFL games loaded.`,
       'good'
     );
-
-    log({
-      eventCount:state.events.length,
-      sport
-    });
 
   }
   catch(e){
 
-    status(
-      'Load failed: '+e.message,
+    setStatus(
+      'apiStatus',
+      e.message,
       'bad'
     );
 
-    log(e.message);
-
-  }
-  finally{
-
-    $('connectBtn').disabled=false;
-
-  }
-}
-
-function selectGame(i){
-
-  state.game=
-    state.events[i];
-
-  if(!state.game)
-    return;
-
-  document
-    .querySelectorAll('[data-game]')
-    .forEach(
-      x=>
-        x.classList.remove('selected')
-    );
-
-  document
-    .querySelector(
-      `[data-game="${i}"]`
-    )
-    ?.classList
-    .add('selected');
-
-  $('setupCard')
-    .classList
-    .remove('hidden');
-
-  $('selectedGame').innerHTML=
-    `
-    <b>
-      ${esc(state.game.away_team)}
-      @
-      ${esc(state.game.home_team)}
-    </b>
-
-    <br>
-
-    <span class="small">
-      ${new Date(state.game.commence_time).toLocaleString()}
-    </span>
-    `;
-
-  resetAfterGame();
-
-  marketStatus(
-    'Ready to load the complete player-prop universe.'
-  );
-}
-
-function normalizeOutcome(
-  outcome,
-  market
-){
-
-  const side=
-    String(
-      outcome.name||
-      ''
-    )
-    .toLowerCase();
-
-  if(
-    side==='under' ||
-    side==='no'
-  )
-    return null;
-
-  const player=
-    String(
-      outcome.description ||
-      outcome.name ||
-      ''
-    )
-    .trim();
-
-  const odds=
-    num(
-      outcome.price
-    );
-
-  if(
-    !player ||
-    odds<=1
-  )
-    return null;
-
-  return{
-    player,
-    market,
-    family:
-      inferFamily(market),
-    name:
-      String(
-        outcome.name ||
-        player
-      ),
-    line:
-      outcome.point??null,
-    odds,
-    implied:
-      implied(odds)
-  };
-}
-
-function dedupe(rows){
-
-  const map=
-    new Map();
-
-  for(const r of rows){
-
-    const key=[
-      r.player.toLowerCase(),
-      r.market,
-      r.line,
-      r.name.toLowerCase()
-    ]
-    .join('|');
-
-    if(
-      !map.has(key) ||
-      map.get(key).odds<r.odds
-    ){
-
-      map.set(
-        key,
-        r
-      );
-
-    }
-
   }
 
-  return[
-    ...map.values()
-  ];
 }
 
-function ladderKey(x){
 
-  return(
-    x.player.toLowerCase()+
-    '|'+
-    x.market
-  );
+function selectedGameChanged(){
+
+  state.selectedGame=
+    state.games.find(
+      g=>
+        g.id ===
+        $('gameSelect').value
+    ) ||
+    null;
+
+
+  state.marketResponse=null;
+
+  state.players=[];
+
+  state.marketLines=[];
+
+  state.projections=[];
+
+  state.frozen=null;
+
+  state.valuations=[];
+
+
+  $('loadUniverseBtn').disabled=
+    !state.selectedGame;
+
+
+  $('buildBtn').disabled=
+    true;
+
+
+  $('freezeBtn').disabled=
+    true;
+
+
+  lockPrices();
+
+  renderSummary();
+
+  renderProjections();
+
 }
 
-function buildLadders(rows){
 
-  const m=
-    new Map();
-
-  for(const x of rows){
-
-    const k=
-      ladderKey(x);
-
-    if(!m.has(k))
-      m.set(
-        k,
-        []
-      );
-
-    m.get(k)
-      .push(x);
-  }
-
-  for(const arr of m.values()){
-
-    arr.sort(
-      (a,b)=>{
-
-        const al=
-          a.line===null
-            ? Infinity
-            : num(
-                a.line,
-                Infinity
-              );
-
-        const bl=
-          b.line===null
-            ? Infinity
-            : num(
-                b.line,
-                Infinity
-              );
-
-        return(
-          al-bl ||
-          a.odds-b.odds
-        );
-
-      }
-    );
-
-  }
-
-  return m;
-}
-
-function exportOddsRange(){
-
-  return{
-    min:
-      num(
-        $('minOdds').value,
-        1.08
-      ),
-    max:
-      num(
-        $('maxOdds').value,
-        5
-      )
-  };
-}
-
-function trimLadder(arr){
-
-  const{
-    min,
-    max
-  }=
-    exportOddsRange();
-
-  return arr.filter(
-    x=>
-      x.odds>=min &&
-      x.odds<=max
-  );
-}
-
-function exportableLadders(){
-
-  return[
-    ...state.ladders.values()
-  ]
-  .map(
-    arr=>({
-      all:arr,
-      trimmed:
-        trimLadder(arr)
-    })
-  )
-  .filter(
-    x=>
-      x.trimmed.length>0
-  );
-}
-
-function uniquePlayers(){
-
-  return new Set(
-    [
-      ...state.ladders.values()
-    ]
-    .map(
-      arr=>
-        (
-          arr[0]?.player||
-          ''
-        )
-        .toLowerCase()
-    )
-    .filter(Boolean)
-  );
-}
-
-function lineText(x){
-
-  return(
-    `${x.line??x.name}@${x.odds.toFixed(2)}`
-  );
-}
-
-function nearestPrice(
-  arr,
-  target
-){
-
-  if(!arr.length)
-    return null;
-
-  return[
-    ...arr
-  ]
-  .sort(
-    (a,b)=>
-      Math.abs(a.odds-target)-
-      Math.abs(b.odds-target)
-      ||
-      a.odds-b.odds
-  )[0];
-}
-
-function ladderIdFactory(){
-
-  const counts=
-    new Map();
-
-  const ids=
-    new Map();
-
-  const sorted=[
-    ...state.ladders.values()
-  ]
-  .sort(
-    (a,b)=>
-      (
-        a[0]?.family||
-        ''
-      )
-      .localeCompare(
-        b[0]?.family||
-        ''
-      )
-      ||
-      (
-        a[0]?.player||
-        ''
-      )
-      .localeCompare(
-        b[0]?.player||
-        ''
-      )
-      ||
-      (
-        a[0]?.market||
-        ''
-      )
-      .localeCompare(
-        b[0]?.market||
-        ''
-      )
-  );
-
-  for(const arr of sorted){
-
-    const fam=
-      (
-        (
-          arr[0]?.family||
-          'other'
-        )
-        .toUpperCase()
-        .replace(
-          /[^A-Z0-9]/g,
-          ''
-        )
-        .slice(
-          0,
-          5
-        )
-        ||
-        'OTHER'
-      );
-
-    const n=
-      (
-        counts.get(fam)||
-        0
-      )+
-      1;
-
-    counts.set(
-      fam,
-      n
-    );
-
-    ids.set(
-      ladderKey(
-        arr[0]
-      ),
-      `${fam}-${String(n).padStart(3,'0')}`
-    );
-
-  }
-
-  return ids;
-}
-
-function familyCounts(){
-
-  const m=
-    new Map();
-
-  for(const arr of state.ladders.values()){
-
-    const fam=
-      arr[0]?.family||
-      'other';
-
-    m.set(
-      fam,
-      (
-        m.get(fam)||
-        0
-      )+
-      1
-    );
-
-  }
-
-  return m;
-}
-
-function renderUniverse(){
-
-  const exportable=
-    exportableLadders();
-
-  $('rawCount').textContent=
-    state.raw.length;
-
-  $('ladderCount').textContent=
-    state.ladders.size;
-
-  $('usefulCount').textContent=
-    exportable.length;
-
-  $('playerCount').textContent=
-    uniquePlayers().size;
-
-  $('marketCount').textContent=
-    state.requestedMarkets.length;
-
-  $('quota').textContent=
-    state.quota??'—';
-
-  const fam=[
-    ...familyCounts().entries()
-  ]
-  .map(
-    ([k,v])=>
-      `${k}:${v}`
-  )
-  .join(', ');
-
-  const{
-    min,
-    max
-  }=
-    exportOddsRange();
-
-  $('universeSummary').textContent=
-    `Retained all ${state.ladders.size} ladders internally. ${exportable.length} contain at least one line between ${min.toFixed(2)} and ${max.toFixed(2)}. Families: ${fam}.`;
-}
-
-function renderDiscovery(){
-
-  const known=
-    state.requestedMarkets.filter(
-      x=>
-        !state.unknownMarkets.includes(x)
-    );
-
-  const{
-    min,
-    max
-  }=
-    exportOddsRange();
-
-  $('marketDiscovery').innerHTML=
-    `
-    <b>Sportsbet player markets detected:</b>
-    ${state.availableMarkets.length}
-
-    <br>
-
-    <b>Loaded:</b>
-    ${esc(
-      state.requestedMarkets.join(', ')||
-      'none'
-    )}
-
-    <br>
-
-    <b>Recognised:</b>
-    ${esc(
-      known.join(', ')||
-      'none'
-    )}
-
-    <br>
-
-    <b>New / unclassified:</b>
-    ${
-      state.unknownMarkets.length
-        ?
-        esc(
-          state.unknownMarkets.join(', ')
-        )
-        :
-        'none'
-    }
-
-    <br>
-
-    <b>Export odds range:</b>
-    ${min.toFixed(2)}
-    to
-    ${max.toFixed(2)}.
-
-    Full API ladders stay retained internally.
-    `;
-}
-
-async function loadMarkets(){
-
-  if(!state.game)
-    return marketStatus(
-      'Select a game first.',
-      'bad'
-    );
+async function loadUniverse(){
 
   const key=
     $('apiKey')
       .value
       .trim();
 
-  if(!key)
-    return marketStatus(
-      'API key is missing.',
-      'bad'
-    );
 
-  marketStatus(
-    'Discovering Sportsbet player markets…',
-    'warn'
+  if(
+    !key ||
+    !state.selectedGame
+  )
+    return;
+
+
+  setStatus(
+    'apiStatus',
+    'Loading Sportsbet disposal player universe. Prices remain hidden…'
   );
 
-  $('marketsBtn').disabled=true;
-
-  resetAfterGame();
 
   try{
 
-    const sport=
-      state.game.sport_key||
-      $('sport').value;
+    const id=
+      state.selectedGame.id;
 
-    const base=
-      `${API}/sports/${encodeURIComponent(sport)}/events/${encodeURIComponent(state.game.id)}`;
 
-    const availability=
-      await getJson(
-        `${base}/markets?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet`
-      );
+    const markets=
+      'player_disposals,player_disposals_over';
 
-    const availBook=
-      (
-        availability.bookmakers||
-        []
-      )
-      .find(
-        x=>
-          x.key==='sportsbet'
-      );
 
-    if(!availBook)
-      throw new Error(
-        'Sportsbet currently has no market list for this event.'
-      );
+    const url=
+      `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds` +
+      `?apiKey=${encodeURIComponent(key)}` +
+      `&bookmakers=sportsbet` +
+      `&markets=${markets}` +
+      `&oddsFormat=decimal` +
+      `&dateFormat=iso`;
 
-    const availableAll=
-      (
-        availBook.markets||
-        []
-      )
-      .map(
-        x=>x.key
-      )
-      .filter(Boolean);
 
-    const playerAvailable=
-      availableAll.filter(
-        isPlayerMarketKey
-      );
+    const data=
+      await apiFetch(url);
 
-    state.availableMarkets=[
-      ...new Set(
-        playerAvailable
-      )
-    ];
 
-    const knownSet=
-      new Set(
-        $('sport').value==='aussierules_afl'
-          ?
-          KNOWN_AFL_MARKETS
-          :
-          KNOWN_NRL_MARKETS
-      );
+    state.marketResponse=
+      data;
 
-    state.unknownMarkets=
-      state.availableMarkets.filter(
-        k=>
-          !knownSet.has(k)
-      );
 
-    state.requestedMarkets=[
-      ...state.availableMarkets
-    ];
+    extractSportsbetLines();
 
-    if(!state.requestedMarkets.length)
-      throw new Error(
-        'Sportsbet has no player-prop markets open for this event yet. Try again closer to game time.'
-      );
 
-    marketStatus(
-      `Found ${state.requestedMarkets.length} Sportsbet player market(s). Loading prices…`,
-      'warn'
+    const uniq=
+      new Map();
+
+
+    state.marketLines.forEach(
+      x=>
+        uniq.set(
+          x.playerKey,
+          x.player
+        )
     );
 
-    const chunks=[];
 
-    for(
-      let i=0;
-      i<state.requestedMarkets.length;
-      i+=10
-    ){
-
-      chunks.push(
-        state.requestedMarkets.slice(
-          i,
-          i+10
+    state.players=
+      [...uniq.entries()]
+        .map(
+          (
+            [
+              playerKey,
+              player
+            ]
+          )=>({
+            playerKey,
+            player
+          })
         )
+        .sort(
+          (a,b)=>
+            a.player.localeCompare(
+              b.player
+            )
+        );
+
+
+    $('buildBtn').disabled=
+      !(
+        state.players.length &&
+        state.history.length
       );
 
-    }
 
-    let rows=[];
+    setStatus(
+      'apiStatus',
+      `${state.players.length} disposal-market players loaded. ` +
+      `${state.marketLines.length} Sportsbet lines retained but hidden.`,
+      'good'
+    );
 
-    const returnedMarkets=
-      new Set();
 
-    for(const chunk of chunks){
+    renderSummary();
 
-      const url=
-        `${base}/odds?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet&oddsFormat=decimal&markets=${encodeURIComponent(chunk.join(','))}`;
+  }
+  catch(e){
 
-      const data=
-        await getJson(url);
+    setStatus(
+      'apiStatus',
+      e.message,
+      'bad'
+    );
 
-      const book=
-        (
-          data.bookmakers||
-          []
+  }
+
+}
+
+
+function extractSportsbetLines(){
+
+  const lines=[];
+
+  const books=
+    state.marketResponse?.bookmakers ||
+    [];
+
+
+  for(
+    const book
+    of books
+  ){
+
+    if(
+      norm(book.key)!=='sportsbet' &&
+      norm(book.title)!=='sportsbet'
+    )
+      continue;
+
+
+    for(
+      const market
+      of book.markets || []
+    ){
+
+      if(
+        ![
+          'player_disposals',
+          'player_disposals_over'
+        ].includes(
+          market.key
         )
-        .find(
-          x=>
-            x.key==='sportsbet'
-        );
-
-      if(!book)
+      )
         continue;
 
+
       for(
-        const m
-        of(
-          book.markets||
-          []
-        )
+        const o
+        of market.outcomes || []
       ){
 
-        returnedMarkets.add(
-          m.key
-        );
+        let player='';
 
-        for(
-          const o
-          of(
-            m.outcomes||
-            []
-          )
+        let isOver=false;
+
+
+        if(
+          norm(o.name)==='over'
         ){
 
-          const x=
-            normalizeOutcome(
-              o,
-              m.key
-            );
+          player=
+            o.description ||
+            '';
 
-          if(x)
-            rows.push(x);
+          isOver=true;
 
         }
+
+
+        else if(
+          market.key===
+          'player_disposals_over'
+        ){
+
+          player=
+            o.description ||
+            o.name ||
+            '';
+
+          isOver=
+            norm(o.name)!==
+            'under';
+
+        }
+
+
+        if(
+          !isOver ||
+          !player ||
+          !Number.isFinite(
+            Number(o.point)
+          ) ||
+          !Number.isFinite(
+            Number(o.price)
+          )
+        )
+          continue;
+
+
+        lines.push({
+
+          player,
+
+          playerKey:
+            norm(player),
+
+          line:
+            Number(o.point),
+
+          odds:
+            Number(o.price),
+
+          market:
+            market.key,
+
+          lastUpdate:
+            market.last_update ||
+            book.last_update ||
+            null
+
+        });
 
       }
 
     }
 
-    if(!rows.length)
-      throw new Error(
-        'Sportsbet player markets were discovered, but no usable player outcomes were returned.'
+  }
+
+
+  const dedup=
+    new Map();
+
+
+  for(
+    const x
+    of lines
+  ){
+
+    const k=
+      `${x.playerKey}|${x.line}`;
+
+
+    const old=
+      dedup.get(k);
+
+
+    if(
+      !old ||
+      x.odds>old.odds
+    )
+      dedup.set(
+        k,
+        x
       );
-
-    state.requestedMarkets=[
-      ...returnedMarkets
-    ];
-
-    state.raw=
-      dedupe(rows);
-
-    state.ladders=
-      buildLadders(
-        state.raw
-      );
-
-    renderUniverse();
-
-    renderDiscovery();
-
-    [
-      'universeCard',
-      'discoveryCard',
-      'compactCard',
-      'lookupCard'
-    ]
-    .forEach(
-      id=>
-        $(id)
-          .classList
-          .remove('hidden')
-    );
-
-    const{
-      min,
-      max
-    }=
-      exportOddsRange();
-
-    marketStatus(
-      `Loaded ${state.raw.length} usable outcomes across ${state.requestedMarkets.length} player markets and retained all ${state.ladders.size} player/market ladders. Export range ${min.toFixed(2)}–${max.toFixed(2)}.`,
-      'good'
-    );
-
-    log({
-      bookmaker:'Sportsbet',
-      requestedMarkets:
-        state.requestedMarkets,
-      unknownMarkets:
-        state.unknownMarkets,
-      raw:
-        state.raw.length,
-      ladders:
-        state.ladders.size,
-      players:
-        uniquePlayers().size,
-      quota:
-        state.quota
-    });
 
   }
-  catch(e){
 
-    marketStatus(
-      'Market load failed: '+
-      e.message,
+
+  state.marketLines=
+    [...dedup.values()]
+      .sort(
+        (a,b)=>
+          a.player.localeCompare(
+            b.player
+          ) ||
+          a.line-b.line
+      );
+
+}
+
+
+function importHistory(){
+
+  const text=
+    $('csvText')
+      .value
+      .trim();
+
+
+  if(!text){
+
+    setStatus(
+      'dataStatus',
+      'Paste or upload CSV data first.',
       'bad'
     );
 
-    log(e.message);
+    return;
 
   }
-  finally{
 
-    $('marketsBtn').disabled=false;
+
+  const rows=
+    historyFromCSV(text);
+
+
+  state.history=
+    rows;
+
+
+  $('buildBtn').disabled=
+    !(
+      state.players.length &&
+      state.history.length
+    );
+
+
+  setStatus(
+    'dataStatus',
+    rows.length
+      ? `${rows.length} valid historical game rows imported.`
+      : 'No valid rows found. Check the column names and date format.',
+    rows.length
+      ? 'good'
+      : 'bad'
+  );
+
+
+  renderSummary();
+
+}
+
+
+function eventCutoff(){
+
+  return state.selectedGame
+    ? new Date(
+        state.selectedGame.commence_time
+      )
+    : new Date();
+
+}
+
+
+function filteredHistoryForPlayer(
+  playerKey
+){
+
+  const cut=
+    eventCutoff();
+
+
+  return state.history
+    .filter(
+      r=>
+        r.playerKey===playerKey &&
+        r.date<cut
+    )
+    .sort(
+      (a,b)=>
+        b.date-a.date
+    );
+
+}
+
+
+function buildModel(){
+
+  if(
+    !state.selectedGame ||
+    !state.players.length ||
+    !state.history.length
+  ){
+
+    setStatus(
+      'modelStatus',
+      'Game, player universe and history are required.',
+      'bad'
+    );
+
+    return;
 
   }
-}
 
-function focusText(){
 
-  const v=
-    $('teamFocus').value;
+  const cut=
+    eventCutoff();
 
-  if(v==='home')
-    return(
-      state.game?.home_team||
-      'Home team'
-    );
 
-  if(v==='away')
-    return(
-      state.game?.away_team||
-      'Away team'
-    );
+  const halfLife=
+    Number(
+      $('halfLife').value
+    ) ||
+    180;
 
-  return 'Both teams';
-}
 
-function compactPack(){
+  const shrink=
+    Number(
+      $('shrinkGames').value
+    ) ||
+    8;
 
-  const g=
-    state.game||
-    {};
 
-  const{
-    min,
-    max
-  }=
-    exportOddsRange();
+  const minGames=
+    Number(
+      $('minGames').value
+    ) ||
+    8;
 
-  const ids=
-    ladderIdFactory();
 
-  const pairs=
-    exportableLadders()
-      .sort(
-        (a,b)=>
-          (
-            a.trimmed[0]?.family||
-            ''
-          )
-          .localeCompare(
-            b.trimmed[0]?.family||
-            ''
-          )
-          ||
-          (
-            a.trimmed[0]?.player||
-            ''
-          )
-          .localeCompare(
-            b.trimmed[0]?.player||
-            ''
-          )
+  const pre=
+    state.history
+      .filter(
+        r=>
+          r.date<cut
       );
 
-  const lines=[];
 
-  lines.push(
-    'BET INTELLIGENCE V17 COMPACT UNIVERSE PACK',
-    '========================================',
-    '',
-    `Sport: ${$('sport').value}`,
-    `Game: ${g.away_team||'-'} @ ${g.home_team||'-'}`,
-    `Commence: ${g.commence_time||'-'}`,
-    'Bookmaker: Sportsbet',
-    `Team focus: ${focusText()}`,
-    `Raw outcomes retained internally: ${state.raw.length}`,
-    `All ladders retained internally: ${state.ladders.size}`,
-    `Useful ladders represented here: ${pairs.length}`,
-    `Unique players: ${uniquePlayers().size}`,
-    `Markets loaded: ${state.requestedMarkets.join(', ')||'-'}`,
-    `Odds range represented: ${min.toFixed(2)} to ${max.toFixed(2)}`,
-    '',
-    'DATA TRUST',
-    'Market/odds: VERIFIED from Sportsbet via The Odds API.',
-    'Player selection, role, injuries, form, matchup and weather: UNVERIFIED and must be externally checked.',
-    '',
-    'COMPACT UNIVERSE',
-    '# ID | player | family | market | low..high | ~1.10 | ~1.30 | ~1.50 | ~1.80 | ~2.20 | ~3.00 | ~4.00'
-  );
-
-  for(const pair of pairs){
-
-    const arr=
-      pair.trimmed;
-
-    const landmarks=
-      PRICE_LANDMARKS
-        .map(
-          p=>
-            nearestPrice(
-              arr,
-              p
-            )
-        )
-        .map(
-          x=>
-            x
-              ?
-              lineText(x)
-              :
-              '—'
-        );
-
-    lines.push(
-      `${ids.get(ladderKey(arr[0]))} | `+
-      `${arr[0].player} | `+
-      `${arr[0].family} | `+
-      `${arr[0].market} | `+
-      `${lineText(arr[0])}..${lineText(arr[arr.length-1])} | `+
-      `${landmarks.join(' | ')}`
+  const targetKeys=
+    new Set(
+      state.players.map(
+        p=>
+          p.playerKey
+      )
     );
 
-  }
 
-  lines.push(
-    '',
-    'MASTER ANALYSIS PROMPT',
-    'Treat this V17 compact pack as the complete meaningful Sportsbet player-prop universe inside the displayed odds range. Bet Intelligence is a data engine, not a betting model. Do not anchor to Sportsbet Hot Legs, promotions, previous multis or previous screenshots.',
-    '',
-    'PROCESS',
-    '1. Scan the entire compact universe across players and market families; do not impose an arbitrary candidate count.',
-    '2. Use Sportsbet prices only as market information, never as true probability.',
-    '3. Identify ladders that warrant deeper research based on required performance, ladder shape, role plausibility, market variance and potential probability/price trade-off.',
-    '4. Verify current/final team selection, injuries, late changes, current role, expected TOG/minutes, responsibilities, recent exact-stat results, longer-term baseline, opponent, venue and weather where material. Reject unverified players.',
-    '5. If an exact line choice requires more detail than the compact landmarks provide, request only the relevant LADDER IDs from the user.',
-    '6. After exact ladders are supplied, estimate true hit probability with uncertainty for useful points, compare with implied probability, estimate fair odds and edge, and select the best probability-adjusted line.',
-    '7. Distinguish GOOD PLAYER vs GOOD BET vs GOOD MULTI LEG. Reject poor-value lines even for elite players.',
-    '8. Explicitly assess correlation and do not treat correlated legs as independent.',
-    '9. Do not add weak legs merely to increase total odds. A valid conclusion is NO BET.',
-    '',
-    'FINAL OUTPUT — KEEP IT SHORT',
-    'If more detail is needed first: request only the exact LADDER IDs.',
-    'Otherwise return BEST MULTI, approximate combined odds, confidence, BEST BET, WEAKEST selected leg, and one short warning if material.',
-    'If evidence does not justify a bet: NO BET and the single most important reason.',
-    '',
-    'POST-MATCH RULE',
-    'Classify failed legs only as: Variance; Bad line selection; Incorrect role assumption; Injury/substitution; Team-selection error; Matchup error; Correlation error; Data-quality problem; Model error. Do not rationalise losses after the event.'
-  );
-
-  return lines.join('\n');
-}
-
-function parseRequestedIds(text){
-
-  return[
-    ...new Set(
-      String(text||'')
-        .toUpperCase()
-        .split(/[\s,;]+/)
-        .map(
-          x=>x.trim()
+  const population=
+    pre.filter(
+      r=>
+        targetKeys.has(
+          r.playerKey
         )
-        .filter(Boolean)
-    )
-  ];
-}
-
-function selectedLadderPack(){
-
-  const ids=
-    ladderIdFactory();
-
-  const reverse=
-    new Map();
-
-  for(const arr of state.ladders.values()){
-
-    reverse.set(
-      ids.get(
-        ladderKey(
-          arr[0]
-        )
-      ),
-      arr
     );
 
-  }
 
-  const requested=
-    parseRequestedIds(
-      $('ladderIds').value
+  const popRates=
+    population.map(
+      r=>
+        r.disposals /
+        (
+          Number.isFinite(r.tog)
+            ? r.tog/100
+            : 1
+        )
     );
 
-  if(!requested.length)
-    return 'No ladder IDs supplied.';
 
-  const{
-    min,
-    max
-  }=
-    exportOddsRange();
+  const popMean=
+    mean(popRates);
 
-  const lines=[
-    'BET INTELLIGENCE V17 REQUESTED LADDERS',
-    '====================================',
-    '',
-    `Game: ${state.game?.away_team||'-'} @ ${state.game?.home_team||'-'}`,
-    `Odds range: ${min.toFixed(2)} to ${max.toFixed(2)}`,
-    '',
-    '# ID | player | family | market | exact useful ladder'
-  ];
 
-  const missing=[];
+  const popTOG=
+    mean(
+      population.map(
+        r=>
+          r.tog
+      )
+    );
 
-  for(const id of requested){
 
-    const arr=
-      reverse.get(id);
+  const popDispVar=
+    Math.max(
+      12,
 
-    if(!arr){
+      mean(
+        state.players.map(
+          p=>{
 
-      missing.push(id);
+            const g=
+              filteredHistoryForPlayer(
+                p.playerKey
+              );
+
+
+            if(g.length<2)
+              return NaN;
+
+
+            const vals=
+              g.map(
+                x=>
+                  x.disposals
+              );
+
+
+            const m=
+              mean(vals);
+
+
+            return mean(
+              vals.map(
+                v=>
+                  (v-m)**2
+              )
+            );
+
+          }
+        )
+      ) ||
+      25
+    );
+
+
+  const out=[];
+
+
+  for(
+    const p
+    of state.players
+  ){
+
+    const games=
+      filteredHistoryForPlayer(
+        p.playerKey
+      );
+
+
+    if(!games.length){
+
+      out.push({
+
+        player:
+          p.player,
+
+        playerKey:
+          p.playerKey,
+
+        status:
+          'NO_HISTORY',
+
+        games:
+          0
+
+      });
 
       continue;
 
     }
 
-    const trimmed=
-      trimLadder(arr);
 
-    lines.push(
-      `${id} | `+
-      `${arr[0].player} | `+
-      `${arr[0].family} | `+
-      `${arr[0].market} | `+
-      `${trimmed.map(lineText).join('; ')}`
-    );
+    const weights=
+      games.map(
+        g=>
+          Math.pow(
+            0.5,
 
-  }
-
-  if(missing.length){
-
-    lines.push(
-      '',
-      `IDs not found: ${missing.join(', ')}`
-    );
-
-  }
-
-  lines.push(
-    '',
-    'Use these exact ladders with the V17 master analysis rules from the compact universe pack.'
-  );
-
-  return lines.join('\n');
-}
-
-function createCompact(){
-
-  if(!state.ladders.size)
-    return;
-
-  $('compactBox').textContent=
-    compactPack();
-
-  $('copyCompactBtn').disabled=false;
-}
-
-async function copyText(
-  text,
-  button
-){
-
-  try{
-
-    await navigator
-      .clipboard
-      .writeText(text);
-
-    const old=
-      button.textContent;
-
-    button.textContent=
-      'COPIED';
-
-    setTimeout(
-      ()=>
-        button.textContent=old,
-      1000
-    );
-
-  }
-  catch{
-
-    alert(
-      'Clipboard access is blocked. Select the text manually.'
-    );
-
-  }
-}
-
-function exportSelected(){
-
-  if(!state.ladders.size)
-    return;
-
-  $('selectedBox').textContent=
-    selectedLadderPack();
-
-  $('copySelectedBtn').disabled=false;
-}
-
-const AUDIT_KEY=
-  'betIntelV17Audit';
-
-function loadAudit(){
-
-  let arr=[];
-
-  try{
-
-    arr=
-      JSON.parse(
-        localStorage.getItem(AUDIT_KEY)||
-        '[]'
+            Math.max(
+              0,
+              (
+                cut-g.date
+              ) /
+              86400000
+            ) /
+            halfLife
+          )
       );
 
-    if(!Array.isArray(arr))
-      arr=[];
 
-  }
-  catch{
+    const rates=
+      games.map(
+        g=>
+          g.disposals /
+          (
+            Number.isFinite(g.tog)
+              ? g.tog/100
+              : 1
+          )
+      );
 
-    arr=[];
 
-  }
+    const nEff=
+      effectiveN(
+        weights
+      );
 
-  $('auditHistory').textContent=
-    arr.length
-      ?
-      arr
-        .map(
-          (x,i)=>
-            `${i+1}. ${x}`
+
+    const playerRate=
+      weightedMean(
+        rates,
+        weights
+      );
+
+
+    const priorRate=
+      Number.isFinite(popMean)
+        ? popMean
+        : playerRate;
+
+
+    const rate=
+      (
+        nEff*playerRate +
+        shrink*priorRate
+      ) /
+      (
+        nEff+shrink
+      );
+
+
+    const togVals=
+      games
+        .filter(
+          g=>
+            Number.isFinite(
+              g.tog
+            )
         )
-        .join('\n')
-      :
-      'No audit history.';
-}
+        .map(
+          g=>
+            g.tog
+        );
 
-function saveAudit(){
 
-  const v=
-    $('auditInput')
-      .value
-      .trim();
-
-  if(!v){
-
-    $('auditStatus').textContent=
-      'Enter an audit line first.';
-
-    return;
-  }
-
-  let arr=[];
-
-  try{
-
-    arr=
-      JSON.parse(
-        localStorage.getItem(AUDIT_KEY)||
-        '[]'
+    const togGames=
+      games.filter(
+        g=>
+          Number.isFinite(
+            g.tog
+          )
       );
 
-    if(!Array.isArray(arr))
-      arr=[];
+
+    const togWeights=
+      togGames.map(
+        g=>
+          Math.pow(
+            0.5,
+
+            Math.max(
+              0,
+              (
+                cut-g.date
+              ) /
+              86400000
+            ) /
+            90
+          )
+      );
+
+
+    const recentTOG=
+      weightedMean(
+        togGames.map(
+          g=>
+            g.tog
+        ),
+        togWeights
+      );
+
+
+    const expectedTOG=
+      Number.isFinite(recentTOG)
+
+        ? clamp(
+            (
+              nEff*recentTOG +
+              4*
+              (
+                Number.isFinite(popTOG)
+                  ? popTOG
+                  : recentTOG
+              )
+            ) /
+            (
+              nEff+4
+            ),
+            45,
+            95
+          )
+
+        : 100;
+
+
+    const mu=
+      rate *
+      (
+        expectedTOG/100
+      );
+
+
+    const residuals=
+      games.map(
+        g=>
+          g.disposals -
+          rate *
+          (
+            (
+              Number.isFinite(g.tog)
+                ? g.tog
+                : expectedTOG
+            ) /
+            100
+          )
+      );
+
+
+    const resMean=
+      weightedMean(
+        residuals,
+        weights
+      );
+
+
+    const ownVar=
+      weightedVariance(
+        residuals,
+        weights,
+        resMean
+      );
+
+
+    const varWeight=
+      clamp(
+        nEff /
+        (
+          nEff+10
+        ),
+        0,
+        1
+      );
+
+
+    const processVar=
+      (
+        Number.isFinite(ownVar)
+          ? ownVar
+          : popDispVar
+      ) *
+      varWeight
+      +
+      popDispVar *
+      (
+        1-varWeight
+      );
+
+
+    const meanUncertainty=
+      Math.max(
+        1.0,
+
+        processVar /
+        Math.max(
+          3,
+          nEff+shrink
+        )
+      );
+
+
+    const togUncertainty=
+      Number.isFinite(recentTOG) &&
+      togVals.length>=3
+
+        ? Math.max(
+            0.5,
+
+            (
+              weightedVariance(
+                togGames.map(
+                  g=>
+                    g.tog
+                ),
+                togWeights,
+                recentTOG
+              ) ||
+              0
+            ) *
+            (
+              rate/100
+            )**2
+          )
+
+        : 2;
+
+
+    const sd=
+      Math.sqrt(
+        Math.max(
+          9,
+
+          processVar +
+          meanUncertainty +
+          togUncertainty
+        )
+      );
+
+
+    const l5=
+      mean(
+        games
+          .slice(
+            0,
+            5
+          )
+          .map(
+            g=>
+              g.disposals
+          )
+      );
+
+
+    const l10=
+      mean(
+        games
+          .slice(
+            0,
+            10
+          )
+          .map(
+            g=>
+              g.disposals
+          )
+      );
+
+
+    const seasonYear=
+      cut.getFullYear();
+
+
+    const season=
+      mean(
+        games
+          .filter(
+            g=>
+              g.date.getFullYear()===
+              seasonYear
+          )
+          .map(
+            g=>
+              g.disposals
+          )
+      );
+
+
+    const missingTOG=
+      games.filter(
+        g=>
+          !Number.isFinite(
+            g.tog
+          )
+      ).length;
+
+
+    let quality=
+      100;
+
+
+    quality-=
+      Math.max(
+        0,
+        minGames-games.length
+      ) *
+      7;
+
+
+    quality-=
+      Math.min(
+        22,
+        missingTOG*3
+      );
+
+
+    quality-=
+      nEff<5
+        ? 12
+        : 0;
+
+
+    quality=
+      clamp(
+        Math.round(
+          quality
+        ),
+        20,
+        100
+      );
+
+
+    out.push({
+
+      player:
+        p.player,
+
+      playerKey:
+        p.playerKey,
+
+      team:
+        games[0]?.team ||
+        '',
+
+      games:
+        games.length,
+
+      nEff,
+
+      l5,
+
+      l10,
+
+      season,
+
+      expectedTOG,
+
+      mu,
+
+      median:
+        mu,
+
+      sd,
+
+      rate,
+
+      quality,
+
+      status:
+        games.length>=minGames
+          ? 'MODELLED'
+          : 'THIN_HISTORY'
+
+    });
 
   }
-  catch{
 
-    arr=[];
+
+  state.projections=
+    out;
+
+
+  state.frozen=
+    null;
+
+
+  state.valuations=
+    [];
+
+
+  lockPrices();
+
+
+  $('freezeBtn').disabled=
+    !out.some(
+      x=>
+        Number.isFinite(
+          x.mu
+        )
+    );
+
+
+  setStatus(
+    'modelStatus',
+    `${out.filter(x=>Number.isFinite(x.mu)).length}/${out.length} players modelled independently. Sportsbet prices still locked.`,
+    'good'
+  );
+
+
+  renderProjections();
+
+  renderSummary();
+
+}
+
+
+function renderProjections(){
+
+  const body=
+    $('projectionBody');
+
+
+  if(!state.projections.length){
+
+    body.innerHTML=
+      '<tr>' +
+      '<td colspan="11" class="muted">' +
+      'Load player universe and history, then build the model.' +
+      '</td>' +
+      '</tr>';
+
+    return;
 
   }
 
-  arr.push(v);
 
-  localStorage.setItem(
-    AUDIT_KEY,
-    JSON.stringify(
-      arr.slice(-200)
+  body.innerHTML=
+    state.projections
+      .map(
+        p=>{
+
+          if(
+            !Number.isFinite(
+              p.mu
+            )
+          ){
+
+            return `
+              <tr>
+                <td>${esc(p.player)}</td>
+                <td>—</td>
+                <td>0</td>
+                <td colspan="7">
+                  No matching historical data
+                </td>
+                <td>
+                  <span class="pill bad">
+                    NO DATA
+                  </span>
+                </td>
+              </tr>
+            `;
+
+          }
+
+
+          const q=
+            p.quality>=80
+              ? 'good'
+              : p.quality>=60
+                ? 'warn'
+                : 'bad';
+
+
+          return `
+            <tr>
+
+              <td>
+                <b>${esc(p.player)}</b>
+              </td>
+
+              <td>
+                ${esc(p.team)}
+              </td>
+
+              <td>
+                ${p.games}
+              </td>
+
+              <td>
+                ${fmt(p.l5)}
+              </td>
+
+              <td>
+                ${fmt(p.l10)}
+              </td>
+
+              <td>
+                ${fmt(p.season)}
+              </td>
+
+              <td>
+
+                <input
+                  data-tog="${esc(p.playerKey)}"
+                  type="number"
+                  min="40"
+                  max="100"
+                  step="1"
+                  value="${fmt(p.expectedTOG,0)}"
+                  style="width:74px;padding:5px"
+                />
+
+              </td>
+
+              <td>
+                <b>${fmt(p.mu)}</b>
+              </td>
+
+              <td>
+                ${fmt(p.median)}
+              </td>
+
+              <td>
+                ${fmt(p.sd)}
+              </td>
+
+              <td>
+                <span class="pill ${q}">
+                  ${p.quality}/100
+                </span>
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
+
+  body
+    .querySelectorAll(
+      '[data-tog]'
     )
-  );
+    .forEach(
+      inp=>
+        inp.addEventListener(
+          'change',
+          e=>{
 
-  $('auditInput').value='';
+            if(state.frozen){
 
-  $('auditStatus').textContent=
-    'Audit line saved locally.';
+              e.target.value=
+                e.target.defaultValue;
 
-  loadAudit();
+              return;
+
+            }
+
+
+            const p=
+              state.projections.find(
+                x=>
+                  x.playerKey===
+                  e.target.dataset.tog
+              );
+
+
+            if(!p)
+              return;
+
+
+            const newTog=
+              clamp(
+                Number(
+                  e.target.value
+                ) ||
+                p.expectedTOG,
+                40,
+                100
+              );
+
+
+            const ratio=
+              newTog /
+              p.expectedTOG;
+
+
+            p.expectedTOG=
+              newTog;
+
+
+            p.mu*=
+              ratio;
+
+
+            p.median=
+              p.mu;
+
+
+            renderProjections();
+
+
+            setStatus(
+              'modelStatus',
+              'Expected TOG override applied. Re-freeze after all verified role adjustments.',
+              'warn'
+            );
+
+          }
+        )
+    );
+
 }
 
-function clearAudit(){
 
-  localStorage.removeItem(
-    AUDIT_KEY
+function freezeModel(){
+
+  if(
+    !state.projections.length
+  )
+    return;
+
+
+  state.frozen={
+
+    frozenAt:
+      new Date()
+        .toISOString(),
+
+    game:
+      state.selectedGame,
+
+    model:{
+
+      name:
+        'AFL Disposal Player Intelligence Trial 0.1',
+
+      halfLife:
+        Number(
+          $('halfLife').value
+        ),
+
+      shrinkGames:
+        Number(
+          $('shrinkGames').value
+        ),
+
+      minGames:
+        Number(
+          $('minGames').value
+        ),
+
+      distribution:
+        'Normal predictive baseline with shrunk variance'
+
+    },
+
+    projections:
+      JSON.parse(
+        JSON.stringify(
+          state.projections
+        )
+      )
+
+  };
+
+
+  $('freezeBtn').disabled=
+    true;
+
+
+  unlockPrices();
+
+  renderSummary();
+
+
+  setStatus(
+    'modelStatus',
+    `Price-blind projections frozen at ${new Date(state.frozen.frozenAt).toLocaleString()}. Sportsbet comparison unlocked.`,
+    'good'
   );
 
-  $('auditStatus').textContent=
-    'Audit history cleared.';
 
-  loadAudit();
+  buildAudit();
+
 }
 
-$('connectBtn').onclick=
-  loadGames;
 
-$('clearBtn').onclick=
-  ()=>{
+function lockPrices(){
 
-    state.events=[];
-
-    state.game=null;
-
-    resetAfterGame();
-
-    $('apiKey').value='';
-
-    $('games').innerHTML='';
-
-    $('setupCard')
-      .classList
-      .add('hidden');
-
-    status(
-      'Cleared. API key is not stored.'
+  $('priceLock')
+    .classList
+    .remove(
+      'hidden'
     );
 
-    log(
-      'Cleared.'
-    );
-  };
 
-$('marketsBtn').onclick=
-  loadMarkets;
-
-$('createCompactBtn').onclick=
-  createCompact;
-
-$('copyCompactBtn').onclick=
-  ()=>
-    copyText(
-      compactPack(),
-      $('copyCompactBtn')
+  $('valuationPanel')
+    .classList
+    .add(
+      'hidden'
     );
 
-$('exportSelectedBtn').onclick=
-  exportSelected;
 
-$('copySelectedBtn').onclick=
-  ()=>
-    copyText(
-      selectedLadderPack(),
-      $('copySelectedBtn')
+  $('copyAuditBtn').disabled=
+    true;
+
+
+  $('downloadAuditBtn').disabled=
+    true;
+
+
+  $('kpiFrozen').textContent=
+    'NO';
+
+}
+
+
+function unlockPrices(){
+
+  $('priceLock')
+    .classList
+    .add(
+      'hidden'
     );
 
-$('saveAuditBtn').onclick=
-  saveAudit;
 
-$('clearAuditBtn').onclick=
-  clearAudit;
-
-$('sport').onchange=
-  ()=>{
-
-    state.events=[];
-
-    state.game=null;
-
-    resetAfterGame();
-
-    $('games').innerHTML='';
-
-    $('setupCard')
-      .classList
-      .add('hidden');
-
-    status(
-      'Sport changed. Load current games.'
+  $('valuationPanel')
+    .classList
+    .remove(
+      'hidden'
     );
-  };
 
-function refreshRange(){
 
-  if(state.ladders.size){
+  $('copyAuditBtn').disabled=
+    false;
 
-    renderUniverse();
 
-    renderDiscovery();
+  $('downloadAuditBtn').disabled=
+    false;
 
-    $('compactBox').textContent=
-      'Odds range changed. Create a new compact pack.';
 
-    $('selectedBox').textContent=
-      'Odds range changed. Re-export requested ladders if needed.';
+  $('kpiFrozen').textContent=
+    'YES';
 
-    $('copyCompactBtn').disabled=true;
 
-    $('copySelectedBtn').disabled=true;
+  $('kpiFrozen').className=
+    'good';
+
+}
+
+
+function rankLines(){
+
+  if(!state.frozen)
+    return;
+
+
+  const minEdge=
+    (
+      Number(
+        $('minEdge').value
+      ) ||
+      0
+    ) /
+    100;
+
+
+  const minProb=
+    (
+      Number(
+        $('minProb').value
+      ) ||
+      0
+    ) /
+    100;
+
+
+  const maxOdds=
+    Number(
+      $('maxOdds').value
+    ) ||
+    99;
+
+
+  const pm=
+    new Map(
+      state.frozen.projections.map(
+        p=>[
+          p.playerKey,
+          p
+        ]
+      )
+    );
+
+
+  const vals=[];
+
+
+  for(
+    const line
+    of state.marketLines
+  ){
+
+    const p=
+      pm.get(
+        line.playerKey
+      );
+
+
+    if(
+      !p ||
+      !Number.isFinite(p.mu) ||
+      !Number.isFinite(p.sd)
+    )
+      continue;
+
+
+    const modelP=
+      overProbability(
+        line.line,
+        p.mu,
+        p.sd
+      );
+
+
+    const breakEven=
+      1 /
+      line.odds;
+
+
+    const edge=
+      modelP -
+      breakEven;
+
+
+    const fair=
+      1 /
+      modelP;
+
+
+    const ev=
+      modelP *
+      line.odds -
+      1;
+
+
+    const uncertaintyPenalty=
+      (
+        100-p.quality
+      ) /
+      100 *
+      0.06;
+
+
+    const conservativeP=
+      clamp(
+        modelP -
+        uncertaintyPenalty,
+        0.001,
+        0.999
+      );
+
+
+    const qualified=
+      edge>=minEdge &&
+      modelP>=minProb &&
+      line.odds<=maxOdds &&
+      conservativeP>breakEven;
+
+
+    const score=
+      edge*100 +
+      ev*35 +
+      (
+        p.quality-70
+      ) *
+      0.04 -
+      Math.max(
+        0,
+        line.odds-2
+      ) *
+      0.35;
+
+
+    vals.push({
+
+      ...line,
+
+      modelP,
+
+      breakEven,
+
+      edge,
+
+      fair,
+
+      ev,
+
+      conservativeP,
+
+      quality:
+        p.quality,
+
+      mu:
+        p.mu,
+
+      sd:
+        p.sd,
+
+      qualified,
+
+      score
+
+    });
+
   }
+
+
+  vals.sort(
+    (a,b)=>
+      b.qualified-a.qualified ||
+      b.score-a.score ||
+      b.edge-a.edge
+  );
+
+
+  state.valuations=
+    vals;
+
+
+  const body=
+    $('valuationBody');
+
+
+  body.innerHTML=
+    vals.length
+
+      ? vals.map(
+          (
+            v,
+            i
+          )=>{
+
+            const q=
+              v.qualified
+                ? 'good'
+                : v.edge>0
+                  ? 'warn'
+                  : 'bad';
+
+
+            const status=
+              v.qualified
+                ? 'QUALIFY'
+                : v.edge>0
+                  ? 'WATCH'
+                  : 'REJECT';
+
+
+            return `
+              <tr>
+
+                <td>
+                  ${i+1}
+                </td>
+
+                <td>
+
+                  <b>
+                    ${esc(v.player)}
+                  </b>
+
+                  <div class="small muted">
+                    μ ${fmt(v.mu)}
+                    /
+                    SD ${fmt(v.sd)}
+                  </div>
+
+                </td>
+
+                <td>
+                  ${v.line}
+                </td>
+
+                <td>
+                  $${fmt(v.odds,2)}
+                </td>
+
+                <td>
+                  ${pct(v.breakEven)}
+                </td>
+
+                <td>
+
+                  <b>
+                    ${pct(v.modelP)}
+                  </b>
+
+                  <div class="small muted">
+                    conservative
+                    ${pct(v.conservativeP)}
+                  </div>
+
+                </td>
+
+                <td>
+                  $${fmt(v.fair,2)}
+                </td>
+
+                <td class="${v.edge>=0?'good':'bad'}">
+
+                  ${v.edge>=0?'+':''}
+
+                  ${fmt(v.edge*100)}
+                  pp
+
+                </td>
+
+                <td class="${v.ev>=0?'good':'bad'}">
+
+                  ${v.ev>=0?'+':''}
+
+                  ${pct(v.ev)}
+
+                </td>
+
+                <td>
+                  ${v.quality}/100
+                </td>
+
+                <td>
+
+                  <span class="pill ${q}">
+                    ${status}
+                  </span>
+
+                </td>
+
+              </tr>
+            `;
+
+          }
+        )
+        .join('')
+
+      : '<tr><td colspan="11" class="muted">No modelled Sportsbet lines matched the imported player data.</td></tr>';
+
+
+  setStatus(
+    'rankStatus',
+    `${vals.length} lines priced; ${vals.filter(x=>x.qualified).length} currently qualify. No multi is forced.`,
+    'good'
+  );
+
+
+  buildAudit();
+
 }
 
-$('minOdds').onchange=
-  refreshRange;
 
-$('maxOdds').onchange=
-  refreshRange;
+function buildAudit(){
 
-window.BetIntelligenceV17Tests={
+  if(!state.frozen){
 
-  implied:
-    ()=>
-      Math.abs(
-        implied(2)-0.5
-      )<1e-12,
+    $('auditText').value=
+      '';
 
-  removesUnder:
-    ()=>
-      normalizeOutcome(
-        {
-          name:'Under',
-          description:'Test',
-          price:1.9,
-          point:20.5
-        },
-        'player_disposals_over'
-      )===null,
+    return;
 
-  dedupe:
-    ()=>
-      dedupe(
-        [
-          {
-            player:'A',
-            market:'x',
-            line:1,
-            name:'Over',
-            odds:1.5
-          },
-          {
-            player:'A',
-            market:'x',
-            line:1,
-            name:'Over',
-            odds:1.6
-          }
-        ]
-      ).length===1,
+  }
 
-  ladderSort:
-    ()=>
-      buildLadders(
-        [
-          {
-            player:'A',
-            market:'m',
-            family:'x',
-            line:24.5,
-            odds:1.9
-          },
-          {
-            player:'A',
-            market:'m',
-            family:'x',
-            line:19.5,
-            odds:1.2
-          }
-        ]
+
+  const audit={
+
+    app:
+      'BET INTELLIGENCE AFL — Player Intelligence Trial 0.1',
+
+    frozenAt:
+      state.frozen.frozenAt,
+
+    game:
+      state.frozen.game,
+
+    model:
+      state.frozen.model,
+
+    historyRowsImported:
+      state.history.length,
+
+    marketPlayerCount:
+      state.players.length,
+
+    projections:
+      state.frozen.projections,
+
+    valuations:
+      state.valuations.map(
+        v=>({
+
+          player:
+            v.player,
+
+          line:
+            v.line,
+
+          sportsbetOdds:
+            v.odds,
+
+          modelProbability:
+            v.modelP,
+
+          conservativeProbability:
+            v.conservativeP,
+
+          breakEvenProbability:
+            v.breakEven,
+
+          fairOdds:
+            v.fair,
+
+          edgePercentagePoints:
+            v.edge*100,
+
+          expectedValue:
+            v.ev,
+
+          quality:
+            v.quality,
+
+          qualified:
+            v.qualified,
+
+          market:
+            v.market,
+
+          lastUpdate:
+            v.lastUpdate
+
+        })
       )
-      .get('a|m')[0]
-      .line===19.5,
 
-  dynamicMarket:
-    ()=>
-      isPlayerMarketKey(
-        'player_hitouts_over'
-      )
-      &&
-      inferFamily(
-        'player_hitouts_over'
-      )==='hitouts'
+  };
 
-};
 
-loadAudit();
+  $('auditText').value=
+    JSON.stringify(
+      audit,
+      null,
+      2
+    );
 
+}
+
+
+function renderSummary(){
+
+  $('kpiUniverse').textContent=
+    state.players.length;
+
+
+  const modelled=
+    state.projections.filter(
+      x=>
+        Number.isFinite(
+          x.mu
+        )
+    ).length;
+
+
+  $('kpiModelled').textContent=
+    modelled;
+
+
+  $('kpiHistory').textContent=
+    state.history.length;
+
+
+  $('kpiCoverage').textContent=
+    state.players.length
+
+      ? Math.round(
+          100 *
+          modelled /
+          state.players.length
+        ) +
+        '%'
+
+      : '0%';
+
+
+  if(!state.frozen){
+
+    $('kpiFrozen').textContent=
+      'NO';
+
+    $('kpiFrozen').className=
+      '';
+
+  }
+
+}
+
+
+function clearTrial(){
+
+  state.games=[];
+
+  state.selectedGame=null;
+
+  state.history=[];
+
+  state.marketResponse=null;
+
+  state.players=[];
+
+  state.marketLines=[];
+
+  state.projections=[];
+
+  state.frozen=null;
+
+  state.valuations=[];
+
+
+  $('gameSelect').innerHTML=
+    '<option value="">Load games first</option>';
+
+
+  $('csvText').value=
+    '';
+
+
+  $('csvFile').value=
+    '';
+
+
+  $('loadUniverseBtn').disabled=
+    true;
+
+
+  $('buildBtn').disabled=
+    true;
+
+
+  $('freezeBtn').disabled=
+    true;
+
+
+  $('projectionBody').innerHTML=
+    '<tr><td colspan="11" class="muted">Load player universe and history, then build the model.</td></tr>';
+
+
+  $('valuationBody').innerHTML=
+    '<tr><td colspan="11" class="muted">Freeze projections to unlock.</td></tr>';
+
+
+  $('auditText').value=
+    '';
+
+
+  setStatus(
+    'apiStatus',
+    ''
+  );
+
+
+  setStatus(
+    'dataStatus',
+    ''
+  );
+
+
+  setStatus(
+    'modelStatus',
+    ''
+  );
+
+
+  lockPrices();
+
+  renderSummary();
+
+}
+
+
+$('saveKeyBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      localStorage.setItem(
+        'bi_odds_api_key',
+        $('apiKey')
+          .value
+          .trim()
+      );
+
+
+      setStatus(
+        'apiStatus',
+        'API key saved on this device.',
+        'good'
+      );
+
+    }
+  );
+
+
+$('loadGamesBtn')
+  .addEventListener(
+    'click',
+    loadGames
+  );
+
+
+$('gameSelect')
+  .addEventListener(
+    'change',
+    selectedGameChanged
+  );
+
+
+$('loadUniverseBtn')
+  .addEventListener(
+    'click',
+    loadUniverse
+  );
+
+
+$('importCsvBtn')
+  .addEventListener(
+    'click',
+    importHistory
+  );
+
+
+$('csvFile')
+  .addEventListener(
+    'change',
+    async e=>{
+
+      const f=
+        e.target.files?.[0];
+
+
+      if(!f)
+        return;
+
+
+      $('csvText').value=
+        await f.text();
+
+
+      importHistory();
+
+    }
+  );
+
+
+$('templateBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      $('csvText').value=
+`player,team,date,opponent,venue,disposals,tog
+Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86
+Matt Rowell,Gold Coast Suns,2026-08-08,Carlton,Marvel Stadium,28,84
+`;
+
+
+      setStatus(
+        'dataStatus',
+        'Template inserted. Replace the sample rows with real historical game data.',
+        'warn'
+      );
+
+    }
+  );
+
+
+$('buildBtn')
+  .addEventListener(
+    'click',
+    buildModel
+  );
+
+
+$('freezeBtn')
+  .addEventListener(
+    'click',
+    freezeModel
+  );
+
+
+$('rankBtn')
+  .addEventListener(
+    'click',
+    rankLines
+  );
+
+
+$('clearBtn')
+  .addEventListener(
+    'click',
+    clearTrial
+  );
+
+
+$('copyAuditBtn')
+  .addEventListener(
+    'click',
+    async()=>{
+
+      buildAudit();
+
+
+      try{
+
+        await navigator.clipboard.writeText(
+          $('auditText').value
+        );
+
+
+        setStatus(
+          'rankStatus',
+          'Audit pack copied.',
+          'good'
+        );
+
+      }
+      catch{
+
+        $('auditText').select();
+
+        document.execCommand(
+          'copy'
+        );
+
+      }
+
+    }
+  );
+
+
+$('downloadAuditBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      buildAudit();
+
+
+      const blob=
+        new Blob(
+          [
+            $('auditText').value
+          ],
+          {
+            type:
+              'application/json'
+          }
+        );
+
+
+      const a=
+        document.createElement(
+          'a'
+        );
+
+
+      a.href=
+        URL.createObjectURL(
+          blob
+        );
+
+
+      a.download=
+        `bi-afl-trial-${state.selectedGame?.id||'audit'}.json`;
+
+
+      a.click();
+
+
+      setTimeout(
+        ()=>
+          URL.revokeObjectURL(
+            a.href
+          ),
+        1000
+      );
+
+    }
+  );
+
+
+const saved=
+  localStorage.getItem(
+    'bi_odds_api_key'
+  );
+
+
+if(saved)
+  $('apiKey').value=
+    saved;
+
+
+renderSummary();
+
+lockPrices();
+
+
+})();
 </script>
 
 </body>
