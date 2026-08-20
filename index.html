@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BET INTELLIGENCE AFL — Trial 0.4</title>
+<title>BET INTELLIGENCE AFL — Market Intelligence</title>
 
 <style>
 :root{
@@ -174,10 +174,6 @@ textarea{
   background:var(--good)
 }
 
-.btn.warnbtn{
-  background:var(--warn)
-}
-
 .btn:disabled{
   opacity:.42;
   cursor:not-allowed
@@ -222,7 +218,7 @@ table{
   width:100%;
   border-collapse:collapse;
   font-size:11px;
-  min-width:900px
+  min-width:850px
 }
 
 th,
@@ -241,6 +237,15 @@ th{
   z-index:1
 }
 
+.notice{
+  padding:10px 12px;
+  border-radius:10px;
+  background:#0d1628;
+  border:1px solid var(--line);
+  font-size:12px;
+  line-height:1.45
+}
+
 .pill{
   display:inline-block;
   padding:3px 7px;
@@ -257,51 +262,21 @@ th{
   background:rgba(255,200,87,.12)
 }
 
-.pill.bad{
-  background:rgba(255,107,107,.12)
-}
-
-.lock,
-.notice{
-  padding:10px 12px;
-  border-radius:10px;
-  background:#0d1628;
-  border:1px solid var(--line);
-  font-size:12px;
-  line-height:1.45
-}
-
-.progress{
-  height:8px;
-  background:#0b1322;
-  border:1px solid var(--line);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:8px
-}
-
-.progress>div{
-  height:100%;
-  width:0;
-  background:var(--accent);
-  transition:width .2s
-}
-
-.mono{
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace
+textarea{
+  min-height:260px;
+  resize:vertical
 }
 
 .small{
   font-size:10px
 }
 
-.hidden{
-  display:none!important
+.mono{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace
 }
 
-textarea{
-  min-height:140px;
-  resize:vertical
+.hidden{
+  display:none!important
 }
 </style>
 </head>
@@ -312,13 +287,12 @@ textarea{
 
   <div class="hero">
     <h1>
-      BET INTELLIGENCE AFL — Player Intelligence Trial 0.4
+      BET INTELLIGENCE AFL — Market Intelligence
     </h1>
 
     <p>
-      Browser connectivity probe for official AFL live data.
-      Sportsbet prices remain hidden while we test whether
-      GitHub Pages can access the live AFL stats pipeline directly.
+      Sportsbet full-universe capture → exact alternate ladders →
+      compact research pack. No fake probability model. No candidate cap.
     </p>
   </div>
 
@@ -326,11 +300,9 @@ textarea{
 
     <section class="card half">
 
-      <h2>1. Sportsbet market universe</h2>
+      <h2>1. Load AFL game</h2>
 
-      <label>
-        The Odds API key
-      </label>
+      <label>The Odds API key</label>
 
       <div class="row">
 
@@ -366,34 +338,21 @@ textarea{
           class="btn secondary"
           id="clearBtn"
         >
-          Clear trial
+          Clear
         </button>
 
       </div>
 
-      <label>
-        Game
-      </label>
+      <label>Game</label>
 
       <select id="gameSelect">
-
         <option value="">
           Load games first
         </option>
-
       </select>
 
-      <button
-        class="btn secondary"
-        id="loadUniverseBtn"
-        style="width:100%;margin-top:8px"
-        disabled
-      >
-        Load player universe — prices hidden
-      </button>
-
       <div
-        id="apiStatus"
+        id="gameStatus"
         class="status muted"
       ></div>
 
@@ -402,39 +361,31 @@ textarea{
 
     <section class="card half">
 
-      <h2>
-        2. Official AFL browser connectivity
-      </h2>
+      <h2>2. Pull Sportsbet player props</h2>
 
       <div class="notice">
 
-        <b>Purpose:</b>
+        <b>Verified AFL markets:</b>
 
-        test the same AFL endpoints used by fitzRoy:
+        disposals, kicks, handballs, marks, tackles,
+        clearances, goals, anytime goal scorer and AFL fantasy.
 
-        competition → season → rounds → temporary token →
-        round match items → one player-stat match.
-
-        This version does not weaken the freshness rule or
-        pretend stale CSV data is current.
+        First/last scorer and “most” markets are deliberately excluded
+        from the default multi pack because they are high variance.
 
       </div>
 
       <button
-        class="btn"
-        id="probeBtn"
+        class="btn goodbtn"
+        id="loadMarketsBtn"
         style="width:100%;margin-top:9px"
         disabled
       >
-        Run official AFL connectivity test
+        Load full Sportsbet prop universe
       </button>
 
-      <div class="progress">
-        <div id="probeProgress"></div>
-      </div>
-
       <div
-        id="probeStatus"
+        id="marketStatus"
         class="status muted"
       ></div>
 
@@ -443,9 +394,143 @@ textarea{
 
     <section class="card">
 
-      <h2>
-        Connectivity results
-      </h2>
+      <h2>Market summary</h2>
+
+      <div class="kpis">
+
+        <div class="kpi">
+          <b id="kpiRaw">0</b>
+          <span>raw usable outcomes</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiPlayers">0</b>
+          <span>unique players</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiLadders">0</b>
+          <span>player/market ladders</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiFamilies">0</b>
+          <span>market families</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiMin">—</b>
+          <span>lowest price</span>
+        </div>
+
+        <div class="kpi">
+          <b id="kpiMax">—</b>
+          <span>highest price</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>3. Analysis-pack controls</h2>
+
+      <div class="grid">
+
+        <div class="third">
+
+          <label>
+            Minimum useful odds
+          </label>
+
+          <input
+            id="minOdds"
+            type="number"
+            min="1.01"
+            max="20"
+            step="0.01"
+            value="1.08"
+          >
+
+        </div>
+
+
+        <div class="third">
+
+          <label>
+            Maximum useful odds
+          </label>
+
+          <input
+            id="maxOdds"
+            type="number"
+            min="1.01"
+            max="50"
+            step="0.05"
+            value="5.00"
+          >
+
+        </div>
+
+
+        <div class="third">
+
+          <label>
+            Pack mode
+          </label>
+
+          <select id="packMode">
+
+            <option value="all">
+              All supported families
+            </option>
+
+            <option value="core">
+              Core multi markets only
+            </option>
+
+            <option value="disposals">
+              Disposals only
+            </option>
+
+            <option value="goals">
+              Goals only
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="help">
+        These controls change only the exported research pack.
+        Every retrieved Sportsbet outcome stays in memory.
+        There is no arbitrary 40-player or 40-candidate cap.
+      </div>
+
+      <button
+        class="btn"
+        id="buildPackBtn"
+        style="width:100%;margin-top:9px"
+        disabled
+      >
+        Build compact analysis pack
+      </button>
+
+      <div
+        id="packStatus"
+        class="status muted"
+      ></div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>4. Exact ladders preview</h2>
 
       <div class="tableWrap">
 
@@ -454,26 +539,23 @@ textarea{
           <thead>
 
             <tr>
-              <th>Step</th>
-              <th>Endpoint</th>
-              <th>Status</th>
-              <th>Result</th>
+              <th>Player</th>
+              <th>Family</th>
+              <th>Market</th>
+              <th>Useful lines</th>
             </tr>
 
           </thead>
 
-          <tbody id="probeBody">
+          <tbody id="ladderBody">
 
             <tr>
-
               <td
                 colspan="4"
                 class="muted"
               >
-                Select a game, load the player universe,
-                then run the test.
+                Load the Sportsbet prop universe first.
               </td>
-
             </tr>
 
           </tbody>
@@ -482,113 +564,25 @@ textarea{
 
       </div>
 
-      <div
-        id="architectureDecision"
-        class="notice"
-        style="margin-top:10px"
-      >
-        <b>Architecture decision:</b>
-        not tested yet.
-      </div>
-
-    </section>
-
-
-    <section class="card half">
-
-      <h2>
-        3. Historical baseline check
-      </h2>
-
-      <div class="help">
-        This retains the working historical baseline only to prove
-        how stale it is relative to the selected match.
-        It is not allowed to unlock modelling when freshness fails.
-      </div>
-
-      <button
-        class="btn secondary"
-        id="baselineBtn"
-        style="width:100%;margin-top:8px"
-        disabled
-      >
-        Load historical baseline
-      </button>
-
-      <div class="progress">
-        <div id="baseProgress"></div>
-      </div>
-
-      <div
-        id="baseStatus"
-        class="status muted"
-      ></div>
-
-    </section>
-
-
-    <section class="card half">
-
-      <h2>
-        4. Safety gate
-      </h2>
-
-      <div class="kpis">
-
-        <div class="kpi">
-          <b id="kpiPlayers">0</b>
-          <span>market players</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiLines">0</b>
-          <span>hidden lines</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiMatched">0</b>
-          <span>baseline matched</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiLatest">—</b>
-          <span>baseline latest</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiLive">—</b>
-          <span>live API</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiBuild">BLOCKED</b>
-          <span>model build</span>
-        </div>
-
-      </div>
-
-      <div
-        id="safetyStatus"
-        class="status bad"
-      >
-        Model build remains blocked until a current independent
-        data path is proven.
-      </div>
-
     </section>
 
 
     <section class="card">
 
-      <h2>
-        5. Diagnostic export
-      </h2>
+      <h2>5. Copy this pack to ChatGPT</h2>
 
-      <div class="help">
-        Copy this result back to ChatGPT.
-        It records exactly which endpoint succeeded or failed,
-        including whether the browser appears to be blocked by
-        CORS/network policy.
+      <div class="notice">
+
+        <b>Workflow learned from Trial 0.4:</b>
+
+        the app supplies the market universe only.
+
+        Current teams, injuries, role, L5/L10, matchup and weather
+        are verified separately before I recommend a multi.
+
+        Missing or stale external data is not silently converted
+        into confidence.
+
       </div>
 
       <div
@@ -598,24 +592,26 @@ textarea{
 
         <button
           class="btn secondary"
-          id="copyDiagBtn"
+          id="copyBtn"
+          disabled
         >
-          Copy diagnostic
+          Copy analysis pack
         </button>
 
         <button
           class="btn secondary"
-          id="downloadDiagBtn"
+          id="downloadBtn"
+          disabled
         >
-          Download JSON
+          Download TXT
         </button>
 
       </div>
 
       <textarea
-        id="diagText"
+        id="packText"
         readonly
-        placeholder="Diagnostic output will appear here."
+        placeholder="Compact analysis pack will appear here."
       ></textarea>
 
     </section>
@@ -623,6 +619,7 @@ textarea{
   </div>
 
 </div>
+
 
 <script>
 (() => {
@@ -634,20 +631,98 @@ const SPORT=
   'aussierules_afl';
 
 
-const ODDS_API=
+const API=
   'https://api.the-odds-api.com/v4';
 
 
-const AFL_PUBLIC=
-  'https://aflapi.afl.com.au';
+const MARKET_DEFS={
+
+  player_disposals:{
+    family:'disposals',
+    label:'Disposals',
+    kind:'ou'
+  },
+
+  player_disposals_over:{
+    family:'disposals',
+    label:'Disposals',
+    kind:'over'
+  },
+
+  player_kicks_over:{
+    family:'kicks',
+    label:'Kicks',
+    kind:'over'
+  },
+
+  player_handballs_over:{
+    family:'handballs',
+    label:'Handballs',
+    kind:'over'
+  },
+
+  player_marks_over:{
+    family:'marks',
+    label:'Marks',
+    kind:'over'
+  },
+
+  player_tackles_over:{
+    family:'tackles',
+    label:'Tackles',
+    kind:'over'
+  },
+
+  player_clearances_over:{
+    family:'clearances',
+    label:'Clearances',
+    kind:'over'
+  },
+
+  player_goals_scored_over:{
+    family:'goals',
+    label:'Goals',
+    kind:'over'
+  },
+
+  player_goal_scorer_anytime:{
+    family:'goals',
+    label:'Anytime goal scorer',
+    kind:'yesno'
+  },
+
+  player_afl_fantasy_points:{
+    family:'fantasy',
+    label:'AFL Fantasy',
+    kind:'ou'
+  },
+
+  player_afl_fantasy_points_over:{
+    family:'fantasy',
+    label:'AFL Fantasy',
+    kind:'over'
+  }
+
+};
 
 
-const AFL_STATS=
-  'https://api.afl.com.au';
+const REQUEST_MARKETS=
+  Object.keys(
+    MARKET_DEFS
+  )
+  .join(',');
 
 
-const BASE_URL=
-  'https://raw.githubusercontent.com/CooperDenny/AFLPlayerStats/main/Player%20Data/AFL/afl_player_stats.csv';
+const CORE_FAMILIES=
+  new Set([
+    'disposals',
+    'kicks',
+    'handballs',
+    'marks',
+    'tackles',
+    'clearances',
+    'goals'
+  ]);
 
 
 const state={
@@ -656,21 +731,13 @@ const state={
 
   selectedGame:null,
 
-  marketResponse:null,
+  rawResponse:null,
 
-  players:[],
+  outcomes:[],
 
-  marketLines:[],
+  ladders:[],
 
-  baseline:[],
-
-  baselineLatest:null,
-
-  probe:[],
-
-  probeContext:{},
-
-  architecture:'UNTESTED'
+  pack:''
 
 };
 
@@ -678,21 +745,6 @@ const state={
 const $=
   id=>
     document.getElementById(id);
-
-
-const esc=
-  s=>
-    String(s??'')
-      .replace(
-        /[&<>"']/g,
-        c=>({
-          '&':'&amp;',
-          '<':'&lt;',
-          '>':'&gt;',
-          '"':'&quot;',
-          "'":'&#039;'
-        }[c])
-      );
 
 
 const norm=
@@ -711,18 +763,26 @@ const norm=
       .trim();
 
 
-const compactName=
+const esc=
   s=>
-    norm(s)
+    String(s??'')
       .replace(
-        /\b(jr|senior|junior)\b/g,
-        ''
-      )
-      .replace(
-        /\s+/g,
-        ' '
-      )
-      .trim();
+        /[&<>"']/g,
+        c=>({
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#039;'
+        }[c])
+      );
+
+
+const fmt=
+  (n,d=2)=>
+    Number.isFinite(n)
+      ? n.toFixed(d)
+      : '—';
 
 
 function setStatus(
@@ -743,84 +803,16 @@ function setStatus(
 }
 
 
-function setProgress(
-  id,
-  p
-){
-
-  $(id).style.width=
-    Math.max(
-      0,
-      Math.min(
-        100,
-        p
-      )
-    )+
-    '%';
-
-}
-
-
-function sleep(ms){
-
-  return new Promise(
-    r=>
-      setTimeout(
-        r,
-        ms
-      )
-  );
-
-}
-
-
-function classifyFetchError(e){
-
-  const m=
-    String(
-      e?.message ||
-      e ||
-      'Unknown error'
-    );
-
-
-  if(
-    /failed to fetch|load failed|networkerror|network request failed/i
-      .test(m)
-  ){
-
-    return{
-      type:
-        'CORS_OR_NETWORK',
-
-      message:
-        m
-    };
-
-  }
-
-
-  return{
-    type:
-      'ERROR',
-
-    message:
-      m
-  };
-
-}
-
-
-async function jsonFetch(
-  url,
-  opts={}
-){
+async function jsonFetch(url){
 
   const res=
     await fetch(
       url,
       {
-        ...opts,
+        headers:{
+          Accept:
+            'application/json'
+        },
 
         cache:
           'no-store'
@@ -832,50 +824,35 @@ async function jsonFetch(
     await res.text();
 
 
-  let data=null;
+  if(!res.ok){
+
+    throw new Error(
+      `API ${res.status}: ${
+        text.slice(
+          0,
+          220
+        ) ||
+        res.statusText
+      }`
+    );
+
+  }
 
 
   try{
 
-    data=
+    return JSON.parse(
       text
-        ? JSON.parse(text)
-        : null;
+    );
 
   }
-  catch{}
+  catch{
 
-
-  if(!res.ok){
-
-    const err=
-      new Error(
-        `HTTP ${res.status}${
-          text
-            ? `: ${text.slice(0,180)}`
-            : ''
-        }`
-      );
-
-
-    err.httpStatus=
-      res.status;
-
-
-    throw err;
+    throw new Error(
+      'API returned invalid JSON.'
+    );
 
   }
-
-
-  return{
-    data,
-    text,
-    status:
-      res.status,
-
-    headers:
-      res.headers
-  };
 
 }
 
@@ -891,7 +868,7 @@ async function loadGames(){
   if(!key){
 
     setStatus(
-      'apiStatus',
+      'gameStatus',
       'Enter your API key first.',
       'bad'
     );
@@ -902,18 +879,16 @@ async function loadGames(){
 
 
   setStatus(
-    'apiStatus',
-    'Loading upcoming AFL games…'
+    'gameStatus',
+    'Loading AFL games…'
   );
 
 
   try{
 
-    const {
-      data
-    }=
+    const data=
       await jsonFetch(
-        `${ODDS_API}/sports/${SPORT}/events`+
+        `${API}/sports/${SPORT}/events`+
         `?apiKey=${encodeURIComponent(key)}`+
         `&dateFormat=iso`
       );
@@ -940,7 +915,7 @@ async function loadGames(){
 
 
     setStatus(
-      'apiStatus',
+      'gameStatus',
       `${state.games.length} AFL games loaded.`,
       'good'
     );
@@ -949,7 +924,7 @@ async function loadGames(){
   catch(e){
 
     setStatus(
-      'apiStatus',
+      'gameStatus',
       e.message,
       'bad'
     );
@@ -970,46 +945,61 @@ function gameChanged(){
     null;
 
 
-  state.marketResponse=null;
+  state.rawResponse=null;
 
-  state.players=[];
+  state.outcomes=[];
 
-  state.marketLines=[];
+  state.ladders=[];
 
-  state.baseline=[];
-
-  state.baselineLatest=null;
-
-  state.probe=[];
-
-  state.probeContext={};
-
-  state.architecture=
-    'UNTESTED';
+  state.pack='';
 
 
-  $('loadUniverseBtn').disabled=
+  $('loadMarketsBtn').disabled=
     !state.selectedGame;
 
 
-  $('probeBtn').disabled=
+  $('buildPackBtn').disabled=
     true;
 
 
-  $('baselineBtn').disabled=
+  $('copyBtn').disabled=
     true;
 
 
-  resetProbeUI();
+  $('downloadBtn').disabled=
+    true;
+
+
+  $('packText').value=
+    '';
+
+
+  $('ladderBody').innerHTML=
+    '<tr>'+
+    '<td colspan="4" class="muted">'+
+    'Load the Sportsbet prop universe first.'+
+    '</td>'+
+    '</tr>';
+
 
   renderSummary();
 
-  buildDiagnostic();
+
+  setStatus(
+    'marketStatus',
+    ''
+  );
+
+
+  setStatus(
+    'packStatus',
+    ''
+  );
 
 }
 
 
-async function loadUniverse(){
+async function loadMarkets(){
 
   const key=
     $('apiKey')
@@ -1025,8 +1015,8 @@ async function loadUniverse(){
 
 
   setStatus(
-    'apiStatus',
-    'Loading Sportsbet disposal universe. Prices remain hidden…'
+    'marketStatus',
+    'Loading all supported Sportsbet AFL player props…'
   );
 
 
@@ -1036,89 +1026,58 @@ async function loadUniverse(){
       state.selectedGame.id;
 
 
-    const markets=
-      'player_disposals,player_disposals_over';
+    const url=
+      `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds`+
+      `?apiKey=${encodeURIComponent(key)}`+
+      `&bookmakers=sportsbet`+
+      `&markets=${encodeURIComponent(REQUEST_MARKETS)}`+
+      `&oddsFormat=decimal`+
+      `&dateFormat=iso`;
 
 
-    const {
-      data
-    }=
+    const data=
       await jsonFetch(
-        `${ODDS_API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds`+
-        `?apiKey=${encodeURIComponent(key)}`+
-        `&bookmakers=sportsbet`+
-        `&markets=${markets}`+
-        `&oddsFormat=decimal`+
-        `&dateFormat=iso`
+        url
       );
 
 
-    state.marketResponse=
+    state.rawResponse=
       data;
 
 
-    extractSportsbetLines();
+    state.outcomes=
+      extractOutcomes(
+        data
+      );
 
 
-    const uniq=
-      new Map();
+    state.ladders=
+      buildLadders(
+        state.outcomes
+      );
 
 
-    state.marketLines.forEach(
-      x=>
-        uniq.set(
-          x.playerKey,
-          x.player
-        )
-    );
-
-
-    state.players=
-      [...uniq.entries()]
-        .map(
-          (
-            [
-              playerKey,
-              player
-            ]
-          )=>({
-            playerKey,
-            player
-          })
-        )
-        .sort(
-          (a,b)=>
-            a.player.localeCompare(
-              b.player
-            )
-        );
-
-
-    $('probeBtn').disabled=
-      !state.players.length;
-
-
-    $('baselineBtn').disabled=
-      !state.players.length;
+    $('buildPackBtn').disabled=
+      !state.ladders.length;
 
 
     setStatus(
-      'apiStatus',
-      `${state.players.length} disposal-market players loaded; `+
-      `${state.marketLines.length} Sportsbet lines retained and hidden.`,
+      'marketStatus',
+      `${state.outcomes.length} usable Sportsbet outcomes retained across `+
+      `${state.ladders.length} exact player/market ladders.`,
       'good'
     );
 
 
     renderSummary();
 
-    buildDiagnostic();
+    renderLadders();
 
   }
   catch(e){
 
     setStatus(
-      'apiStatus',
+      'marketStatus',
       e.message,
       'bad'
     );
@@ -1128,14 +1087,14 @@ async function loadUniverse(){
 }
 
 
-function extractSportsbetLines(){
+function extractOutcomes(data){
 
-  const lines=[];
+  const rows=[];
 
 
   for(
     const book
-    of state.marketResponse?.bookmakers ||
+    of data?.bookmakers ||
     []
   ){
 
@@ -1154,14 +1113,13 @@ function extractSportsbetLines(){
       []
     ){
 
-      if(
-        ![
-          'player_disposals',
-          'player_disposals_over'
-        ].includes(
+      const def=
+        MARKET_DEFS[
           market.key
-        )
-      )
+        ];
+
+
+      if(!def)
         continue;
 
 
@@ -1173,73 +1131,159 @@ function extractSportsbetLines(){
 
         let player='';
 
-        let isOver=false;
+        let line=null;
+
+        let accept=false;
+
+
+        const on=
+          norm(
+            o.name
+          );
 
 
         if(
-          norm(o.name)==='over'
+          def.kind===
+          'ou'
         ){
+
+          if(
+            on!==
+            'over'
+          )
+            continue;
+
 
           player=
             o.description ||
             '';
 
-          isOver=true;
+
+          line=
+            Number(
+              o.point
+            );
+
+
+          accept=
+            !!player &&
+            Number.isFinite(
+              line
+            );
 
         }
 
 
         else if(
-          market.key===
-          'player_disposals_over'
+          def.kind===
+          'over'
         ){
+
+          if(
+            on==='under' ||
+            on==='no'
+          )
+            continue;
+
 
           player=
             o.description ||
             o.name ||
             '';
 
-          isOver=
-            norm(o.name)!==
-            'under';
+
+          line=
+            Number(
+              o.point
+            );
+
+
+          accept=
+            !!player &&
+            Number.isFinite(
+              line
+            );
 
         }
 
 
+        else if(
+          def.kind===
+          'yesno'
+        ){
+
+          if(
+            on==='no'
+          )
+            continue;
+
+
+          if(
+            on==='yes'
+          ){
+
+            player=
+              o.description ||
+              '';
+
+          }
+
+          else{
+
+            player=
+              o.description ||
+              o.name ||
+              '';
+
+          }
+
+
+          line=
+            0.5;
+
+
+          accept=
+            !!player;
+
+        }
+
+
+        const odds=
+          Number(
+            o.price
+          );
+
+
         if(
-          !isOver ||
-          !player ||
+          !accept ||
           !Number.isFinite(
-            Number(o.point)
-          ) ||
-          !Number.isFinite(
-            Number(o.price)
+            odds
           )
         )
           continue;
 
 
-        lines.push({
+        rows.push({
 
           player,
 
           playerKey:
-            compactName(
+            norm(
               player
             ),
 
-          line:
-            Number(
-              o.point
-            ),
+          family:
+            def.family,
 
-          odds:
-            Number(
-              o.price
-            ),
+          label:
+            def.label,
 
           market:
             market.key,
+
+          line,
+
+          odds,
 
           lastUpdate:
             market.last_update ||
@@ -1260,12 +1304,12 @@ function extractSportsbetLines(){
 
 
   for(
-    const x
-    of lines
+    const r
+    of rows
   ){
 
     const k=
-      `${x.playerKey}|${x.line}`;
+      `${r.playerKey}|${r.market}|${r.line}`;
 
 
     const old=
@@ -1274,13 +1318,13 @@ function extractSportsbetLines(){
 
     if(
       !old ||
-      x.odds>
+      r.odds>
       old.odds
     ){
 
       d.set(
         k,
-        x
+        r
       );
 
     }
@@ -1288,1220 +1332,113 @@ function extractSportsbetLines(){
   }
 
 
-  state.marketLines=
-    [...d.values()]
-      .sort(
-        (a,b)=>
-          a.player.localeCompare(
-            b.player
-          ) ||
-          a.line-
-          b.line
-      );
-
-}
-
-
-function resetProbeUI(){
-
-  $('probeBody').innerHTML=
-    '<tr>'+
-    '<td colspan="4" class="muted">'+
-    'Select a game, load the player universe, then run the test.'+
-    '</td>'+
-    '</tr>';
-
-
-  setProgress(
-    'probeProgress',
-    0
-  );
-
-
-  setStatus(
-    'probeStatus',
-    ''
-  );
-
-
-  $('architectureDecision').innerHTML=
-    '<b>Architecture decision:</b> not tested yet.';
-
-
-  $('architectureDecision').className=
-    'notice';
-
-}
-
-
-function addProbe(
-  step,
-  endpoint,
-  status,
-  result,
-  detail={}
-){
-
-  state.probe.push({
-
-    step,
-
-    endpoint,
-
-    status,
-
-    result,
-
-    detail,
-
-    at:
-      new Date()
-        .toISOString()
-
-  });
-
-
-  renderProbe();
-
-  buildDiagnostic();
-
-}
-
-
-function renderProbe(){
-
-  const b=
-    $('probeBody');
-
-
-  b.innerHTML=
-    state.probe
-      .map(
-        x=>{
-
-          const cls=
-            x.status==='PASS'
-              ? 'good'
-              : x.status==='WARN'
-                ? 'warn'
-                : 'bad';
-
-
-          return `
-            <tr>
-
-              <td>
-                <b>${esc(x.step)}</b>
-              </td>
-
-              <td class="mono small">
-                ${esc(x.endpoint)}
-              </td>
-
-              <td>
-                <span class="pill ${cls}">
-                  ${esc(x.status)}
-                </span>
-              </td>
-
-              <td>
-                ${esc(x.result)}
-              </td>
-
-            </tr>
-          `;
-
-        }
-      )
-      .join('') ||
-
-      '<tr><td colspan="4" class="muted">No results yet.</td></tr>';
-
-}
-
-
-function findArray(
-  obj,
-  names
-){
-
-  for(
-    const n
-    of names
-  ){
-
-    if(
-      Array.isArray(
-        obj?.[n]
-      )
-    ){
-
-      return obj[n];
-
-    }
-
-  }
-
-
-  return [];
-
-}
-
-
-function itemMatchId(item){
-
-  return (
-    item?.providerId ||
-    item?.matchId ||
-    item?.id ||
-    item?.providerID ||
-    item?.match?.providerId ||
-    item?.match?.id ||
-    null
-  );
-
-}
-
-
-function itemDate(item){
-
-  const vals=[
-
-    item?.match?.date,
-
-    item?.matchDate,
-
-    item?.date,
-
-    item?.utcStartTime,
-
-    item?.startTime,
-
-    item?.match?.utcStartTime
-
+  return [
+    ...d.values()
   ];
 
-
-  for(
-    const v
-    of vals
-  ){
-
-    if(!v)
-      continue;
-
-
-    const d=
-      new Date(v);
-
-
-    if(
-      !Number.isNaN(
-        d.getTime()
-      )
-    ){
-
-      return d;
-
-    }
-
-  }
-
-
-  return null;
-
 }
 
 
-async function runProbe(){
+function buildLadders(rows){
 
-  if(
-    !state.selectedGame
-  )
-    return;
-
-
-  state.probe=[];
-
-  state.probeContext={};
-
-  state.architecture=
-    'TESTING';
-
-
-  renderProbe();
-
-  renderSummary();
-
-
-  setStatus(
-    'probeStatus',
-    'Testing official AFL browser access…'
-  );
-
-
-  setProgress(
-    'probeProgress',
-    3
-  );
-
-
-  const year=
-    new Date(
-      state.selectedGame.commence_time
-    )
-    .getFullYear();
-
-
-  let compId=null;
-
-  let seasonId=null;
-
-  let rounds=[];
-
-  let token=null;
-
-  let roundProviderId=null;
-
-  let matchId=null;
-
-
-  try{
-
-    const u=
-      `${AFL_PUBLIC}/afl/v2/competitions?pageSize=50`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(u);
-
-
-    const comps=
-      findArray(
-        data,
-        [
-          'competitions'
-        ]
-      );
-
-
-    const afl=
-      comps.find(
-        x=>
-          String(
-            x.code
-          )
-          .toUpperCase()==='AFL' &&
-          !/legacy/i.test(
-            String(
-              x.name ||
-              ''
-            )
-          )
-      );
-
-
-    compId=
-      afl?.id ??
-      null;
-
-
-    if(
-      compId==null
-    ){
-
-      throw new Error(
-        'AFL competition ID not found in response'
-      );
-
-    }
-
-
-    state.probeContext.compId=
-      compId;
-
-
-    addProbe(
-      '1. Competition API',
-      u,
-      'PASS',
-      `AFL competition ID ${compId}`
-    );
-
-
-    setProgress(
-      'probeProgress',
-      16
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '1. Competition API',
-      `${AFL_PUBLIC}/afl/v2/competitions`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-      'Public AFL API failed in this browser. A backend/proxy is likely required.'
-    );
-
-
-    return;
-
-  }
-
-
-  try{
-
-    const u=
-      `${AFL_PUBLIC}/afl/v2/competitions/${encodeURIComponent(compId)}/compseasons?pageSize=100`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(u);
-
-
-    const ss=
-      findArray(
-        data,
-        [
-          'compSeasons',
-          'compseasons'
-        ]
-      );
-
-
-    const s=
-      ss.find(
-        x=>
-          new RegExp(
-            `\\b${year}\\b`
-          )
-          .test(
-            String(
-              x.name ||
-              ''
-            )
-          ) &&
-          !/legacy/i.test(
-            String(
-              x.name ||
-              ''
-            )
-          )
-      );
-
-
-    seasonId=
-      s?.id ??
-      null;
-
-
-    if(
-      seasonId==null
-    ){
-
-      throw new Error(
-        `${year} AFL season ID not found`
-      );
-
-    }
-
-
-    state.probeContext.seasonId=
-      seasonId;
-
-
-    addProbe(
-      '2. Season API',
-      u,
-      'PASS',
-      `${year} season ID ${seasonId}`
-    );
-
-
-    setProgress(
-      'probeProgress',
-      30
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '2. Season API',
-      `${AFL_PUBLIC}/afl/v2/competitions/${compId}/compseasons`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-      'Season discovery failed. Browser-only live data is not reliable enough.'
-    );
-
-
-    return;
-
-  }
-
-
-  try{
-
-    const u=
-      `${AFL_PUBLIC}/afl/v2/compseasons/${encodeURIComponent(seasonId)}/rounds?pageSize=40`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(u);
-
-
-    rounds=
-      findArray(
-        data,
-        [
-          'rounds'
-        ]
-      );
-
-
-    if(
-      !rounds.length
-    ){
-
-      throw new Error(
-        'No rounds returned'
-      );
-
-    }
-
-
-    const gameDate=
-      new Date(
-        state.selectedGame.commence_time
-      );
-
-
-    const eligible=
-      rounds
-        .filter(
-          r=>{
-
-            const d=
-              new Date(
-                r.utcStartTime ||
-                r.startTime ||
-                ''
-              );
-
-
-            return (
-              !Number.isNaN(
-                d.getTime()
-              ) &&
-              d<gameDate
-            );
-
-          }
-        )
-        .sort(
-          (a,b)=>
-            new Date(
-              b.utcStartTime ||
-              b.startTime
-            ) -
-            new Date(
-              a.utcStartTime ||
-              a.startTime
-            )
-        );
-
-
-    const latest=
-      eligible[0] ||
-      rounds[
-        rounds.length-1
-      ];
-
-
-    roundProviderId=
-      latest?.providerId ||
-      latest?.id ||
-      null;
-
-
-    if(
-      !roundProviderId
-    ){
-
-      throw new Error(
-        'No round provider ID available'
-      );
-
-    }
-
-
-    state.probeContext.roundProviderId=
-      roundProviderId;
-
-
-    state.probeContext.roundName=
-      latest?.name ||
-      latest?.roundNumber ||
-      '';
-
-
-    addProbe(
-      '3. Rounds API',
-      u,
-      'PASS',
-      `${rounds.length} rounds; test round ${
-        state.probeContext.roundName ||
-        roundProviderId
-      }`
-    );
-
-
-    setProgress(
-      'probeProgress',
-      45
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '3. Rounds API',
-      `${AFL_PUBLIC}/afl/v2/compseasons/${seasonId}/rounds`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-      'Round discovery failed. Browser-only live data is not reliable enough.'
-    );
-
-
-    return;
-
-  }
-
-
-  try{
-
-    const u=
-      `${AFL_STATS}/cfs/afl/WMCTok`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(
-        u,
-        {
-          method:
-            'POST',
-
-          headers:{
-            'Accept':
-              'application/json'
-          }
-        }
-      );
-
-
-    token=
-      data?.token ||
-      null;
-
-
-    if(!token){
-
-      throw new Error(
-        'Token endpoint responded but no token field was returned'
-      );
-
-    }
-
-
-    state.probeContext.tokenReceived=
-      true;
-
-
-    addProbe(
-      '4. AFL stats token',
-      u,
-      'PASS',
-      'Temporary AFL token received'
-    );
-
-
-    setProgress(
-      'probeProgress',
-      60
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '4. AFL stats token',
-      `${AFL_STATS}/cfs/afl/WMCTok`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-
-      c.type===
-      'CORS_OR_NETWORK'
-
-        ? 'The authenticated AFL stats layer is blocked from this GitHub Pages browser. A lightweight backend/proxy is required.'
-
-        : 'AFL token request failed. A backend/proxy is the safer architecture.'
-    );
-
-
-    return;
-
-  }
-
-
-  try{
-
-    const u=
-      `${AFL_STATS}/cfs/afl/matchItems/round/${encodeURIComponent(roundProviderId)}`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(
-        u,
-        {
-          headers:{
-            'Accept':
-              'application/json',
-
-            'x-media-mis-token':
-              token
-          }
-        }
-      );
-
-
-    const items=
-      findArray(
-        data,
-        [
-          'items',
-          'matches',
-          'matchItems'
-        ]
-      );
-
-
-    if(
-      !items.length
-    ){
-
-      throw new Error(
-        'Round endpoint returned no match items'
-      );
-
-    }
-
-
-    const completed=
-      items.filter(
-        x=>{
-
-          const d=
-            itemDate(x);
-
-
-          return d
-            ? d<
-              new Date(
-                state.selectedGame.commence_time
-              )
-            : true;
-
-        }
-      );
-
-
-    const candidate=
-      completed.find(
-        x=>
-          itemMatchId(x)
-      ) ||
-      items.find(
-        x=>
-          itemMatchId(x)
-      );
-
-
-    matchId=
-      candidate
-        ? itemMatchId(
-            candidate
-          )
-        : null;
-
-
-    if(!matchId){
-
-      throw new Error(
-        'No match provider ID found in round response'
-      );
-
-    }
-
-
-    state.probeContext.roundMatchCount=
-      items.length;
-
-
-    state.probeContext.matchId=
-      matchId;
-
-
-    addProbe(
-      '5. Round match items',
-      u,
-      'PASS',
-      `${items.length} matches returned; sample match ${matchId}`
-    );
-
-
-    setProgress(
-      'probeProgress',
-      78
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '5. Round match items',
-      `${AFL_STATS}/cfs/afl/matchItems/round/${roundProviderId}`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-      'Token works but round match retrieval does not. A backend/proxy remains the recommended route.'
-    );
-
-
-    return;
-
-  }
-
-
-  try{
-
-    const u=
-      `${AFL_STATS}/cfs/afl/playerStats/match/${encodeURIComponent(matchId)}`;
-
-
-    const {
-      data
-    }=
-      await jsonFetch(
-        u,
-        {
-          headers:{
-            'Accept':
-              'application/json',
-
-            'x-media-mis-token':
-              token
-          }
-        }
-      );
-
-
-    const home=
-      findArray(
-        data,
-        [
-          'homeTeamPlayerStats'
-        ]
-      );
-
-
-    const away=
-      findArray(
-        data,
-        [
-          'awayTeamPlayerStats'
-        ]
-      );
-
-
-    if(
-      !home.length &&
-      !away.length
-    ){
-
-      throw new Error(
-        'Stats endpoint returned JSON but no homeTeamPlayerStats/awayTeamPlayerStats arrays. Keys: '+
-        Object.keys(
-          data ||
-          {}
-        )
-        .join(', ')
-      );
-
-    }
-
-
-    state.probeContext.sampleHomePlayers=
-      home.length;
-
-
-    state.probeContext.sampleAwayPlayers=
-      away.length;
-
-
-    state.probeContext.sampleStatKeys=
-      Object.keys(
-        home[0] ||
-        away[0] ||
-        {}
-      )
-      .slice(
-        0,
-        25
-      );
-
-
-    addProbe(
-      '6. Player stats',
-      u,
-      'PASS',
-      `${home.length+away.length} player rows returned`
-    );
-
-
-    setProgress(
-      'probeProgress',
-      100
-    );
-
-
-    finishProbe(
-      true,
-      'All official AFL browser calls succeeded. Browser-only live patching is technically viable; the next build can ingest completed 2026 matches directly.'
-    );
-
-  }
-  catch(e){
-
-    const c=
-      classifyFetchError(e);
-
-
-    addProbe(
-      '6. Player stats',
-      `${AFL_STATS}/cfs/afl/playerStats/match/${matchId}`,
-      'FAIL',
-      `${c.type}: ${c.message}`
-    );
-
-
-    finishProbe(
-      false,
-      'Player-stat retrieval failed from the browser. A lightweight backend/proxy is required for reliable current data.'
-    );
-
-  }
-
-}
-
-
-function finishProbe(
-  pass,
-  message
-){
-
-  state.architecture=
-    pass
-      ? 'BROWSER_LIVE_SUPPORTED'
-      : 'BACKEND_REQUIRED';
-
-
-  setProgress(
-    'probeProgress',
-    100
-  );
-
-
-  setStatus(
-    'probeStatus',
-    pass
-      ? 'Official AFL live data path passed.'
-      : 'Official AFL live data path failed.',
-    pass
-      ? 'good'
-      : 'bad'
-  );
-
-
-  $('architectureDecision').className=
-    'notice '+
-    (
-      pass
-        ? 'good'
-        : 'bad'
-    );
-
-
-  $('architectureDecision').innerHTML=
-    `<b>Architecture decision:</b> ${esc(message)}`;
-
-
-  renderSummary();
-
-  buildDiagnostic();
-
-}
-
-
-function makeMatcher(players){
-
-  const exact=
-    new Map(
-      players.map(
-        p=>[
-          compactName(
-            p.player
-          ),
-          p
-        ]
-      )
-    );
-
-
-  const bySurname=
+  const m=
     new Map();
 
 
   for(
-    const p
-    of players
+    const r
+    of rows
   ){
 
-    const parts=
-      compactName(
-        p.player
-      )
-      .split(' ');
-
-
-    const s=
-      parts.at(-1) ||
-      '';
+    const k=
+      `${r.playerKey}|${r.family}|${r.market}`;
 
 
     if(
-      !bySurname.has(s)
+      !m.has(k)
     ){
 
-      bySurname.set(
-        s,
-        []
+      m.set(
+        k,
+        {
+
+          player:
+            r.player,
+
+          playerKey:
+            r.playerKey,
+
+          family:
+            r.family,
+
+          label:
+            r.label,
+
+          market:
+            r.market,
+
+          lines:[]
+
+        }
       );
 
     }
 
 
-    bySurname
-      .get(s)
-      .push(p);
+    m.get(k)
+      .lines
+      .push(
+        {
+
+          line:
+            r.line,
+
+          odds:
+            r.odds,
+
+          lastUpdate:
+            r.lastUpdate
+
+        }
+      );
 
   }
 
 
-  return name=>{
-
-    const k=
-      compactName(name);
-
-
-    if(
-      exact.has(k)
-    ){
-
-      return exact.get(k);
-
-    }
-
-
-    const parts=
-      k.split(' ');
-
-
-    const s=
-      parts.at(-1) ||
-      '';
-
-
-    const f=
-      parts[0] ||
-      '';
-
-
-    const c=
-      bySurname.get(s) ||
-      [];
-
-
-    if(
-      c.length===1
-    ){
-
-      return c[0];
-
-    }
-
-
-    const m=
-      c.filter(
-        p=>
-          (
-            (
-              compactName(
-                p.player
-              )
-              .split(' ')[0] ||
-              ''
-            )[0] ||
-            ''
-          )===
-          (
-            f[0] ||
-            ''
-          )
-      );
-
-
-    return m.length===1
-      ? m[0]
-      : null;
-
-  };
-
-}
-
-
-function parseCSVLine(line){
-
-  const out=[];
-
-  let c='';
-
-  let q=false;
+  const out=
+    [
+      ...m.values()
+    ];
 
 
   for(
-    let i=0;
-    i<line.length;
-    i++
+    const l
+    of out
   ){
 
-    const ch=
-      line[i];
-
-
-    const n=
-      line[i+1];
-
-
-    if(ch==='"'){
-
-      if(
-        q &&
-        n==='"'
-      ){
-
-        c+='"';
-
-        i++;
-
-      }
-
-      else{
-
-        q=!q;
-
-      }
-
-    }
-
-
-    else if(
-      ch===',' &&
-      !q
-    ){
-
-      out.push(c);
-
-      c='';
-
-    }
-
-
-    else{
-
-      c+=ch;
-
-    }
+    l.lines.sort(
+      (a,b)=>
+        a.line-
+        b.line ||
+        a.odds-
+        b.odds
+    );
 
   }
 
 
-  out.push(c);
+  out.sort(
+    (a,b)=>
+      a.player.localeCompare(
+        b.player
+      ) ||
+      a.family.localeCompare(
+        b.family
+      ) ||
+      a.market.localeCompare(
+        b.market
+      )
+  );
 
 
   return out;
@@ -2509,645 +1446,566 @@ function parseCSVLine(line){
 }
 
 
-function cleanHeader(h){
+function usefulLadders(){
 
-  return String(
-    h ??
-    ''
-  )
-  .trim()
-  .replace(
-    /^\uFEFF/,
-    ''
-  );
-
-}
-
-
-function num(v){
-
-  const n=
+  const lo=
     Number(
-      String(
-        v ??
-        ''
+      $('minOdds').value
+    ) ||
+    1.01;
+
+
+  const hi=
+    Number(
+      $('maxOdds').value
+    ) ||
+    99;
+
+
+  const mode=
+    $('packMode').value;
+
+
+  return state.ladders
+
+    .map(
+      l=>(
+        {
+
+          ...l,
+
+          lines:
+            l.lines.filter(
+              x=>
+                x.odds>=lo &&
+                x.odds<=hi
+            )
+
+        }
       )
-      .replace(
-        '%',
-        ''
-      )
-      .trim()
+    )
+
+    .filter(
+      l=>{
+
+        if(
+          !l.lines.length
+        )
+          return false;
+
+
+        if(
+          mode==='core' &&
+          !CORE_FAMILIES.has(
+            l.family
+          )
+        )
+          return false;
+
+
+        if(
+          mode==='disposals' &&
+          l.family!==
+          'disposals'
+        )
+          return false;
+
+
+        if(
+          mode==='goals' &&
+          l.family!==
+          'goals'
+        )
+          return false;
+
+
+        return true;
+
+      }
     );
-
-
-  return Number.isFinite(n)
-    ? n
-    : NaN;
 
 }
 
 
-function parseBaseline(text){
-
-  const lines=
-    text.split(
-      /\r?\n/
-    );
-
+function lineText(
+  ladder,
+  x
+){
 
   if(
-    lines.length<2
+    ladder.market===
+    'player_goal_scorer_anytime'
   ){
 
-    throw new Error(
-      'Baseline CSV is empty'
-    );
+    return `Anytime@${fmt(x.odds)}`;
 
   }
 
 
-  const headers=
-    parseCSVLine(
-      lines[0]
+  const threshold=
+    Number.isInteger(
+      x.line
     )
-    .map(
-      cleanHeader
-    );
+
+      ? String(
+          x.line
+        )
+
+      : fmt(
+          x.line,
+          1
+        );
 
 
-  const ix={};
+  return `${threshold}@${fmt(x.odds)}`;
+
+}
 
 
-  headers.forEach(
-    (
-      h,
-      i
-    )=>
-      ix[h]=i
-  );
+function buildPack(){
+
+  if(
+    !state.selectedGame ||
+    !state.ladders.length
+  )
+    return;
+
+
+  const ladders=
+    usefulLadders();
+
+
+  const lo=
+    Number(
+      $('minOdds').value
+    ) ||
+    1.01;
+
+
+  const hi=
+    Number(
+      $('maxOdds').value
+    ) ||
+    99;
+
+
+  const familyCounts={};
 
 
   for(
-    const h
-    of [
-      'First.Name',
-      'Surname',
-      'Match.Start.UTC',
-      'Disposals'
-    ]
+    const l
+    of ladders
   ){
 
-    if(
-      ix[h]===
-      undefined
-    ){
-
-      throw new Error(
-        'Baseline missing '+
-        h
-      );
-
-    }
+    familyCounts[
+      l.family
+    ]=
+      (
+        familyCounts[
+          l.family
+        ] ||
+        0
+      ) +
+      1;
 
   }
 
 
-  const matcher=
-    makeMatcher(
-      state.players
+  const players=
+    new Set(
+      ladders.map(
+        l=>
+          l.playerKey
+      )
     );
 
 
-  const cutoff=
-    new Date(
-      state.selectedGame.commence_time
+  const linesCount=
+    ladders.reduce(
+      (
+        n,
+        l
+      )=>
+        n+
+        l.lines.length,
+      0
     );
+
+
+  const g=
+    state.selectedGame;
 
 
   const out=[];
 
 
-  let latest=null;
+  out.push(
+    'BET INTELLIGENCE AFL — FULL MARKET ANALYSIS PACK'
+  );
 
 
-  for(
-    let i=1;
-    i<lines.length;
-    i++
-  ){
-
-    const line=
-      lines[i];
+  out.push(
+    '================================================'
+  );
 
 
-    if(
-      !line ||
-      line.length<5
-    )
-      continue;
+  out.push('');
 
 
-    const r=
-      parseCSVLine(
-        line
-      );
+  out.push(
+    `Game: ${g.away_team} @ ${g.home_team}`
+  );
 
 
-    const name=
-      `${r[ix['First.Name']]||''} ${r[ix['Surname']]||''}`
-        .trim();
+  out.push(
+    `Start: ${new Date(g.commence_time).toLocaleString('en-AU')}`
+  );
 
 
-    const p=
-      matcher(name);
+  out.push(
+    'Bookmaker: Sportsbet'
+  );
 
 
-    if(!p)
-      continue;
+  out.push(
+    `Generated: ${new Date().toLocaleString('en-AU')}`
+  );
 
 
-    const d=
-      new Date(
-        r[
-          ix[
-            'Match.Start.UTC'
-          ]
-        ] ||
-        ''
-      );
+  out.push(
+    `Useful odds range: ${lo.toFixed(2)} to ${hi.toFixed(2)}`
+  );
 
 
-    if(
-      Number.isNaN(
-        d.getTime()
-      ) ||
-      d>=cutoff
-    )
-      continue;
+  out.push(
+    `Raw usable outcomes retained internally: ${state.outcomes.length}`
+  );
 
 
-    const disposals=
-      num(
-        r[
-          ix[
-            'Disposals'
-          ]
-        ]
-      );
+  out.push(
+    `Pack outcomes: ${linesCount}`
+  );
 
 
-    if(
-      !Number.isFinite(
-        disposals
+  out.push(
+    `Players represented: ${players.size}`
+  );
+
+
+  out.push(
+    `Exact ladders represented: ${ladders.length}`
+  );
+
+
+  out.push('');
+
+
+  out.push(
+    'MARKET REPRESENTATION'
+  );
+
+
+  Object.entries(
+    familyCounts
+  )
+  .sort(
+    (a,b)=>
+      b[1]-
+      a[1]
+  )
+  .forEach(
+    (
+      [
+        f,
+        n
+      ]
+    )=>
+      out.push(
+        `${f}: ${n} ladders`
       )
-    )
-      continue;
+  );
 
 
-    out.push({
-
-      player:
-        p.player,
-
-      playerKey:
-        p.playerKey,
-
-      date:
-        d.toISOString(),
-
-      disposals
-
-    });
+  out.push('');
 
 
-    if(
-      !latest ||
-      d>latest
-    ){
-
-      latest=d;
-
-    }
-
-  }
+  out.push(
+    'ANALYSIS RULES'
+  );
 
 
-  return{
-    rows:
-      out,
+  out.push(
+    '- This pack is Sportsbet market data, not an independent probability model.'
+  );
 
-    latest
-  };
+
+  out.push(
+    '- Verify final/current team selection before recommending any player.'
+  );
+
+
+  out.push(
+    '- Independently research role, injuries, recent form, L5/L10/season, TOG/CBA where relevant, matchup, venue and weather before selecting a line.'
+  );
+
+
+  out.push(
+    '- Do not assume a shorter-priced line is automatically safe or good value.'
+  );
+
+
+  out.push(
+    '- Prefer conservative alternate lines only when the probability gain justifies the price reduction.'
+  );
+
+
+  out.push(
+    '- Distinguish GOOD PLAYER, GOOD BET and GOOD MULTI LEG.'
+  );
+
+
+  out.push(
+    '- Consider correlation explicitly; do not multiply correlated leg probabilities as independent.'
+  );
+
+
+  out.push(
+    '- Do not force a target price. NO BET is valid.'
+  );
+
+
+  out.push(
+    '- Sportsbet Hot Legs are a benchmark only, not an input to the research shortlist.'
+  );
+
+
+  out.push('');
+
+
+  out.push(
+    'EXACT USEFUL LADDERS'
+  );
+
+
+  out.push('');
+
+
+  ladders.forEach(
+    (
+      l,
+      i
+    )=>
+      out.push(
+        `${String(i+1).padStart(3,'0')} | `+
+        `${l.player} | `+
+        `${l.family} | `+
+        `${l.market} | `+
+        `${l.lines.map(x=>lineText(l,x)).join('; ')}`
+      )
+  );
+
+
+  out.push('');
+
+
+  out.push(
+    'REQUEST TO CHATGPT'
+  );
+
+
+  out.push(
+    'Research this game using current verified information. Review the full ladder universe rather than only the shortest-priced Sportsbet legs. Identify the strongest probability-adjusted selections, explain only material weaknesses, and construct ONE best multi only if enough qualified legs exist. Do not force odds.'
+  );
+
+
+  state.pack=
+    out.join(
+      '\n'
+    );
+
+
+  $('packText').value=
+    state.pack;
+
+
+  $('copyBtn').disabled=
+    false;
+
+
+  $('downloadBtn').disabled=
+    false;
+
+
+  setStatus(
+    'packStatus',
+    `${ladders.length} ladders / ${linesCount} individual prices exported. No candidate cap applied.`,
+    'good'
+  );
+
+
+  renderLadders();
 
 }
 
 
-async function loadBaseline(){
+function renderLadders(){
 
-  if(
-    !state.selectedGame ||
-    !state.players.length
-  )
-    return;
-
-
-  setProgress(
-    'baseProgress',
-    8
-  );
+  const rows=
+    state.ladders.length
+      ? usefulLadders()
+      : [];
 
 
-  setStatus(
-    'baseStatus',
-    'Downloading historical baseline…'
-  );
+  $('ladderBody').innerHTML=
 
+    rows.length
 
-  try{
+      ? rows
+          .slice(
+            0,
+            400
+          )
+          .map(
+            l=>
+              `<tr>`+
+              `<td><b>${esc(l.player)}</b></td>`+
+              `<td>${esc(l.family)}</td>`+
+              `<td class="mono small">${esc(l.market)}</td>`+
+              `<td>${esc(l.lines.map(x=>lineText(l,x)).join('; '))}</td>`+
+              `</tr>`
+          )
+          .join('')
 
-    const res=
-      await fetch(
-        `${BASE_URL}?v=${Date.now()}`,
-        {
-          cache:
-            'no-store'
-        }
-      );
-
-
-    if(!res.ok){
-
-      throw new Error(
-        `HTTP ${res.status}`
-      );
-
-    }
-
-
-    setProgress(
-      'baseProgress',
-      45
-    );
-
-
-    const text=
-      await res.text();
-
-
-    setProgress(
-      'baseProgress',
-      70
-    );
-
-
-    await sleep(20);
-
-
-    const x=
-      parseBaseline(text);
-
-
-    state.baseline=
-      x.rows;
-
-
-    state.baselineLatest=
-      x.latest;
-
-
-    setProgress(
-      'baseProgress',
-      100
-    );
-
-
-    const matched=
-      new Set(
-        state.baseline.map(
-          r=>
-            r.playerKey
-        )
-      ).size;
-
-
-    const age=
-      x.latest
-        ? (
-            new Date(
-              state.selectedGame.commence_time
-            ) -
-            x.latest
-          ) /
-          86400000
-        : NaN;
-
-
-    setStatus(
-      'baseStatus',
-      `Baseline: ${x.rows.length} player-game rows, `+
-      `${matched}/${state.players.length} players, latest `+
-      `${
-        x.latest
-          ? x.latest.toLocaleDateString(
-              'en-AU'
-            )
-          : 'unknown'
-      }`+
-      `${
-        Number.isFinite(age)
-          ? ` (${age.toFixed(1)} days before match)`
-          : ''
-      }.`,
-      'warn'
-    );
-
-
-    renderSummary();
-
-    buildDiagnostic();
-
-  }
-  catch(e){
-
-    setProgress(
-      'baseProgress',
-      0
-    );
-
-
-    setStatus(
-      'baseStatus',
-      'Baseline failed: '+
-      e.message,
-      'bad'
-    );
-
-  }
+      : '<tr><td colspan="4" class="muted">No ladders in the selected export range.</td></tr>';
 
 }
 
 
 function renderSummary(){
 
+  $('kpiRaw').textContent=
+    state.outcomes.length;
+
+
   $('kpiPlayers').textContent=
-    state.players.length;
-
-
-  $('kpiLines').textContent=
-    state.marketLines.length;
-
-
-  $('kpiMatched').textContent=
     new Set(
-      state.baseline.map(
-        r=>
-          r.playerKey
+      state.outcomes.map(
+        x=>
+          x.playerKey
       )
     ).size;
 
 
-  $('kpiLatest').textContent=
-    state.baselineLatest
+  $('kpiLadders').textContent=
+    state.ladders.length;
 
-      ? state.baselineLatest
-          .toLocaleDateString(
-            'en-AU',
-            {
-              day:
-                '2-digit',
 
-              month:
-                'short'
-            }
+  $('kpiFamilies').textContent=
+    new Set(
+      state.ladders.map(
+        x=>
+          x.family
+      )
+    ).size;
+
+
+  const prices=
+    state.outcomes
+      .map(
+        x=>
+          x.odds
+      )
+      .filter(
+        Number.isFinite
+      );
+
+
+  $('kpiMin').textContent=
+    prices.length
+      ? '$'+
+        fmt(
+          Math.min(
+            ...prices
           )
-
+        )
       : '—';
 
 
-  $('kpiLive').textContent=
-    state.architecture===
-    'BROWSER_LIVE_SUPPORTED'
-
-      ? 'PASS'
-
-      : state.architecture===
-        'BACKEND_REQUIRED'
-
-        ? 'FAIL'
-
-        : '—';
-
-
-  $('kpiLive').className=
-    state.architecture===
-    'BROWSER_LIVE_SUPPORTED'
-
-      ? 'good'
-
-      : state.architecture===
-        'BACKEND_REQUIRED'
-
-        ? 'bad'
-
-        : '';
-
-
-  $('kpiBuild').textContent=
-    'BLOCKED';
-
-
-  $('safetyStatus').textContent=
-
-    state.architecture===
-    'BROWSER_LIVE_SUPPORTED'
-
-      ? 'Live API is reachable, but 0.4 is diagnostic only. Model build remains intentionally blocked until live rows are actually ingested in the next build.'
-
-      : state.architecture===
-        'BACKEND_REQUIRED'
-
-        ? 'Browser-only live AFL data failed. Do not bypass the gate; the next component should be a lightweight backend/proxy.'
-
-        : 'Model build remains blocked until a current independent data path is proven.';
-
-
-  $('safetyStatus').className=
-    'status '+
-    (
-      state.architecture===
-      'BROWSER_LIVE_SUPPORTED'
-
-        ? 'warn'
-
-        : 'bad'
-    );
-
-}
-
-
-function buildDiagnostic(){
-
-  const d={
-
-    app:
-      'BET INTELLIGENCE AFL — Player Intelligence Trial 0.4',
-
-    generatedAt:
-      new Date()
-        .toISOString(),
-
-    pageOrigin:
-      location.origin,
-
-    userAgent:
-      navigator.userAgent,
-
-    game:
-      state.selectedGame
-
-        ? {
-            id:
-              state.selectedGame.id,
-
-            home:
-              state.selectedGame.home_team,
-
-            away:
-              state.selectedGame.away_team,
-
-            commence_time:
-              state.selectedGame.commence_time
-          }
-
-        : null,
-
-    market:{
-
-      players:
-        state.players.length,
-
-      hiddenSportsbetLines:
-        state.marketLines.length
-
-    },
-
-    baseline:{
-
-      rows:
-        state.baseline.length,
-
-      latest:
-        state.baselineLatest
-          ? state.baselineLatest.toISOString()
-          : null,
-
-      matchedPlayers:
-        new Set(
-          state.baseline.map(
-            r=>
-              r.playerKey
+  $('kpiMax').textContent=
+    prices.length
+      ? '$'+
+        fmt(
+          Math.max(
+            ...prices
           )
-        ).size
-
-    },
-
-    architectureDecision:
-      state.architecture,
-
-    probeContext:
-      state.probeContext,
-
-    probeResults:
-      state.probe
-
-  };
-
-
-  $('diagText').value=
-    JSON.stringify(
-      d,
-      null,
-      2
-    );
+        )
+      : '—';
 
 }
 
 
-function clearTrial(){
+function clearAll(){
 
   state.games=[];
 
   state.selectedGame=null;
 
-  state.marketResponse=null;
+  state.rawResponse=null;
 
-  state.players=[];
+  state.outcomes=[];
 
-  state.marketLines=[];
+  state.ladders=[];
 
-  state.baseline=[];
-
-  state.baselineLatest=null;
-
-  state.probe=[];
-
-  state.probeContext={};
-
-  state.architecture=
-    'UNTESTED';
+  state.pack='';
 
 
   $('gameSelect').innerHTML=
     '<option value="">Load games first</option>';
 
 
-  $('loadUniverseBtn').disabled=
+  $('loadMarketsBtn').disabled=
     true;
 
 
-  $('probeBtn').disabled=
+  $('buildPackBtn').disabled=
     true;
 
 
-  $('baselineBtn').disabled=
+  $('copyBtn').disabled=
     true;
+
+
+  $('downloadBtn').disabled=
+    true;
+
+
+  $('packText').value=
+    '';
+
+
+  $('ladderBody').innerHTML=
+    '<tr><td colspan="4" class="muted">Load the Sportsbet prop universe first.</td></tr>';
 
 
   setStatus(
-    'apiStatus',
+    'gameStatus',
     ''
   );
 
 
   setStatus(
-    'probeStatus',
+    'marketStatus',
     ''
   );
 
 
   setStatus(
-    'baseStatus',
+    'packStatus',
     ''
   );
 
-
-  setProgress(
-    'probeProgress',
-    0
-  );
-
-
-  setProgress(
-    'baseProgress',
-    0
-  );
-
-
-  resetProbeUI();
 
   renderSummary();
-
-  buildDiagnostic();
 
 }
 
@@ -3166,7 +2024,7 @@ $('saveKeyBtn')
 
 
       setStatus(
-        'apiStatus',
+        'gameStatus',
         'API key saved on this device.',
         'good'
       );
@@ -3189,59 +2047,97 @@ $('gameSelect')
   );
 
 
-$('loadUniverseBtn')
+$('loadMarketsBtn')
   .addEventListener(
     'click',
-    loadUniverse
+    loadMarkets
   );
 
 
-$('probeBtn')
+$('buildPackBtn')
   .addEventListener(
     'click',
-    runProbe
+    buildPack
   );
 
 
-$('baselineBtn')
+$('minOdds')
   .addEventListener(
-    'click',
-    loadBaseline
+    'change',
+    ()=>{
+
+      if(
+        state.ladders.length
+      )
+        renderLadders();
+
+    }
+  );
+
+
+$('maxOdds')
+  .addEventListener(
+    'change',
+    ()=>{
+
+      if(
+        state.ladders.length
+      )
+        renderLadders();
+
+    }
+  );
+
+
+$('packMode')
+  .addEventListener(
+    'change',
+    ()=>{
+
+      if(
+        state.ladders.length
+      )
+        renderLadders();
+
+    }
   );
 
 
 $('clearBtn')
   .addEventListener(
     'click',
-    clearTrial
+    clearAll
   );
 
 
-$('copyDiagBtn')
+$('copyBtn')
   .addEventListener(
     'click',
     async()=>{
 
-      buildDiagnostic();
+      if(
+        !state.pack
+      )
+        return;
 
 
       try{
 
         await navigator.clipboard.writeText(
-          $('diagText').value
+          state.pack
         );
 
 
         setStatus(
-          'probeStatus',
-          'Diagnostic copied.',
+          'packStatus',
+          'Analysis pack copied.',
           'good'
         );
 
       }
       catch{
 
-        $('diagText').select();
+        $('packText').select();
 
         document.execCommand(
           'copy'
@@ -3253,22 +2149,25 @@ $('copyDiagBtn')
   );
 
 
-$('downloadDiagBtn')
+$('downloadBtn')
   .addEventListener(
     'click',
     ()=>{
 
-      buildDiagnostic();
+      if(
+        !state.pack
+      )
+        return;
 
 
       const blob=
         new Blob(
           [
-            $('diagText').value
+            state.pack
           ],
           {
             type:
-              'application/json'
+              'text/plain'
           }
         );
 
@@ -3286,7 +2185,7 @@ $('downloadDiagBtn')
 
 
       a.download=
-        'bi-afl-trial-0.4-diagnostic.json';
+        `bi-afl-market-pack-${state.selectedGame?.id||'game'}.txt`;
 
 
       a.click();
@@ -3319,8 +2218,6 @@ if(saved){
 
 
 renderSummary();
-
-buildDiagnostic();
 
 
 })();
