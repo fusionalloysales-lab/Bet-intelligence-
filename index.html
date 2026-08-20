@@ -431,4 +431,1684 @@ const FAMILY={
   player_hitouts:'hitouts',
   player_try_scorer_anytime:'tries',
   player_try_scorer_over:'tries',
-  player_try
+  player_try_scorer_first:'tries',
+  player_try_scorer_last:'tries',
+  player_points:'points',
+  player_points_over:'points',
+  player_run_metres_over:'run_metres'
+};
+
+const NON_PLAYER_PREFIXES=[
+  'h2h',
+  'spreads',
+  'totals',
+  'alternate_',
+  'team_'
+];
+
+const PRICE_LANDMARKS=[
+  1.10,
+  1.25,
+  1.40,
+  1.60,
+  1.85,
+  2.20,
+  3.00,
+  4.00
+];
+
+const state={
+  events:[],
+  game:null,
+  raw:[],
+  ladders:new Map(),
+  quota:null,
+  availableMarkets:[],
+  requestedMarkets:[],
+  unknownMarkets:[]
+};
+
+const $=id=>document.getElementById(id);
+
+const esc=s=>
+  String(s??'').replace(
+    /[&<>"']/g,
+    c=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[c])
+  );
+
+const num=(v,d=0)=>
+  Number.isFinite(Number(v))
+    ? Number(v)
+    : d;
+
+const implied=o=>
+  o>1
+    ? 1/o
+    : 0;
+
+function log(x){
+  $('diag').textContent=
+    new Date().toLocaleTimeString()+
+    '\n'+
+    (
+      typeof x==='string'
+        ? x
+        : JSON.stringify(x,null,2)
+    );
+}
+
+function setStatus(id,msg,type=''){
+  const el=$(id);
+
+  el.textContent=msg;
+
+  el.className=
+    'status'+
+    (
+      type
+        ? ' '+type
+        : ''
+    );
+}
+
+function inferFamily(market){
+
+  if(FAMILY[market])
+    return FAMILY[market];
+
+  const k=
+    String(market||'')
+      .toLowerCase();
+
+  if(k.includes('disposal')) return 'disposals';
+  if(k.includes('goal')) return 'goals';
+  if(k.includes('mark')) return 'marks';
+  if(k.includes('tackle')) return 'tackles';
+  if(k.includes('clearance')) return 'clearances';
+  if(k.includes('kick')) return 'kicks';
+  if(k.includes('handball')) return 'handballs';
+  if(k.includes('fantasy')) return 'fantasy';
+
+  if(
+    k.includes('hitout') ||
+    k.includes('hit_out')
+  )
+    return 'hitouts';
+
+  if(k.includes('try')) return 'tries';
+  if(k.includes('run_met')) return 'run_metres';
+  if(k.includes('point')) return 'points';
+
+  return 'other';
+}
+
+function isPlayerMarketKey(k){
+
+  const s=
+    String(k||'');
+
+  return(
+    s.startsWith('player_') &&
+    !NON_PLAYER_PREFIXES.some(
+      p=>s.startsWith(p)
+    )
+  );
+}
+
+async function getJson(url){
+
+  let r;
+
+  try{
+
+    r=
+      await fetch(
+        url,
+        {
+          cache:'no-store'
+        }
+      );
+
+  }
+  catch(e){
+
+    throw new Error(
+      (
+        location.protocol==='file:'
+          ? 'Browser/network blocked the request from a local file. Host V16 on GitHub Pages/HTTPS. '
+          : ''
+      )+
+      e.message
+    );
+
+  }
+
+  state.quota=
+    r.headers.get(
+      'x-requests-remaining'
+    );
+
+  if($('quota'))
+    $('quota').textContent=
+      state.quota??'—';
+
+  const text=
+    await r.text();
+
+  let data;
+
+  try{
+    data=
+      JSON.parse(text);
+  }
+  catch{
+    data=text;
+  }
+
+  if(!r.ok){
+
+    throw new Error(
+      'HTTP '+
+      r.status+
+      ' — '+
+      (
+        typeof data==='string'
+          ? data.slice(0,300)
+          : JSON.stringify(data).slice(0,300)
+      )
+    );
+
+  }
+
+  return data;
+}
+
+function resetAfterGame(){
+
+  state.raw=[];
+  state.ladders=new Map();
+  state.availableMarkets=[];
+  state.requestedMarkets=[];
+  state.unknownMarkets=[];
+
+  [
+    'universeCard',
+    'discoveryCard',
+    'compactCard',
+    'lookupCard'
+  ]
+  .forEach(
+    id=>
+      $(id)
+        .classList
+        .add('hidden')
+  );
+
+  $('compactBox').textContent=
+    'Create the compact universe pack after markets are loaded.';
+
+  $('selectedBox').textContent=
+    'No ladder IDs requested yet.';
+
+  $('copyCompactBtn').disabled=true;
+  $('copySelectedBtn').disabled=true;
+}
+
+async function loadGames(){
+
+  const key=
+    $('apiKey')
+      .value
+      .trim();
+
+  if(!key)
+    return setStatus(
+      'status',
+      'Enter your API key first.',
+      'bad'
+    );
+
+  setStatus(
+    'status',
+    'Loading current games…',
+    'warn'
+  );
+
+  $('connectBtn').disabled=true;
+
+  resetAfterGame();
+
+  try{
+
+    const sport=
+      $('sport').value;
+
+    const data=
+      await getJson(
+        `${API}/sports/${encodeURIComponent(sport)}/events?apiKey=${encodeURIComponent(key)}`
+      );
+
+    state.events=
+      (
+        Array.isArray(data)
+          ? data
+          : []
+      )
+      .sort(
+        (a,b)=>
+          Date.parse(a.commence_time)-
+          Date.parse(b.commence_time)
+      );
+
+    $('games').innerHTML=
+      state.events.length
+        ?
+        state.events
+          .map(
+            (g,i)=>
+              `
+              <div class="game" data-game="${i}">
+
+                <b>
+                  ${esc(g.away_team)}
+                  @
+                  ${esc(g.home_team)}
+                </b>
+
+                <div class="small">
+                  ${new Date(g.commence_time).toLocaleString()}
+                </div>
+
+              </div>
+              `
+          )
+          .join('')
+        :
+        `
+        <div class="status">
+          No current/upcoming games returned.
+        </div>
+        `;
+
+    document
+      .querySelectorAll('[data-game]')
+      .forEach(
+        el=>
+          el.onclick=
+            ()=>
+              selectGame(
+                num(el.dataset.game)
+              )
+      );
+
+    setStatus(
+      'status',
+      `Loaded ${state.events.length} current/upcoming game(s). Select one.${
+        state.quota!==null
+          ? ' API remaining: '+state.quota+'.'
+          : ''
+      }`,
+      'good'
+    );
+
+    log({
+      eventCount:state.events.length,
+      sport
+    });
+
+  }
+  catch(e){
+
+    setStatus(
+      'status',
+      'Load failed: '+e.message,
+      'bad'
+    );
+
+    log(e.message);
+
+  }
+  finally{
+
+    $('connectBtn').disabled=false;
+
+  }
+}
+
+function selectGame(i){
+
+  state.game=
+    state.events[i];
+
+  if(!state.game)
+    return;
+
+  document
+    .querySelectorAll('[data-game]')
+    .forEach(
+      x=>
+        x.classList.remove('selected')
+    );
+
+  document
+    .querySelector(
+      `[data-game="${i}"]`
+    )
+    ?.classList
+    .add('selected');
+
+  $('setupCard')
+    .classList
+    .remove('hidden');
+
+  $('selectedGame').innerHTML=
+    `
+    <b>
+      ${esc(state.game.away_team)}
+      @
+      ${esc(state.game.home_team)}
+    </b>
+
+    <br>
+
+    <span class="small">
+      ${new Date(state.game.commence_time).toLocaleString()}
+    </span>
+    `;
+
+  resetAfterGame();
+
+  setStatus(
+    'marketStatus',
+    'Ready to load the complete player-prop universe.'
+  );
+}
+
+function normalizeOutcome(
+  outcome,
+  market
+){
+
+  const side=
+    String(
+      outcome.name||
+      ''
+    )
+    .toLowerCase();
+
+  if(
+    side==='under' ||
+    side==='no'
+  )
+    return null;
+
+  const player=
+    String(
+      outcome.description ||
+      outcome.name ||
+      ''
+    )
+    .trim();
+
+  const odds=
+    num(
+      outcome.price
+    );
+
+  if(
+    !player ||
+    odds<=1
+  )
+    return null;
+
+  return{
+    player,
+    market,
+    family:
+      inferFamily(market),
+    name:
+      String(
+        outcome.name ||
+        player
+      ),
+    line:
+      outcome.point??null,
+    odds,
+    implied:
+      implied(odds)
+  };
+}
+
+function dedupe(rows){
+
+  const map=
+    new Map();
+
+  for(const r of rows){
+
+    const key=[
+      r.player.toLowerCase(),
+      r.market,
+      r.line,
+      r.name.toLowerCase()
+    ]
+    .join('|');
+
+    if(
+      !map.has(key) ||
+      map.get(key).odds<r.odds
+    ){
+      map.set(
+        key,
+        r
+      );
+    }
+  }
+
+  return[
+    ...map.values()
+  ];
+}
+
+function ladderKey(x){
+
+  return(
+    x.player.toLowerCase()+
+    '|'+
+    x.market
+  );
+}
+
+function buildLadders(rows){
+
+  const m=
+    new Map();
+
+  for(const x of rows){
+
+    const k=
+      ladderKey(x);
+
+    if(!m.has(k))
+      m.set(
+        k,
+        []
+      );
+
+    m.get(k)
+      .push(x);
+  }
+
+  for(const arr of m.values()){
+
+    arr.sort(
+      (a,b)=>{
+
+        const al=
+          a.line===null
+            ? Infinity
+            : num(a.line,Infinity);
+
+        const bl=
+          b.line===null
+            ? Infinity
+            : num(b.line,Infinity);
+
+        return(
+          al-bl ||
+          a.odds-b.odds
+        );
+      }
+    );
+  }
+
+  return m;
+}
+
+function exportOddsRange(){
+
+  return{
+    min:
+      num(
+        $('minOdds').value,
+        1.08
+      ),
+    max:
+      num(
+        $('maxOdds').value,
+        5
+      )
+  };
+}
+
+function trimLadder(arr){
+
+  const {
+    min,
+    max
+  }=
+    exportOddsRange();
+
+  return arr.filter(
+    x=>
+      x.odds>=min &&
+      x.odds<=max
+  );
+}
+
+function exportableLadders(){
+
+  return[
+    ...state.ladders.values()
+  ]
+  .map(
+    arr=>({
+      all:arr,
+      trimmed:trimLadder(arr)
+    })
+  )
+  .filter(
+    x=>
+      x.trimmed.length>0
+  );
+}
+
+function uniquePlayers(){
+
+  return new Set(
+    [
+      ...state.ladders.values()
+    ]
+    .map(
+      arr=>
+        (
+          arr[0]?.player||
+          ''
+        )
+        .toLowerCase()
+    )
+    .filter(Boolean)
+  );
+}
+
+function lineText(x){
+
+  return(
+    `${x.line??x.name}@${x.odds.toFixed(2)}`
+  );
+}
+
+function nearestPrice(
+  arr,
+  target
+){
+
+  if(!arr.length)
+    return null;
+
+  return[
+    ...arr
+  ]
+  .sort(
+    (a,b)=>
+      Math.abs(a.odds-target)-
+      Math.abs(b.odds-target)
+      ||
+      a.odds-b.odds
+  )[0];
+}
+
+function ladderIdFactory(){
+
+  const counts=
+    new Map();
+
+  const ids=
+    new Map();
+
+  const sorted=[
+    ...state.ladders.values()
+  ]
+  .sort(
+    (a,b)=>
+      (
+        a[0]?.family||
+        ''
+      )
+      .localeCompare(
+        b[0]?.family||
+        ''
+      )
+      ||
+      (
+        a[0]?.player||
+        ''
+      )
+      .localeCompare(
+        b[0]?.player||
+        ''
+      )
+      ||
+      (
+        a[0]?.market||
+        ''
+      )
+      .localeCompare(
+        b[0]?.market||
+        ''
+      )
+  );
+
+  for(const arr of sorted){
+
+    const fam=
+      (
+        (
+          arr[0]?.family||
+          'other'
+        )
+        .toUpperCase()
+        .replace(
+          /[^A-Z0-9]/g,
+          ''
+        )
+        .slice(
+          0,
+          5
+        )
+        ||
+        'OTHER'
+      );
+
+    const n=
+      (
+        counts.get(fam)||
+        0
+      )+
+      1;
+
+    counts.set(
+      fam,
+      n
+    );
+
+    ids.set(
+      ladderKey(
+        arr[0]
+      ),
+      `${fam}-${String(n).padStart(3,'0')}`
+    );
+  }
+
+  return ids;
+}
+
+function familyCounts(){
+
+  const m=
+    new Map();
+
+  for(const arr of state.ladders.values()){
+
+    const fam=
+      arr[0]?.family||
+      'other';
+
+    m.set(
+      fam,
+      (
+        m.get(fam)||
+        0
+      )+
+      1
+    );
+  }
+
+  return m;
+}
+
+function renderUniverse(){
+
+  const exportable=
+    exportableLadders();
+
+  $('rawCount').textContent=
+    state.raw.length;
+
+  $('ladderCount').textContent=
+    state.ladders.size;
+
+  $('exportLadderCount').textContent=
+    exportable.length;
+
+  $('playerCount').textContent=
+    uniquePlayers().size;
+
+  $('marketCount').textContent=
+    state.requestedMarkets.length;
+
+  $('quota').textContent=
+    state.quota??'—';
+
+  const fam=[
+    ...familyCounts().entries()
+  ]
+  .map(
+    ([k,v])=>
+      `${k}:${v}`
+  )
+  .join(', ');
+
+  const {
+    min,
+    max
+  }=
+    exportOddsRange();
+
+  $('universeSummary').textContent=
+    `Retained all ${state.ladders.size} player/market ladders internally. ${exportable.length} contain at least one useful line between ${min.toFixed(2)} and ${max.toFixed(2)}. Families: ${fam}.`;
+}
+
+function renderDiscovery(){
+
+  const known=
+    state.requestedMarkets.filter(
+      x=>
+        !state.unknownMarkets.includes(x)
+    );
+
+  const {
+    min,
+    max
+  }=
+    exportOddsRange();
+
+  $('marketDiscovery').innerHTML=
+    `
+    <b>Sportsbet player markets detected:</b>
+    ${state.availableMarkets.length}
+
+    <br>
+
+    <b>Loaded:</b>
+    ${esc(
+      state.requestedMarkets.join(', ')||
+      'none'
+    )}
+
+    <br>
+
+    <b>Recognised:</b>
+    ${esc(
+      known.join(', ')||
+      'none'
+    )}
+
+    <br>
+
+    <b>New / unclassified:</b>
+    ${
+      state.unknownMarkets.length
+        ? esc(
+            state.unknownMarkets.join(', ')
+          )
+        : 'none'
+    }
+
+    <br>
+
+    <b>Useful export odds range:</b>
+    ${min.toFixed(2)}
+    to
+    ${max.toFixed(2)}.
+
+    Full ladders stay retained internally.
+    `;
+}
+
+async function loadMarkets(){
+
+  if(!state.game)
+    return setStatus(
+      'marketStatus',
+      'Select a game first.',
+      'bad'
+    );
+
+  const key=
+    $('apiKey')
+      .value
+      .trim();
+
+  if(!key)
+    return setStatus(
+      'marketStatus',
+      'API key is missing.',
+      'bad'
+    );
+
+  setStatus(
+    'marketStatus',
+    'Discovering Sportsbet player markets…',
+    'warn'
+  );
+
+  $('marketsBtn').disabled=true;
+
+  resetAfterGame();
+
+  try{
+
+    const sport=
+      state.game.sport_key||
+      $('sport').value;
+
+    const base=
+      `${API}/sports/${encodeURIComponent(sport)}/events/${encodeURIComponent(state.game.id)}`;
+
+    const availability=
+      await getJson(
+        `${base}/markets?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet`
+      );
+
+    const availBook=
+      (
+        availability.bookmakers||
+        []
+      )
+      .find(
+        x=>
+          x.key==='sportsbet'
+      );
+
+    if(!availBook)
+      throw new Error(
+        'Sportsbet currently has no market list for this event.'
+      );
+
+    state.availableMarkets=[
+      ...new Set(
+        (
+          availBook.markets||
+          []
+        )
+        .map(
+          x=>x.key
+        )
+        .filter(
+          isPlayerMarketKey
+        )
+      )
+    ];
+
+    const knownSet=
+      new Set(
+        $('sport').value==='aussierules_afl'
+          ? KNOWN_AFL_MARKETS
+          : KNOWN_NRL_MARKETS
+      );
+
+    state.unknownMarkets=
+      state.availableMarkets.filter(
+        k=>
+          !knownSet.has(k)
+      );
+
+    state.requestedMarkets=[
+      ...state.availableMarkets
+    ];
+
+    if(!state.requestedMarkets.length)
+      throw new Error(
+        'Sportsbet has no player-prop markets open for this event yet.'
+      );
+
+    setStatus(
+      'marketStatus',
+      `Found ${state.requestedMarkets.length} player market(s). Loading every line…`,
+      'warn'
+    );
+
+    const chunks=[];
+
+    for(
+      let i=0;
+      i<state.requestedMarkets.length;
+      i+=10
+    ){
+      chunks.push(
+        state.requestedMarkets.slice(
+          i,
+          i+10
+        )
+      );
+    }
+
+    let rows=[];
+
+    const returnedMarkets=
+      new Set();
+
+    for(const chunk of chunks){
+
+      const url=
+        `${base}/odds?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet&oddsFormat=decimal&markets=${encodeURIComponent(chunk.join(','))}`;
+
+      const data=
+        await getJson(url);
+
+      const book=
+        (
+          data.bookmakers||
+          []
+        )
+        .find(
+          x=>
+            x.key==='sportsbet'
+        );
+
+      if(!book)
+        continue;
+
+      for(
+        const m
+        of(
+          book.markets||
+          []
+        )
+      ){
+
+        returnedMarkets.add(
+          m.key
+        );
+
+        for(
+          const o
+          of(
+            m.outcomes||
+            []
+          )
+        ){
+
+          const x=
+            normalizeOutcome(
+              o,
+              m.key
+            );
+
+          if(x)
+            rows.push(x);
+        }
+      }
+    }
+
+    if(!rows.length)
+      throw new Error(
+        'Sportsbet player markets were discovered, but no usable player outcomes were returned.'
+      );
+
+    state.requestedMarkets=[
+      ...returnedMarkets
+    ];
+
+    state.raw=
+      dedupe(rows);
+
+    state.ladders=
+      buildLadders(
+        state.raw
+      );
+
+    renderUniverse();
+
+    renderDiscovery();
+
+    [
+      'universeCard',
+      'discoveryCard',
+      'compactCard',
+      'lookupCard'
+    ]
+    .forEach(
+      id=>
+        $(id)
+          .classList
+          .remove('hidden')
+    );
+
+    const {
+      min,
+      max
+    }=
+      exportOddsRange();
+
+    setStatus(
+      'marketStatus',
+      `Loaded ${state.raw.length} usable outcomes and retained all ${state.ladders.size} ladders. Compact pack will represent every ladder with a useful line between ${min.toFixed(2)} and ${max.toFixed(2)}.`,
+      'good'
+    );
+
+    log({
+      markets:state.requestedMarkets,
+      unknown:state.unknownMarkets,
+      raw:state.raw.length,
+      ladders:state.ladders.size,
+      players:uniquePlayers().size,
+      exportable:exportableLadders().length,
+      quota:state.quota
+    });
+
+  }
+  catch(e){
+
+    setStatus(
+      'marketStatus',
+      'Market load failed: '+e.message,
+      'bad'
+    );
+
+    log(e.message);
+
+  }
+  finally{
+
+    $('marketsBtn').disabled=false;
+
+  }
+}
+
+function focusText(){
+
+  const v=
+    $('teamFocus').value;
+
+  if(v==='home')
+    return(
+      state.game?.home_team||
+      'Home team'
+    );
+
+  if(v==='away')
+    return(
+      state.game?.away_team||
+      'Away team'
+    );
+
+  return 'Both teams';
+}
+
+function compactPack(){
+
+  const g=
+    state.game||
+    {};
+
+  const {
+    min,
+    max
+  }=
+    exportOddsRange();
+
+  const ids=
+    ladderIdFactory();
+
+  const pairs=
+    exportableLadders()
+      .sort(
+        (a,b)=>
+          (
+            a.trimmed[0]?.family||
+            ''
+          )
+          .localeCompare(
+            b.trimmed[0]?.family||
+            ''
+          )
+          ||
+          (
+            a.trimmed[0]?.player||
+            ''
+          )
+          .localeCompare(
+            b.trimmed[0]?.player||
+            ''
+          )
+      );
+
+  const lines=[];
+
+  lines.push(
+    'BET INTELLIGENCE V16 COMPACT UNIVERSE PACK',
+    '========================================',
+    '',
+    `Sport: ${$('sport').value}`,
+    `Game: ${g.away_team||'-'} @ ${g.home_team||'-'}`,
+    `Commence: ${g.commence_time||'-'}`,
+    'Bookmaker: Sportsbet',
+    `Team focus: ${focusText()}`,
+    `Raw outcomes retained internally: ${state.raw.length}`,
+    `All ladders retained internally: ${state.ladders.size}`,
+    `Useful ladders represented here: ${pairs.length}`,
+    `Unique players: ${uniquePlayers().size}`,
+    `Markets loaded: ${state.requestedMarkets.join(', ')||'-'}`,
+    `Odds range represented: ${min.toFixed(2)} to ${max.toFixed(2)}`,
+    '',
+    'DATA TRUST',
+    'Market/odds: VERIFIED from Sportsbet via The Odds API.',
+    'Player selection, role, injuries, form, matchup and weather: UNVERIFIED and must be externally checked.',
+    '',
+    'COMPACT UNIVERSE',
+    '# ID | player | family | market | useful_range | ~1.10 | ~1.25 | ~1.40 | ~1.60 | ~1.85 | ~2.20 | ~3.00 | ~4.00'
+  );
+
+  for(const pair of pairs){
+
+    const arr=
+      pair.trimmed;
+
+    const landmarks=
+      PRICE_LANDMARKS
+        .map(
+          p=>
+            nearestPrice(
+              arr,
+              p
+            )
+        )
+        .map(
+          x=>
+            x
+              ? lineText(x)
+              : '—'
+        );
+
+    lines.push(
+      `${ids.get(ladderKey(arr[0]))} | `+
+      `${arr[0].player} | `+
+      `${arr[0].family} | `+
+      `${arr[0].market} | `+
+      `${lineText(arr[0])}..${lineText(arr[arr.length-1])} | `+
+      `${landmarks.join(' | ')}`
+    );
+  }
+
+  lines.push(
+    '',
+    'MASTER ANALYSIS PROMPT',
+    'Treat this pack as the complete meaningful Sportsbet player-prop universe inside the displayed individual-odds range. Bet Intelligence is a data engine, not a betting model. Do not anchor to Sportsbet Hot Legs, promotions, previous multis or previous screenshots.',
+    '',
+    'PROCESS',
+    '1. Scan the complete compact universe horizontally by market and player. Do not impose an arbitrary candidate count.',
+    '2. Use Sportsbet prices only as market information, not as true probabilities.',
+    '3. Identify the player/market ladders that genuinely warrant deeper investigation based on required performance, ladder shape, market type, role plausibility and potential for a useful probability/price trade-off.',
+    '4. Before recommending anyone, externally verify current team selection, injuries/late changes, current role, expected minutes/TOG, relevant responsibilities, recent exact-stat results, longer-term baseline, opponent, venue and weather where material.',
+    '5. Reject unverified or unstable players rather than guessing.',
+    '6. When an exact line decision requires more detail than this compact pack provides, ask the user for the required LADDER IDs only. Example: “Send DISP-014, GOALS-003, TACKL-007.”',
+    '7. After those exact ladders are supplied, estimate true hit probability with uncertainty for the useful points, compare with implied probability, estimate fair odds and edge, and select the best probability-adjusted line.',
+    '8. Distinguish GOOD PLAYER vs GOOD BET vs GOOD MULTI LEG. Reject poor-value lines even for elite players.',
+    '9. Explicitly assess correlation and do not treat correlated legs as independent.',
+    '10. Do not add weak legs merely to increase total odds. A valid conclusion is NO BET.',
+    '',
+    'FINAL OUTPUT — KEEP IT SHORT',
+    'BEST MULTI: selections with individual odds, approximate combined individual-leg odds and confidence.',
+    'OPTIONAL ALTERNATIVE MULTI only if genuinely justified.',
+    'BEST BET / strongest leg.',
+    'WEAKEST selected leg.',
+    'ONE short warning if material.',
+    'If exact ladders are needed before finalising, request only those LADDER IDs instead of guessing.',
+    'If evidence does not justify a bet: NO BET and the single most important reason.',
+    '',
+    'POST-MATCH RULE',
+    'Classify failed legs only as: Variance; Bad line selection; Incorrect role assumption; Injury/substitution; Team-selection error; Matchup error; Correlation error; Data-quality problem; Model error. Do not rationalise losses after the event.'
+  );
+
+  return lines.join('\n');
+}
+
+function parseRequestedIds(text){
+
+  return[
+    ...new Set(
+      String(text||'')
+        .toUpperCase()
+        .split(/[\s,;]+/)
+        .map(
+          x=>x.trim()
+        )
+        .filter(Boolean)
+    )
+  ];
+}
+
+function selectedLadderPack(){
+
+  const ids=
+    ladderIdFactory();
+
+  const reverse=
+    new Map();
+
+  for(const arr of state.ladders.values()){
+
+    reverse.set(
+      ids.get(
+        ladderKey(
+          arr[0]
+        )
+      ),
+      arr
+    );
+  }
+
+  const requested=
+    parseRequestedIds(
+      $('ladderIds').value
+    );
+
+  if(!requested.length)
+    return 'No ladder IDs supplied.';
+
+  const {
+    min,
+    max
+  }=
+    exportOddsRange();
+
+  const lines=[
+    'BET INTELLIGENCE V16 REQUESTED LADDERS',
+    '====================================',
+    '',
+    `Game: ${state.game?.away_team||'-'} @ ${state.game?.home_team||'-'}`,
+    `Odds range: ${min.toFixed(2)} to ${max.toFixed(2)}`,
+    '',
+    '# ID | player | family | market | exact useful ladder'
+  ];
+
+  const missing=[];
+
+  for(const id of requested){
+
+    const arr=
+      reverse.get(id);
+
+    if(!arr){
+
+      missing.push(id);
+      continue;
+
+    }
+
+    const trimmed=
+      trimLadder(arr);
+
+    lines.push(
+      `${id} | `+
+      `${arr[0].player} | `+
+      `${arr[0].family} | `+
+      `${arr[0].market} | `+
+      `${trimmed.map(lineText).join('; ')}`
+    );
+  }
+
+  if(missing.length){
+
+    lines.push(
+      '',
+      `IDs not found: ${missing.join(', ')}`
+    );
+  }
+
+  lines.push(
+    '',
+    'Use these exact ladders with the V16 master analysis rules from the compact universe pack.'
+  );
+
+  return lines.join('\n');
+}
+
+function createCompact(){
+
+  if(!state.ladders.size)
+    return;
+
+  $('compactBox').textContent=
+    compactPack();
+
+  $('copyCompactBtn').disabled=false;
+}
+
+async function copyText(
+  text,
+  button
+){
+
+  try{
+
+    await navigator
+      .clipboard
+      .writeText(text);
+
+    const old=
+      button.textContent;
+
+    button.textContent=
+      'COPIED';
+
+    setTimeout(
+      ()=>
+        button.textContent=old,
+      1000
+    );
+
+  }
+  catch{
+
+    alert(
+      'Clipboard access is blocked. Select the text manually.'
+    );
+
+  }
+}
+
+function exportSelected(){
+
+  if(!state.ladders.size)
+    return;
+
+  $('selectedBox').textContent=
+    selectedLadderPack();
+
+  $('copySelectedBtn').disabled=false;
+}
+
+const AUDIT_KEY=
+  'betIntelV16Audit';
+
+function loadAudit(){
+
+  let arr=[];
+
+  try{
+
+    arr=
+      JSON.parse(
+        localStorage.getItem(AUDIT_KEY)||
+        '[]'
+      );
+
+    if(!Array.isArray(arr))
+      arr=[];
+
+  }
+  catch{
+
+    arr=[];
+
+  }
+
+  $('auditHistory').textContent=
+    arr.length
+      ?
+      arr
+        .map(
+          (x,i)=>
+            `${i+1}. ${x}`
+        )
+        .join('\n')
+      :
+      'No audit history.';
+}
+
+function saveAudit(){
+
+  const v=
+    $('auditInput')
+      .value
+      .trim();
+
+  if(!v){
+
+    $('auditStatus').textContent=
+      'Enter an audit line first.';
+
+    return;
+  }
+
+  let arr=[];
+
+  try{
+
+    arr=
+      JSON.parse(
+        localStorage.getItem(AUDIT_KEY)||
+        '[]'
+      );
+
+    if(!Array.isArray(arr))
+      arr=[];
+
+  }
+  catch{
+
+    arr=[];
+
+  }
+
+  arr.push(v);
+
+  localStorage.setItem(
+    AUDIT_KEY,
+    JSON.stringify(
+      arr.slice(-200)
+    )
+  );
+
+  $('auditInput').value='';
+
+  $('auditStatus').textContent=
+    'Audit line saved locally.';
+
+  loadAudit();
+}
+
+function clearAudit(){
+
+  localStorage.removeItem(
+    AUDIT_KEY
+  );
+
+  $('auditStatus').textContent=
+    'Audit history cleared.';
+
+  loadAudit();
+}
+
+$('connectBtn').onclick=
+  loadGames;
+
+$('clearBtn').onclick=
+  ()=>{
+
+    state.events=[];
+    state.game=null;
+
+    resetAfterGame();
+
+    $('apiKey').value='';
+    $('games').innerHTML='';
+
+    $('setupCard')
+      .classList
+      .add('hidden');
+
+    setStatus(
+      'status',
+      'Cleared. API key is not stored.'
+    );
+
+    log(
+      'Cleared.'
+    );
+  };
+
+$('marketsBtn').onclick=
+  loadMarkets;
+
+$('createCompactBtn').onclick=
+  createCompact;
+
+$('copyCompactBtn').onclick=
+  ()=>
+    copyText(
+      compactPack(),
+      $('copyCompactBtn')
+    );
+
+$('exportSelectedBtn').onclick=
+  exportSelected;
+
+$('copySelectedBtn').onclick=
+  ()=>
+    copyText(
+      selectedLadderPack(),
+      $('copySelectedBtn')
+    );
+
+$('saveAuditBtn').onclick=
+  saveAudit;
+
+$('clearAuditBtn').onclick=
+  clearAudit;
+
+$('sport').onchange=
+  ()=>{
+
+    state.events=[];
+    state.game=null;
+
+    resetAfterGame();
+
+    $('games').innerHTML='';
+
+    $('setupCard')
+      .classList
+      .add('hidden');
+
+    setStatus(
+      'status',
+      'Sport changed. Load current games.'
+    );
+  };
+
+function refreshRange(){
+
+  if(state.ladders.size){
+
+    renderUniverse();
+    renderDiscovery();
+
+    $('compactBox').textContent=
+      'Odds range changed. Create a new compact pack.';
+
+    $('selectedBox').textContent=
+      'Odds range changed. Re-export requested ladders if needed.';
+
+    $('copyCompactBtn').disabled=true;
+    $('copySelectedBtn').disabled=true;
+  }
+}
+
+$('minOdds').onchange=
+  refreshRange;
+
+$('maxOdds').onchange=
+  refreshRange;
+
+window.BetIntelligenceV16Tests={
+
+  implied:
+    ()=>
+      Math.abs(
+        implied(2)-0.5
+      )<1e-12,
+
+  removesUnder:
+    ()=>
+      normalizeOutcome(
+        {
+          name:'Under',
+          description:'Test',
+          price:1.9,
+          point:20.5
+        },
+        'player_disposals_over'
+      )===null,
+
+  dedupe:
+    ()=>
+      dedupe(
+        [
+          {
+            player:'A',
+            market:'x',
+            line:1,
+            name:'Over',
+            odds:1.5
+          },
+          {
+            player:'A',
+            market:'x',
+            line:1,
+            name:'Over',
+            odds:1.6
+          }
+        ]
+      ).length===1,
+
+  ladderSort:
+    ()=>
+      buildLadders(
+        [
+          {
+            player:'A',
+            market:'m',
+            family:'x',
+            line:24.5,
+            odds:1.9
+          },
+          {
+            player:'A',
+            market:'m',
+            family:'x',
+            line:19.5,
+            odds:1.2
+          }
+        ]
+      )
+      .get('a|m')[0]
+      .line===19.5,
+
+  dynamicMarket:
+    ()=>
+      isPlayerMarketKey(
+        'player_hitouts_over'
+      )
+      &&
+      inferFamily(
+        'player_hitouts_over'
+      )==='hitouts'
+
+};
+
+loadAudit();
+
+</script>
+
+</body>
+</html>
