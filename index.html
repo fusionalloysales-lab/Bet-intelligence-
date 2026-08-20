@@ -3,1056 +3,267 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BET INTELLIGENCE AFL — Player Intelligence Trial 0.2</title>
-
+<title>BET INTELLIGENCE AFL — Player Intelligence Trial 0.3</title>
 <style>
-:root{
-  --bg:#08101d;
-  --panel:#111a2c;
-  --panel2:#0d1626;
-  --line:#263754;
-  --text:#eef3ff;
-  --muted:#9fb0cc;
-  --accent:#72a7ff;
-  --good:#55d38a;
-  --warn:#ffc857;
-  --bad:#ff6b6b
-}
-
-*{
-  box-sizing:border-box
-}
-
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:linear-gradient(180deg,#07101d,#0b1020 30%);
-  color:var(--text)
-}
-
-.wrap{
-  max-width:1180px;
-  margin:auto;
-  padding:16px
-}
-
-.hero{
-  padding:14px 0
-}
-
-.hero h1{
-  font-size:23px;
-  margin:0 0 6px
-}
-
-.hero p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.45
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:12px
-}
-
-.card{
-  grid-column:span 12;
-  background:rgba(17,26,44,.97);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px
-}
-
-.half{
-  grid-column:span 12
-}
-
-@media(min-width:860px){
-  .half{
-    grid-column:span 6
-  }
-
-  .third{
-    grid-column:span 4
-  }
-}
-
-h2{
-  font-size:16px;
-  margin:0 0 10px
-}
-
-.muted,
-.help{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45
-}
-
-.status{
-  font-size:12px;
-  margin-top:8px;
-  min-height:18px
-}
-
-.good{
-  color:var(--good)
-}
-
-.warn{
-  color:var(--warn)
-}
-
-.bad{
-  color:var(--bad)
-}
-
-label{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin:8px 0 5px
-}
-
-input,
-select,
-button,
-textarea{
-  font:inherit
-}
-
-input,
-select,
-textarea{
-  width:100%;
-  background:#0d1526;
-  color:var(--text);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:10px;
-  outline:none
-}
-
-.row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap
-}
-
-.row>*{
-  flex:1
-}
-
-.row .auto{
-  flex:0 0 auto
-}
-
-.btn{
-  border:0;
-  border-radius:10px;
-  padding:10px 12px;
-  font-weight:700;
-  cursor:pointer;
-  background:var(--accent);
-  color:#07101d
-}
-
-.btn.secondary{
-  background:#253653;
-  color:var(--text);
-  border:1px solid #354b70
-}
-
-.btn.goodbtn{
-  background:var(--good)
-}
-
-.btn.warnbtn{
-  background:var(--warn)
-}
-
-.btn:disabled{
-  opacity:.42;
-  cursor:not-allowed
-}
-
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px
-}
-
-@media(min-width:700px){
-  .kpis{
-    grid-template-columns:repeat(6,1fr)
-  }
-}
-
-.kpi{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:9px
-}
-
-.kpi b{
-  display:block;
-  font-size:17px
-}
-
-.kpi span{
-  font-size:10px;
-  color:var(--muted)
-}
-
-.tableWrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:12px
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:11px;
-  min-width:980px
-}
-
-th,
-td{
-  padding:8px;
-  border-bottom:1px solid #22314c;
-  text-align:left;
-  white-space:nowrap
-}
-
-th{
-  position:sticky;
-  top:0;
-  background:#15213a;
-  color:#bdd0ee;
-  z-index:1
-}
-
-.pill{
-  display:inline-block;
-  padding:3px 7px;
-  border-radius:999px;
-  background:#1f2d49;
-  font-size:10px
-}
-
-.pill.good{
-  background:rgba(85,211,138,.12)
-}
-
-.pill.warn{
-  background:rgba(255,200,87,.12)
-}
-
-.pill.bad{
-  background:rgba(255,107,107,.12)
-}
-
-.lock,
-.notice{
-  padding:10px 12px;
-  border-radius:10px;
-  background:#0d1628;
-  border:1px solid var(--line);
-  font-size:12px;
-  line-height:1.45
-}
-
-.hidden{
-  display:none!important
-}
-
-.small{
-  font-size:10px
-}
-
-.progress{
-  height:8px;
-  background:#0b1322;
-  border:1px solid var(--line);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:8px
-}
-
-.progress>div{
-  height:100%;
-  width:0;
-  background:var(--accent);
-  transition:width .2s
-}
-
-textarea{
-  min-height:130px;
-  resize:vertical
-}
+:root{--bg:#08101d;--panel:#111a2c;--panel2:#0d1626;--line:#263754;--text:#eef3ff;--muted:#9fb0cc;--accent:#72a7ff;--good:#55d38a;--warn:#ffc857;--bad:#ff6b6b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#07101d,#0b1020 30%);color:var(--text)}
+.wrap{max-width:1180px;margin:auto;padding:16px}.hero{padding:14px 0}.hero h1{font-size:23px;margin:0 0 6px}.hero p{margin:0;color:var(--muted);line-height:1.45}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{grid-column:span 12;background:rgba(17,26,44,.97);border:1px solid var(--line);border-radius:16px;padding:14px}.half{grid-column:span 12}.third{grid-column:span 12}
+@media(min-width:860px){.half{grid-column:span 6}.third{grid-column:span 4}}
+h2{font-size:16px;margin:0 0 10px}.muted,.help{color:var(--muted);font-size:12px;line-height:1.45}.status{font-size:12px;margin-top:8px;min-height:18px}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+label{display:block;font-size:12px;color:var(--muted);margin:8px 0 5px}input,select,button,textarea{font:inherit}input,select,textarea{width:100%;background:#0d1526;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;outline:none}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row .auto{flex:0 0 auto}.btn{border:0;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;background:var(--accent);color:#07101d}.btn.secondary{background:#253653;color:var(--text);border:1px solid #354b70}.btn.goodbtn{background:var(--good)}.btn.warnbtn{background:var(--warn)}.btn:disabled{opacity:.42;cursor:not-allowed}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}@media(min-width:700px){.kpis{grid-template-columns:repeat(7,1fr)}}.kpi{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:9px}.kpi b{display:block;font-size:17px}.kpi span{font-size:10px;color:var(--muted)}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;font-size:11px;min-width:1030px}th,td{padding:8px;border-bottom:1px solid #22314c;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#15213a;color:#bdd0ee;z-index:1}
+.pill{display:inline-block;padding:3px 7px;border-radius:999px;background:#1f2d49;font-size:10px}.pill.good{background:rgba(85,211,138,.12)}.pill.warn{background:rgba(255,200,87,.12)}.pill.bad{background:rgba(255,107,107,.12)}
+.lock,.notice{padding:10px 12px;border-radius:10px;background:#0d1628;border:1px solid var(--line);font-size:12px;line-height:1.45}.hidden{display:none!important}.small{font-size:10px}.progress{height:8px;background:#0b1322;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:8px}.progress>div{height:100%;width:0;background:var(--accent);transition:width .2s}textarea{min-height:130px;resize:vertical}
 </style>
 </head>
-
 <body>
-
 <div class="wrap">
-
   <div class="hero">
-    <h1>BET INTELLIGENCE AFL — Player Intelligence Trial 0.2</h1>
-    <p>
-      Automatic independent AFL history → price-blind disposal model →
-      freeze → Sportsbet ladder valuation.
-    </p>
+    <h1>BET INTELLIGENCE AFL — Player Intelligence Trial 0.3</h1>
+    <p>Dual-source AFL history + freshness gate → price-blind disposal model → freeze → Sportsbet valuation.</p>
   </div>
-
   <div class="grid">
-
     <section class="card half">
-
       <h2>1. Sportsbet market universe</h2>
-
       <label>The Odds API key</label>
-
-      <div class="row">
-        <input
-          id="apiKey"
-          type="password"
-          autocomplete="off"
-          placeholder="Paste API key"
-        >
-
-        <button
-          class="btn secondary auto"
-          id="saveKeyBtn"
-        >
-          Save
-        </button>
-      </div>
-
-      <div
-        class="row"
-        style="margin-top:8px"
-      >
-        <button
-          class="btn"
-          id="loadGamesBtn"
-        >
-          Load AFL games
-        </button>
-
-        <button
-          class="btn secondary"
-          id="clearBtn"
-        >
-          Clear trial
-        </button>
-      </div>
-
-      <label>Game</label>
-
-      <select id="gameSelect">
-        <option value="">
-          Load games first
-        </option>
-      </select>
-
-      <button
-        class="btn secondary"
-        id="loadUniverseBtn"
-        style="width:100%;margin-top:8px"
-        disabled
-      >
-        Load player universe — prices hidden
-      </button>
-
-      <div
-        id="apiStatus"
-        class="status muted"
-      ></div>
-
+      <div class="row"><input id="apiKey" type="password" autocomplete="off" placeholder="Paste API key"><button class="btn secondary auto" id="saveKeyBtn">Save</button></div>
+      <div class="row" style="margin-top:8px"><button class="btn" id="loadGamesBtn">Load AFL games</button><button class="btn secondary" id="clearBtn">Clear trial</button></div>
+      <label>Game</label><select id="gameSelect"><option value="">Load games first</option></select>
+      <button class="btn secondary" id="loadUniverseBtn" style="width:100%;margin-top:8px" disabled>Load player universe — prices hidden</button>
+      <div id="apiStatus" class="status muted"></div>
     </section>
-
 
     <section class="card half">
-
-      <h2>2. Independent AFL history</h2>
-
-      <div class="notice">
-        Source: public AFLPlayerStats dataset generated from official AFL data
-        via fitzRoy. The app downloads it from GitHub, keeps only useful fields,
-        matches the selected Sportsbet players, and caches the filtered history
-        on this device.
-      </div>
-
-      <div
-        class="row"
-        style="margin-top:9px"
-      >
-
-        <button
-          class="btn"
-          id="loadHistoryBtn"
-          disabled
-        >
-          Load independent AFL history
-        </button>
-
-        <button
-          class="btn secondary"
-          id="clearCacheBtn"
-        >
-          Clear history cache
-        </button>
-
-      </div>
-
-      <div class="progress">
-        <div id="historyProgress"></div>
-      </div>
-
-      <div
-        id="dataStatus"
-        class="status muted"
-      ></div>
-
-      <div class="help">
-        Current source includes TOG, position and CBA counts.
-        Trial 0.2 stores those fields but only disposals + TOG drive
-        the probability model.
-      </div>
-
+      <h2>2. Independent AFL history + freshness</h2>
+      <div class="notice"><b>Trial 0.3:</b> loads the official-AFL/fitzRoy baseline, then attempts a separate current-season AFL Tables patch. The two sources are merged and deduplicated. If the latest history is too old for the selected match, the model is blocked.</div>
+      <div class="row" style="margin-top:9px"><button class="btn" id="loadHistoryBtn" disabled>Load + patch AFL history</button><button class="btn secondary" id="clearCacheBtn">Clear history cache</button></div>
+      <div class="progress"><div id="historyProgress"></div></div>
+      <div id="dataStatus" class="status muted"></div>
+      <div id="freshnessStatus" class="status muted"></div>
     </section>
 
-
     <section class="card">
-
       <h2>3. Model controls</h2>
-
       <div class="grid">
-
-        <div class="third">
-          <label>
-            Recency half-life (days)
-          </label>
-
-          <input
-            id="halfLife"
-            type="number"
-            min="30"
-            max="730"
-            step="10"
-            value="180"
-          >
-        </div>
-
-        <div class="third">
-          <label>
-            Shrinkage strength (pseudo-games)
-          </label>
-
-          <input
-            id="shrinkGames"
-            type="number"
-            min="1"
-            max="30"
-            step="1"
-            value="8"
-          >
-        </div>
-
-        <div class="third">
-          <label>
-            Minimum history games
-          </label>
-
-          <input
-            id="minGames"
-            type="number"
-            min="3"
-            max="30"
-            step="1"
-            value="8"
-          >
-        </div>
-
+        <div class="third"><label>Recency half-life (days)</label><input id="halfLife" type="number" min="30" max="730" step="10" value="180"></div>
+        <div class="third"><label>Shrinkage strength (pseudo-games)</label><input id="shrinkGames" type="number" min="1" max="30" step="1" value="8"></div>
+        <div class="third"><label>Maximum allowed data age (days)</label><input id="freshnessDays" type="number" min="3" max="21" step="1" value="10"></div>
       </div>
-
-      <div
-        class="row"
-        style="margin-top:10px"
-      >
-
-        <button
-          class="btn goodbtn"
-          id="buildBtn"
-          disabled
-        >
-          Build independent projections
-        </button>
-
-        <button
-          class="btn warnbtn"
-          id="freezeBtn"
-          disabled
-        >
-          Freeze projections
-        </button>
-
-      </div>
-
-      <div
-        id="modelStatus"
-        class="status muted"
-      ></div>
-
+      <div class="row" style="margin-top:10px"><button class="btn goodbtn" id="buildBtn" disabled>Build independent projections</button><button class="btn warnbtn" id="freezeBtn" disabled>Freeze projections</button></div>
+      <div id="modelStatus" class="status muted"></div>
     </section>
 
-
     <section class="card">
-
       <h2>Model summary</h2>
-
       <div class="kpis">
-
-        <div class="kpi">
-          <b id="kpiUniverse">0</b>
-          <span>market players</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiMatched">0</b>
-          <span>history matched</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiHistory">0</b>
-          <span>history rows</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiLatest">—</b>
-          <span>latest history</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiCoverage">0%</b>
-          <span>coverage</span>
-        </div>
-
-        <div class="kpi">
-          <b id="kpiFrozen">NO</b>
-          <span>price-blind freeze</span>
-        </div>
-
+        <div class="kpi"><b id="kpiUniverse">0</b><span>market players</span></div>
+        <div class="kpi"><b id="kpiMatched">0</b><span>history matched</span></div>
+        <div class="kpi"><b id="kpiHistory">0</b><span>merged rows</span></div>
+        <div class="kpi"><b id="kpiBaseLatest">—</b><span>baseline latest</span></div>
+        <div class="kpi"><b id="kpiPatchLatest">—</b><span>patch latest</span></div>
+        <div class="kpi"><b id="kpiFreshness">—</b><span>freshness</span></div>
+        <div class="kpi"><b id="kpiFrozen">NO</b><span>price-blind freeze</span></div>
       </div>
-
     </section>
 
-
     <section class="card">
-
       <h2>4. Independent player projections</h2>
-
-      <div class="help">
-        No Sportsbet odds are used in this table.
-        Expected TOG may be manually adjusted before freezing only when
-        verified team/role information justifies it.
-      </div>
-
-      <div
-        class="tableWrap"
-        style="margin-top:9px"
-      >
-
-        <table>
-
-          <thead>
-
-            <tr>
-              <th>Player</th>
-              <th>Team</th>
-              <th>Pos</th>
-              <th>Games</th>
-              <th>L5</th>
-              <th>L10</th>
-              <th>Season</th>
-              <th>Recent TOG</th>
-              <th>Expected TOG</th>
-              <th>Mean</th>
-              <th>SD</th>
-              <th>Quality</th>
-            </tr>
-
-          </thead>
-
-          <tbody id="projectionBody">
-
-            <tr>
-              <td
-                colspan="12"
-                class="muted"
-              >
-                Load game, universe and history first.
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
+      <div class="help">No Sportsbet odds are used here. Expected TOG may be manually adjusted before freezing only when verified team/role information justifies it.</div>
+      <div class="tableWrap" style="margin-top:9px"><table><thead><tr><th>Player</th><th>Team</th><th>Pos</th><th>Games</th><th>L5</th><th>L10</th><th>Season</th><th>Recent TOG</th><th>Expected TOG</th><th>Mean</th><th>SD</th><th>Quality</th></tr></thead><tbody id="projectionBody"><tr><td colspan="12" class="muted">Load game, universe and fresh history first.</td></tr></tbody></table></div>
     </section>
 
-
     <section class="card">
-
       <h2>5. Price reveal + full ladder valuation</h2>
-
-      <div
-        id="priceLock"
-        class="lock"
-      >
-
-        <b>
-          Sportsbet prices locked.
-        </b>
-
-        <div class="muted">
-          Build and freeze the independent projections first.
-        </div>
-
+      <div id="priceLock" class="lock"><b>Sportsbet prices locked.</b><div class="muted">Fresh independent projections must be built and frozen first.</div></div>
+      <div id="valuationPanel" class="hidden">
+        <div class="row"><div><label>Minimum edge (percentage points)</label><input id="minEdge" type="number" min="0" max="30" step="0.5" value="4"></div><div><label>Minimum BI probability</label><input id="minProb" type="number" min="40" max="99" step="1" value="65"></div><div><label>Maximum single-leg odds</label><input id="maxOdds" type="number" min="1.01" max="10" step="0.05" value="3"></div></div>
+        <button class="btn" id="rankBtn" style="margin-top:9px">Rank every disposal line</button><div id="rankStatus" class="status muted"></div>
+        <div class="tableWrap" style="margin-top:9px"><table><thead><tr><th>#</th><th>Player</th><th>Line</th><th>Sportsbet</th><th>Break-even</th><th>BI P</th><th>Conservative P</th><th>Fair odds</th><th>Edge</th><th>EV</th><th>Status</th></tr></thead><tbody id="valuationBody"><tr><td colspan="11" class="muted">Freeze projections to unlock.</td></tr></tbody></table></div>
       </div>
-
-      <div
-        id="valuationPanel"
-        class="hidden"
-      >
-
-        <div class="row">
-
-          <div>
-            <label>
-              Minimum edge (percentage points)
-            </label>
-
-            <input
-              id="minEdge"
-              type="number"
-              min="0"
-              max="30"
-              step="0.5"
-              value="4"
-            >
-          </div>
-
-          <div>
-            <label>
-              Minimum BI probability
-            </label>
-
-            <input
-              id="minProb"
-              type="number"
-              min="40"
-              max="99"
-              step="1"
-              value="65"
-            >
-          </div>
-
-          <div>
-            <label>
-              Maximum single-leg odds
-            </label>
-
-            <input
-              id="maxOdds"
-              type="number"
-              min="1.01"
-              max="10"
-              step="0.05"
-              value="3"
-            >
-          </div>
-
-        </div>
-
-        <button
-          class="btn"
-          id="rankBtn"
-          style="margin-top:9px"
-        >
-          Rank every disposal line
-        </button>
-
-        <div
-          id="rankStatus"
-          class="status muted"
-        ></div>
-
-        <div
-          class="tableWrap"
-          style="margin-top:9px"
-        >
-
-          <table>
-
-            <thead>
-
-              <tr>
-                <th>#</th>
-                <th>Player</th>
-                <th>Line</th>
-                <th>Sportsbet</th>
-                <th>Break-even</th>
-                <th>BI P</th>
-                <th>Conservative P</th>
-                <th>Fair odds</th>
-                <th>Edge</th>
-                <th>EV</th>
-                <th>Status</th>
-              </tr>
-
-            </thead>
-
-            <tbody id="valuationBody">
-
-              <tr>
-                <td
-                  colspan="11"
-                  class="muted"
-                >
-                  Freeze projections to unlock.
-                </td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
     </section>
-
 
     <section class="card">
-
       <h2>6. Pre-match audit</h2>
-
-      <div class="help">
-        Save this after ranking.
-        It preserves the frozen price-blind model and Sportsbet comparison
-        for later calibration, ROI and CLV audits.
-      </div>
-
-      <div
-        class="row"
-        style="margin-top:8px"
-      >
-
-        <button
-          class="btn secondary"
-          id="copyAuditBtn"
-          disabled
-        >
-          Copy audit pack
-        </button>
-
-        <button
-          class="btn secondary"
-          id="downloadAuditBtn"
-          disabled
-        >
-          Download JSON
-        </button>
-
-      </div>
-
-      <textarea
-        id="auditText"
-        readonly
-        placeholder="Frozen audit output will appear here."
-      ></textarea>
-
+      <div class="help">The audit stores source freshness as well as the frozen model. A stale-data run cannot be frozen.</div>
+      <div class="row" style="margin-top:8px"><button class="btn secondary" id="copyAuditBtn" disabled>Copy audit pack</button><button class="btn secondary" id="downloadAuditBtn" disabled>Download JSON</button></div>
+      <textarea id="auditText" readonly placeholder="Frozen audit output will appear here."></textarea>
     </section>
-
   </div>
-
 </div>
-
 
 <script>
 (() => {
 
 'use strict';
 
-
 const SPORT='aussierules_afl';
+const API='https://api.the-odds-api.com/v4';
 
-const API=
-  'https://api.the-odds-api.com/v4';
+const BASE_URL=
+'https://raw.githubusercontent.com/CooperDenny/AFLPlayerStats/main/Player%20Data/AFL/afl_player_stats.csv';
 
+const PATCH_URL=
+year =>
+`https://raw.githubusercontent.com/CooperDenny/AFLPlayerStats/main/Player%20Data/AFL%20Tables/afltables_player_stats_${year}.csv`;
 
-const HISTORY_URL=
-  'https://raw.githubusercontent.com/CooperDenny/AFLPlayerStats/main/Player%20Data/AFL/afl_player_stats.csv';
-
-
-const CACHE_DB=
-  'bi-afl-history-v1';
-
-const CACHE_STORE=
-  'history';
-
-const CACHE_KEY=
-  'selected-player-history';
-
+const CACHE_DB='bi-afl-history-v2';
+const CACHE_STORE='history';
+const CACHE_KEY='dual-source-history';
 
 const state={
-
   games:[],
-
   selectedGame:null,
-
   marketResponse:null,
-
   players:[],
-
   marketLines:[],
-
   history:[],
-
   projections:[],
-
   frozen:null,
-
   valuations:[],
-
-  historyMeta:null
-
+  historyMeta:null,
+  freshness:null
 };
 
-
 const $=
-  id=>
-    document.getElementById(id);
-
+id =>
+document.getElementById(id);
 
 const clamp=
-  (x,a,b)=>
-    Math.max(
-      a,
-      Math.min(b,x)
-    );
-
+(x,a,b) =>
+Math.max(a,Math.min(b,x));
 
 const fmt=
-  (n,d=1)=>
-    Number.isFinite(n)
-      ? n.toFixed(d)
-      : '—';
-
+(n,d=1) =>
+Number.isFinite(n)
+? n.toFixed(d)
+: '—';
 
 const pct=
-  (n,d=1)=>
-    Number.isFinite(n)
-      ? (100*n).toFixed(d)+'%'
-      : '—';
-
+(n,d=1) =>
+Number.isFinite(n)
+? (100*n).toFixed(d)+'%'
+: '—';
 
 const esc=
-  s=>
-    String(s??'')
-      .replace(
-        /[&<>"']/g,
-        c=>({
-          '&':'&amp;',
-          '<':'&lt;',
-          '>':'&gt;',
-          '"':'&quot;',
-          "'":'&#039;'
-        }[c])
-      );
-
+s =>
+String(s??'')
+.replace(
+  /[&<>"']/g,
+  c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#039;'
+  }[c])
+);
 
 const norm=
-  s=>
-    String(s??'')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(
-        /[\u0300-\u036f]/g,
-        ''
-      )
-      .replace(
-        /[^a-z0-9]+/g,
-        ' '
-      )
-      .trim();
-
+s =>
+String(s??'')
+.toLowerCase()
+.normalize('NFD')
+.replace(/[\u0300-\u036f]/g,'')
+.replace(/[^a-z0-9]+/g,' ')
+.trim();
 
 const compactName=
-  s=>
-    norm(s)
-      .replace(
-        /\b(jr|senior|junior)\b/g,
-        ''
-      )
-      .replace(
-        /\s+/g,
-        ' '
-      )
-      .trim();
-
+s =>
+norm(s)
+.replace(/\b(jr|senior|junior)\b/g,'')
+.replace(/\s+/g,' ')
+.trim();
 
 function setStatus(
   id,
   msg,
   cls='muted'
 ){
-
   const el=$(id);
-
-  el.className=
-    'status '+cls;
-
-  el.textContent=
-    msg;
-
+  el.className='status '+cls;
+  el.textContent=msg;
 }
-
 
 function mean(a){
-
-  const v=
-    a.filter(
-      Number.isFinite
-    );
+  const v=a.filter(Number.isFinite);
 
   return v.length
-    ? v.reduce(
-        (x,y)=>x+y,
-        0
-      ) / v.length
-    : NaN;
-
+  ? v.reduce((x,y)=>x+y,0)/v.length
+  : NaN;
 }
-
 
 function weightedMean(
   v,
   w
 ){
-
   let sw=0;
-
   let s=0;
 
-  for(
-    let i=0;
-    i<v.length;
-    i++
-  ){
+  for(let i=0;i<v.length;i++){
 
     if(
       Number.isFinite(v[i]) &&
       Number.isFinite(w[i]) &&
       w[i]>0
     ){
-
       sw+=w[i];
-
-      s+=
-        v[i] *
-        w[i];
-
+      s+=v[i]*w[i];
     }
-
   }
 
   return sw
-    ? s/sw
-    : NaN;
-
+  ? s/sw
+  : NaN;
 }
-
 
 function weightedVariance(
   v,
   w,
   m
 ){
-
   let sw=0;
-
   let s=0;
 
-  for(
-    let i=0;
-    i<v.length;
-    i++
-  ){
+  for(let i=0;i<v.length;i++){
 
     if(
       Number.isFinite(v[i]) &&
       Number.isFinite(w[i]) &&
       w[i]>0
     ){
-
       sw+=w[i];
-
-      s+=
-        w[i] *
-        (v[i]-m)**2;
-
+      s+=w[i]*(v[i]-m)**2;
     }
-
   }
 
   return sw
-    ? s/sw
-    : NaN;
-
+  ? s/sw
+  : NaN;
 }
-
 
 function effectiveN(w){
-
   const s=
-    w.reduce(
-      (a,b)=>a+b,
-      0
-    );
+  w.reduce((a,b)=>a+b,0);
 
   const s2=
-    w.reduce(
-      (a,b)=>a+b*b,
-      0
-    );
+  w.reduce((a,b)=>a+b*b,0);
 
   return s2
-    ? s*s/s2
-    : 0;
-
+  ? s*s/s2
+  : 0;
 }
-
 
 function erf(x){
 
   const sign=
-    x<0
-      ? -1
-      : 1;
+  x<0
+  ? -1
+  : 1;
 
-  x=
-    Math.abs(x);
+  x=Math.abs(x);
 
   const a1=.254829592;
   const a2=-.284496736;
@@ -1062,383 +273,300 @@ function erf(x){
   const p=.3275911;
 
   const t=
-    1/(1+p*x);
+  1/(1+p*x);
 
   const y=
-    1-
+  1-
+  (
     (
       (
         (
           (
-            (
-              a5*t+a4
-            )*t+a3
-          )*t+a2
-        )*t+a1
-      )*t
-    )*
-    Math.exp(
-      -x*x
-    );
+            a5*t+a4
+          )*t+a3
+        )*t+a2
+      )*t+a1
+    )*t
+  )*
+  Math.exp(-x*x);
 
   return sign*y;
-
 }
-
 
 function normalCDF(
   x,
   mu,
   sd
 ){
-
   if(!(sd>0))
-    return x<mu
-      ? 0
-      : 1;
+  return x<mu ? 0 : 1;
 
-  return .5 *
-    (
-      1+
-      erf(
-        (x-mu) /
-        (
-          sd *
-          Math.SQRT2
-        )
-      )
-    );
-
+  return .5*
+  (
+    1+
+    erf(
+      (x-mu)/
+      (sd*Math.SQRT2)
+    )
+  );
 }
-
 
 function overProbability(
   line,
   mu,
   sd
 ){
-
   return clamp(
-    1-
-    normalCDF(
-      line+0.5,
+    1-normalCDF(
+      line+.5,
       mu,
       sd
     ),
     .001,
     .999
   );
-
 }
-
 
 function openDB(){
 
   return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
+    (resolve,reject)=>{
 
       const req=
-        indexedDB.open(
-          CACHE_DB,
-          1
-        );
-
+      indexedDB.open(
+        CACHE_DB,
+        1
+      );
 
       req.onupgradeneeded=
-        ()=>{
+      ()=>{
 
-          const db=
-            req.result;
+        const db=
+        req.result;
 
-          if(
-            !db.objectStoreNames.contains(
-              CACHE_STORE
-            )
-          ){
-
-            db.createObjectStore(
-              CACHE_STORE
-            );
-
-          }
-
-        };
-
+        if(
+          !db.objectStoreNames.contains(
+            CACHE_STORE
+          )
+        ){
+          db.createObjectStore(
+            CACHE_STORE
+          );
+        }
+      };
 
       req.onsuccess=
-        ()=>
-          resolve(
-            req.result
-          );
-
+      ()=>
+      resolve(req.result);
 
       req.onerror=
-        ()=>
-          reject(
-            req.error
-          );
-
+      ()=>
+      reject(req.error);
     }
   );
-
 }
-
 
 async function cacheSet(
   key,
   value
 ){
-
   const db=
-    await openDB();
-
+  await openDB();
 
   return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
+    (resolve,reject)=>{
 
       const tx=
-        db.transaction(
-          CACHE_STORE,
-          'readwrite'
-        );
+      db.transaction(
+        CACHE_STORE,
+        'readwrite'
+      );
 
-
-      tx
-        .objectStore(
-          CACHE_STORE
-        )
-        .put(
-          value,
-          key
-        );
-
+      tx.objectStore(
+        CACHE_STORE
+      )
+      .put(
+        value,
+        key
+      );
 
       tx.oncomplete=
-        ()=>{
-
-          db.close();
-
-          resolve();
-
-        };
-
+      ()=>{
+        db.close();
+        resolve();
+      };
 
       tx.onerror=
-        ()=>{
-
-          db.close();
-
-          reject(
-            tx.error
-          );
-
-        };
-
+      ()=>{
+        db.close();
+        reject(tx.error);
+      };
     }
   );
-
 }
-
 
 async function cacheGet(key){
 
   const db=
-    await openDB();
-
+  await openDB();
 
   return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
+    (resolve,reject)=>{
 
       const tx=
-        db.transaction(
-          CACHE_STORE,
-          'readonly'
-        );
-
+      db.transaction(
+        CACHE_STORE,
+        'readonly'
+      );
 
       const req=
-        tx
-          .objectStore(
-            CACHE_STORE
-          )
-          .get(
-            key
-          );
-
+      tx.objectStore(
+        CACHE_STORE
+      )
+      .get(key);
 
       req.onsuccess=
-        ()=>{
-
-          db.close();
-
-          resolve(
-            req.result ||
-            null
-          );
-
-        };
-
+      ()=>{
+        db.close();
+        resolve(req.result||null);
+      };
 
       req.onerror=
-        ()=>{
-
-          db.close();
-
-          reject(
-            req.error
-          );
-
-        };
-
+      ()=>{
+        db.close();
+        reject(req.error);
+      };
     }
   );
-
 }
-
 
 async function cacheClear(){
 
   const db=
-    await openDB();
-
+  await openDB();
 
   return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
+    (resolve,reject)=>{
 
       const tx=
-        db.transaction(
-          CACHE_STORE,
-          'readwrite'
-        );
+      db.transaction(
+        CACHE_STORE,
+        'readwrite'
+      );
 
-
-      tx
-        .objectStore(
-          CACHE_STORE
-        )
-        .clear();
-
+      tx.objectStore(
+        CACHE_STORE
+      )
+      .clear();
 
       tx.oncomplete=
-        ()=>{
-
-          db.close();
-
-          resolve();
-
-        };
-
+      ()=>{
+        db.close();
+        resolve();
+      };
 
       tx.onerror=
-        ()=>{
-
-          db.close();
-
-          reject(
-            tx.error
-          );
-
-        };
-
+      ()=>{
+        db.close();
+        reject(tx.error);
+      };
     }
   );
-
 }
 
+function parseCSV(text){
 
-function parseCSVLine(line){
+  const rows=[];
 
-  const out=[];
-
-  let c='';
-
+  let row=[];
+  let cell='';
   let q=false;
-
 
   for(
     let i=0;
-    i<line.length;
+    i<text.length;
     i++
   ){
 
-    const ch=
-      line[i];
+    const c=text[i];
+    const n=text[i+1];
 
-    const n=
-      line[i+1];
-
-
-    if(ch==='"'){
+    if(c==='"'){
 
       if(
         q &&
         n==='"'
       ){
-
-        c+='"';
-
+        cell+='"';
         i++;
-
       }
 
       else{
-
         q=!q;
-
       }
-
     }
 
     else if(
-      ch===',' &&
+      c===',' &&
+      !q
+    ){
+      row.push(cell);
+      cell='';
+    }
+
+    else if(
+      (
+        c==='\n' ||
+        c==='\r'
+      ) &&
       !q
     ){
 
-      out.push(c);
+      if(
+        c==='\r' &&
+        n==='\n'
+      )
+      i++;
 
-      c='';
+      row.push(cell);
 
+      if(
+        row.some(
+          x=>
+          String(x).trim()!==''
+        )
+      )
+      rows.push(row);
+
+      row=[];
+      cell='';
     }
 
     else{
-
-      c+=ch;
-
+      cell+=c;
     }
-
   }
 
+  row.push(cell);
 
-  out.push(c);
+  if(
+    row.some(
+      x=>
+      String(x).trim()!==''
+    )
+  )
+  rows.push(row);
 
-  return out;
-
+  return rows;
 }
 
+function hkey(s){
 
-function cleanHeader(h){
-
-  return String(h??'')
-    .trim()
-    .replace(
-      /^\uFEFF/,
-      ''
-    );
-
+  return norm(
+    String(s??'')
+  )
+  .replace(/ /g,'_');
 }
-
 
 function num(v){
 
@@ -1447,65 +575,75 @@ function num(v){
     v===undefined ||
     v===''
   )
-    return NaN;
-
+  return NaN;
 
   const n=
-    Number(
-      String(v)
-        .replace(
-          '%',
-          ''
-        )
-        .trim()
-    );
-
+  Number(
+    String(v)
+    .replace('%','')
+    .trim()
+  );
 
   return Number.isFinite(n)
-    ? n
-    : NaN;
-
+  ? n
+  : NaN;
 }
 
+function dateVal(v){
 
-function fullName(
-  first,
-  surname
-){
+  if(!v)
+  return null;
 
-  return [
-    first,
-    surname
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .replace(
-      /\s+/g,
-      ' '
+  let d=
+  new Date(v);
+
+  if(
+    !Number.isNaN(
+      d.getTime()
     )
-    .trim();
+  )
+  return d;
 
+  const s=
+  String(v).trim();
+
+  const m=
+  s.match(
+    /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
+  );
+
+  if(m){
+
+    d=
+    new Date(
+      `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}T12:00:00`
+    );
+
+    if(
+      !Number.isNaN(
+        d.getTime()
+      )
+    )
+    return d;
+  }
+
+  return null;
 }
-
 
 function makeMatcher(players){
 
   const exact=
-    new Map(
-      players.map(
-        p=>[
-          compactName(
-            p.player
-          ),
-          p
-        ]
-      )
-    );
-
+  new Map(
+    players.map(
+      p=>[
+        compactName(p.player),
+        p
+      ]
+    )
+  );
 
   const bySurname=
-    new Map();
-
+  new Map();
 
   for(
     const p
@@ -1513,557 +651,570 @@ function makeMatcher(players){
   ){
 
     const parts=
-      compactName(
-        p.player
-      ).split(' ');
-
+    compactName(
+      p.player
+    ).split(' ');
 
     const sur=
-      parts.at(-1) ||
-      '';
-
+    parts.at(-1)||'';
 
     if(
       !bySurname.has(sur)
-    ){
-
-      bySurname.set(
-        sur,
-        []
-      );
-
-    }
-
+    )
+    bySurname.set(
+      sur,
+      []
+    );
 
     bySurname
-      .get(sur)
-      .push(p);
-
+    .get(sur)
+    .push(p);
   }
-
 
   return name=>{
 
     const k=
-      compactName(name);
-
+    compactName(name);
 
     if(
       exact.has(k)
     )
-      return exact.get(k);
-
+    return exact.get(k);
 
     const parts=
-      k.split(' ');
+    k.split(' ');
 
     const sur=
-      parts.at(-1) ||
-      '';
+    parts.at(-1)||'';
 
     const first=
-      parts[0] ||
-      '';
-
+    parts[0]||'';
 
     const candidates=
-      bySurname.get(sur) ||
-      [];
-
+    bySurname.get(sur)||
+    [];
 
     if(
       candidates.length===1
     )
-      return candidates[0];
-
-
-    const initial=
-      first[0] ||
-      '';
-
+    return candidates[0];
 
     const same=
-      candidates.filter(
-        p=>
-          (
-            compactName(
-              p.player
-            )
-            .split(' ')[0] ||
-            ''
-          )[0]===initial
-      );
-
-
-    return same.length===1
-      ? same[0]
-      : null;
-
-  };
-
-}
-
-
-function parseHistoryCSV(
-  text,
-  players,
-  cutoff
-){
-
-  const lines=
-    text.split(
-      /\r?\n/
-    );
-
-
-  if(lines.length<2)
-    throw new Error(
-      'Historical CSV is empty.'
-    );
-
-
-  const headers=
-    parseCSVLine(
-      lines[0]
-    )
-    .map(
-      cleanHeader
-    );
-
-
-  const ix={};
-
-
-  headers.forEach(
-    (
-      h,
-      i
-    )=>
-      ix[h]=i
-  );
-
-
-  const required=[
-    'First.Name',
-    'Surname',
-    'Match.Start.UTC',
-    'Team.Name',
-    'Disposals'
-  ];
-
-
-  for(
-    const h
-    of required
-  ){
-
-    if(
-      ix[h]===undefined
-    ){
-
-      throw new Error(
-        'History source is missing required column: '+
-        h
-      );
-
-    }
-
-  }
-
-
-  const matcher=
-    makeMatcher(
-      players
-    );
-
-
-  const targetKeys=
-    new Set(
-      players.map(
-        p=>
-          p.playerKey
+    candidates.filter(
+      p=>
+      (
+        (
+          compactName(
+            p.player
+          )
+          .split(' ')[0]
+          ||
+          ''
+        )[0]
+        ||
+        ''
+      )
+      ===
+      (
+        first[0]||
+        ''
       )
     );
 
+    return same.length===1
+    ? same[0]
+    : null;
+  };
+}
+
+function pick(
+  r,
+  aliases
+){
+
+  for(
+    const a
+    of aliases
+  ){
+
+    const k=
+    hkey(a);
+
+    if(
+      r[k]!==undefined &&
+      r[k]!==null &&
+      String(r[k]).trim()!==''
+    )
+    return r[k];
+  }
+
+  return '';
+}
+
+function rowsToObjects(rows){
+
+  if(
+    rows.length<2
+  )
+  return [];
+
+  const headers=
+  rows
+  .shift()
+  .map(hkey);
+
+  return rows.map(
+    r=>
+    Object.fromEntries(
+      headers.map(
+        (h,i)=>[
+          h,
+          r[i]??''
+        ]
+      )
+    )
+  );
+}
+
+function parseSource(
+  text,
+  players,
+  cutoff,
+  source
+){
+
+  const raw=
+  rowsToObjects(
+    parseCSV(text)
+  );
+
+  const matcher=
+  makeMatcher(players);
 
   const out=[];
 
-  const matchedKeys=
-    new Set();
+  const matched=
+  new Set();
 
   let latest=null;
 
-
   for(
-    let r=1;
-    r<lines.length;
-    r++
+    const r
+    of raw
   ){
 
-    const line=
-      lines[r];
+    let first=
+    pick(
+      r,
+      [
+        'First.Name',
+        'First.name',
+        'First Name',
+        'first_name',
+        'player_first_name'
+      ]
+    );
 
+    let surname=
+    pick(
+      r,
+      [
+        'Surname',
+        'surname',
+        'Last.Name',
+        'last_name',
+        'player_last_name'
+      ]
+    );
 
-    if(
-      !line ||
-      line.length<5
-    )
-      continue;
+    let name=
+    pick(
+      r,
+      [
+        'Player',
+        'player',
+        'Player.Name',
+        'player_name'
+      ]
+    );
 
+    if(!name){
 
-    const row=
-      parseCSVLine(
-        line
-      );
-
-
-    const first=
-      row[
-        ix['First.Name']
-      ] ||
-      '';
-
-
-    const surname=
-      row[
-        ix['Surname']
-      ] ||
-      '';
-
-
-    const name=
-      fullName(
+      name=
+      [
         first,
         surname
+      ]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+    }
+
+    if(
+      name.includes(',') &&
+      !first &&
+      !surname
+    ){
+
+      const parts=
+      name.split(',')
+      .map(
+        x=>
+        x.trim()
       );
 
+      if(
+        parts.length>=2
+      ){
+
+        name=
+        `${parts.slice(1).join(' ')} ${parts[0]}`
+        .trim();
+      }
+    }
 
     const match=
-      matcher(name);
+    matcher(name);
 
-
-    if(
-      !match ||
-      !targetKeys.has(
-        match.playerKey
-      )
-    )
-      continue;
-
-
-    const dateRaw=
-      row[
-        ix['Match.Start.UTC']
-      ] ||
-      '';
-
+    if(!match)
+    continue;
 
     const date=
-      new Date(
-        dateRaw
-      );
-
+    dateVal(
+      pick(
+        r,
+        [
+          'Match.Start.UTC',
+          'Date',
+          'match_date',
+          'Match.Date',
+          'game_date'
+        ]
+      )
+    );
 
     if(
-      Number.isNaN(
-        date.getTime()
-      ) ||
+      !date ||
       date>=cutoff
     )
-      continue;
-
+    continue;
 
     const disposals=
-      num(
-        row[
-          ix['Disposals']
+    num(
+      pick(
+        r,
+        [
+          'Disposals',
+          'DI',
+          'D',
+          'disposals'
         ]
-      );
-
+      )
+    );
 
     if(
       !Number.isFinite(
         disposals
       )
     )
-      continue;
-
+    continue;
 
     const tog=
-      ix[
-        'Time.On.Ground.Percentage'
-      ]!==undefined
-
-        ? num(
-            row[
-              ix[
-                'Time.On.Ground.Percentage'
-              ]
-            ]
-          )
-
-        : NaN;
-
-
-    const cba=
-      ix[
-        'Centre.Bounce.Attendances'
-      ]!==undefined
-
-        ? num(
-            row[
-              ix[
-                'Centre.Bounce.Attendances'
-              ]
-            ]
-          )
-
-        : NaN;
-
+    num(
+      pick(
+        r,
+        [
+          'Time.On.Ground.Percentage',
+          'Percentage.Game.Played',
+          'Percent.Played',
+          '%P',
+          'TOG',
+          'time_on_ground_percentage'
+        ]
+      )
+    );
 
     const kicks=
-      ix['Kicks']!==undefined
-
-        ? num(
-            row[
-              ix['Kicks']
-            ]
-          )
-
-        : NaN;
-
+    num(
+      pick(
+        r,
+        [
+          'Kicks',
+          'KI',
+          'K',
+          'kicks'
+        ]
+      )
+    );
 
     const handballs=
-      ix['Handballs']!==undefined
+    num(
+      pick(
+        r,
+        [
+          'Handballs',
+          'HB',
+          'handballs'
+        ]
+      )
+    );
 
-        ? num(
-            row[
-              ix['Handballs']
-            ]
-          )
-
-        : NaN;
-
-
-    const pos=
-      ix[
-        'Player.Position'
-      ]!==undefined
-
-        ? (
-            row[
-              ix[
-                'Player.Position'
-              ]
-            ] ||
-            ''
-          )
-
-        : '';
-
+    const cba=
+    num(
+      pick(
+        r,
+        [
+          'Centre.Bounce.Attendances',
+          'CBA',
+          'centre_bounce_attendances'
+        ]
+      )
+    );
 
     const team=
-      row[
-        ix['Team.Name']
-      ] ||
-      '';
+    pick(
+      r,
+      [
+        'Team.Name',
+        'Playing.for',
+        'Playing.For',
+        'Team',
+        'player_team'
+      ]
+    );
 
-
-    const opp=
-      ix[
-        'Opponent.Name'
-      ]!==undefined
-
-        ? (
-            row[
-              ix[
-                'Opponent.Name'
-              ]
-            ] ||
-            ''
-          )
-
-        : '';
-
+    const opponent=
+    pick(
+      r,
+      [
+        'Opponent.Name',
+        'Opponent',
+        'opp'
+      ]
+    );
 
     const venue=
-      ix[
-        'Venue.Name'
-      ]!==undefined
+    pick(
+      r,
+      [
+        'Venue.Name',
+        'Venue',
+        'ground'
+      ]
+    );
 
-        ? (
-            row[
-              ix[
-                'Venue.Name'
-              ]
-            ] ||
-            ''
-          )
-
-        : '';
-
-
-    const gameId=
-      ix[
-        'Game.ID'
-      ]!==undefined
-
-        ? (
-            row[
-              ix[
-                'Game.ID'
-              ]
-            ] ||
-            ''
-          )
-
-        : '';
-
+    const position=
+    pick(
+      r,
+      [
+        'Player.Position',
+        'Position',
+        'player_position'
+      ]
+    );
 
     out.push({
 
       player:
-        match.player,
+      match.player,
 
       playerKey:
-        match.playerKey,
+      match.playerKey,
 
       sourceName:
-        name,
-
-      gameId,
+      name,
 
       team,
 
       teamKey:
-        norm(team),
+      norm(team),
 
-      opponent:
-        opp,
+      opponent,
 
       venue,
 
-      position:
-        pos,
+      position,
 
       date:
-        date.toISOString(),
+      date.toISOString(),
 
       disposals,
 
       tog:
-        Number.isFinite(tog) &&
-        tog>0
+      Number.isFinite(tog) &&
+      tog>0
 
-          ? clamp(
-              tog,
-              1,
-              100
-            )
+      ? clamp(
+          tog,
+          1,
+          100
+        )
 
-          : NaN,
+      : NaN,
 
       cba,
 
       kicks,
 
-      handballs
+      handballs,
 
+      source
     });
 
-
-    matchedKeys.add(
+    matched.add(
       match.playerKey
     );
-
 
     if(
       !latest ||
       date>latest
     )
-      latest=date;
-
+    latest=date;
   }
-
 
   out.sort(
     (a,b)=>
-      new Date(a.date)-
-      new Date(b.date)
+    new Date(a.date)-
+    new Date(b.date)
   );
 
-
-  return {
-
-    rows:
-      out,
-
-    matchedKeys:
-      [...matchedKeys],
-
+  return{
+    rows:out,
+    matchedKeys:[
+      ...matched
+    ],
     latest:
-      latest
-        ? latest.toISOString()
-        : null
-
+    latest
+    ? latest.toISOString()
+    : null
   };
-
 }
 
+function mergeHistory(
+  base,
+  patch
+){
+
+  const m=
+  new Map();
+
+  for(
+    const r
+    of base
+  ){
+
+    m.set(
+      `${r.playerKey}|${r.date.slice(0,10)}`,
+      r
+    );
+  }
+
+  for(
+    const r
+    of patch
+  ){
+
+    const k=
+    `${r.playerKey}|${r.date.slice(0,10)}`;
+
+    const old=
+    m.get(k);
+
+    if(old){
+
+      m.set(
+        k,
+        {
+          ...old,
+          ...r,
+
+          position:
+          r.position||
+          old.position,
+
+          cba:
+          Number.isFinite(r.cba)
+          ? r.cba
+          : old.cba,
+
+          tog:
+          Number.isFinite(r.tog)
+          ? r.tog
+          : old.tog,
+
+          kicks:
+          Number.isFinite(r.kicks)
+          ? r.kicks
+          : old.kicks,
+
+          handballs:
+          Number.isFinite(r.handballs)
+          ? r.handballs
+          : old.handballs,
+
+          source:'PATCH'
+        }
+      );
+    }
+
+    else{
+
+      m.set(
+        k,
+        r
+      );
+    }
+  }
+
+  return [
+    ...m.values()
+  ]
+  .sort(
+    (a,b)=>
+    new Date(a.date)-
+    new Date(b.date)
+  );
+}
 
 async function apiFetch(url){
 
   const res=
-    await fetch(
-      url,
-      {
-        headers:{
-          Accept:
-            'application/json'
-        }
+  await fetch(
+    url,
+    {
+      headers:{
+        Accept:'application/json'
       }
-    );
-
+    }
+  );
 
   if(!res.ok){
 
     let t='';
 
-
     try{
-
       t=
-        await res.text();
-
+      await res.text();
     }
     catch{}
 
-
     throw new Error(
       `API ${res.status}: ${
-        t.slice(
-          0,
-          220
-        ) ||
+        t.slice(0,220)||
         res.statusText
       }`
     );
-
   }
 
-
   return res.json();
-
 }
-
 
 async function loadGames(){
 
   const key=
-    $('apiKey')
-      .value
-      .trim();
-
+  $('apiKey')
+  .value
+  .trim();
 
   if(!key){
 
@@ -2074,57 +1225,44 @@ async function loadGames(){
     );
 
     return;
-
   }
-
 
   setStatus(
     'apiStatus',
     'Loading upcoming AFL games…'
   );
 
-
   try{
 
-    const url=
-      `${API}/sports/${SPORT}/events`+
-      `?apiKey=${encodeURIComponent(key)}`+
-      `&dateFormat=iso`;
-
-
     const games=
-      await apiFetch(
-        url
-      );
-
+    await apiFetch(
+      `${API}/sports/${SPORT}/events?apiKey=${encodeURIComponent(key)}&dateFormat=iso`
+    );
 
     state.games=
-      Array.isArray(games)
-        ? games
-        : [];
-
+    Array.isArray(games)
+    ? games
+    : [];
 
     $('gameSelect').innerHTML=
-      '<option value="">Select a game</option>'+
-
-      state.games
-        .map(
-          g=>
-            `<option value="${esc(g.id)}">`+
-            `${esc(g.away_team)} @ ${esc(g.home_team)}`+
-            ` — ${new Date(g.commence_time).toLocaleString()}`+
-            `</option>`
-        )
-        .join('');
-
+    '<option value="">Select a game</option>'+
+    state.games
+    .map(
+      g=>
+      `<option value="${esc(g.id)}">`+
+      `${esc(g.away_team)} @ ${esc(g.home_team)}`+
+      ` — ${new Date(g.commence_time).toLocaleString()}`+
+      `</option>`
+    )
+    .join('');
 
     setStatus(
       'apiStatus',
       `${state.games.length} AFL games loaded.`,
       'good'
     );
-
   }
+
   catch(e){
 
     setStatus(
@@ -2132,60 +1270,44 @@ async function loadGames(){
       e.message,
       'bad'
     );
-
   }
-
 }
-
 
 function gameChanged(){
 
   state.selectedGame=
-    state.games.find(
-      g=>
-        g.id===
-        $('gameSelect').value
-    ) ||
-    null;
-
+  state.games.find(
+    g=>
+    g.id===
+    $('gameSelect').value
+  )||
+  null;
 
   state.marketResponse=null;
-
   state.players=[];
-
   state.marketLines=[];
-
   state.history=[];
-
   state.projections=[];
-
   state.frozen=null;
-
   state.valuations=[];
-
   state.historyMeta=null;
-
+  state.freshness=null;
 
   $('loadUniverseBtn').disabled=
-    !state.selectedGame;
-
+  !state.selectedGame;
 
   $('loadHistoryBtn').disabled=
-    true;
-
+  true;
 
   $('buildBtn').disabled=
-    true;
-
+  true;
 
   $('freezeBtn').disabled=
-    true;
-
+  true;
 
   lockPrices();
 
   renderSummary();
-
   renderProjections();
 
   setStatus(
@@ -2193,95 +1315,81 @@ function gameChanged(){
     ''
   );
 
+  setStatus(
+    'freshnessStatus',
+    ''
+  );
 }
-
 
 async function loadUniverse(){
 
   const key=
-    $('apiKey')
-      .value
-      .trim();
-
+  $('apiKey')
+  .value
+  .trim();
 
   if(
     !key ||
     !state.selectedGame
   )
-    return;
-
+  return;
 
   setStatus(
     'apiStatus',
     'Loading Sportsbet disposal universe. Prices remain hidden…'
   );
 
-
   try{
 
     const id=
-      state.selectedGame.id;
-
+    state.selectedGame.id;
 
     const markets=
-      'player_disposals,player_disposals_over';
-
+    'player_disposals,player_disposals_over';
 
     const url=
-      `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds`+
-      `?apiKey=${encodeURIComponent(key)}`+
-      `&bookmakers=sportsbet`+
-      `&markets=${markets}`+
-      `&oddsFormat=decimal`+
-      `&dateFormat=iso`;
-
+    `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds`+
+    `?apiKey=${encodeURIComponent(key)}`+
+    `&bookmakers=sportsbet`+
+    `&markets=${markets}`+
+    `&oddsFormat=decimal`+
+    `&dateFormat=iso`;
 
     state.marketResponse=
-      await apiFetch(
-        url
-      );
-
+    await apiFetch(url);
 
     extractSportsbetLines();
 
-
     const uniq=
-      new Map();
-
+    new Map();
 
     state.marketLines.forEach(
       x=>
-        uniq.set(
-          x.playerKey,
-          x.player
-        )
+      uniq.set(
+        x.playerKey,
+        x.player
+      )
     );
 
-
     state.players=
-      [...uniq.entries()]
-        .map(
-          (
-            [
-              playerKey,
-              player
-            ]
-          )=>({
-            playerKey,
-            player
-          })
-        )
-        .sort(
-          (a,b)=>
-            a.player.localeCompare(
-              b.player
-            )
-        );
-
+    [
+      ...uniq.entries()
+    ]
+    .map(
+      ([playerKey,player])=>({
+        playerKey,
+        player
+      })
+    )
+    .sort(
+      (a,b)=>
+      a.player.localeCompare(
+        b.player
+      )
+    );
 
     $('loadHistoryBtn').disabled=
-      !state.players.length;
-
+    !state.players.length;
 
     setStatus(
       'apiStatus',
@@ -2290,10 +1398,9 @@ async function loadUniverse(){
       'good'
     );
 
-
     renderSummary();
-
   }
+
   catch(e){
 
     setStatus(
@@ -2301,20 +1408,16 @@ async function loadUniverse(){
       e.message,
       'bad'
     );
-
   }
-
 }
-
 
 function extractSportsbetLines(){
 
   const lines=[];
 
-
   for(
     const book
-    of state.marketResponse?.bookmakers ||
+    of state.marketResponse?.bookmakers||
     []
   ){
 
@@ -2322,12 +1425,11 @@ function extractSportsbetLines(){
       norm(book.key)!=='sportsbet' &&
       norm(book.title)!=='sportsbet'
     )
-      continue;
-
+    continue;
 
     for(
       const market
-      of book.markets ||
+      of book.markets||
       []
     ){
 
@@ -2335,34 +1437,31 @@ function extractSportsbetLines(){
         ![
           'player_disposals',
           'player_disposals_over'
-        ].includes(
+        ]
+        .includes(
           market.key
         )
       )
-        continue;
-
+      continue;
 
       for(
         const o
-        of market.outcomes ||
+        of market.outcomes||
         []
       ){
 
         let player='';
-
         let isOver=false;
-
 
         if(
           norm(o.name)==='over'
         ){
 
           player=
-            o.description ||
-            '';
+          o.description||
+          '';
 
           isOver=true;
-
         }
 
         else if(
@@ -2371,16 +1470,14 @@ function extractSportsbetLines(){
         ){
 
           player=
-            o.description ||
-            o.name ||
-            '';
+          o.description||
+          o.name||
+          '';
 
           isOver=
-            norm(o.name)!==
-            'under';
-
+          norm(o.name)!==
+          'under';
         }
-
 
         if(
           !isOver ||
@@ -2392,48 +1489,29 @@ function extractSportsbetLines(){
             Number(o.price)
           )
         )
-          continue;
-
+        continue;
 
         lines.push({
-
           player,
-
           playerKey:
-            compactName(
-              player
-            ),
-
+          compactName(player),
           line:
-            Number(
-              o.point
-            ),
-
+          Number(o.point),
           odds:
-            Number(
-              o.price
-            ),
-
+          Number(o.price),
           market:
-            market.key,
-
+          market.key,
           lastUpdate:
-            market.last_update ||
-            book.last_update ||
-            null
-
+          market.last_update||
+          book.last_update||
+          null
         });
-
       }
-
     }
-
   }
 
-
   const dedup=
-    new Map();
-
+  new Map();
 
   for(
     const x
@@ -2441,40 +1519,157 @@ function extractSportsbetLines(){
   ){
 
     const k=
-      `${x.playerKey}|${x.line}`;
-
+    `${x.playerKey}|${x.line}`;
 
     const old=
-      dedup.get(k);
-
+    dedup.get(k);
 
     if(
       !old ||
       x.odds>old.odds
-    ){
-
-      dedup.set(
-        k,
-        x
-      );
-
-    }
-
+    )
+    dedup.set(
+      k,
+      x
+    );
   }
 
-
   state.marketLines=
-    [...dedup.values()]
-      .sort(
-        (a,b)=>
-          a.player.localeCompare(
-            b.player
-          ) ||
-          a.line-b.line
-      );
-
+  [
+    ...dedup.values()
+  ]
+  .sort(
+    (a,b)=>
+    a.player.localeCompare(
+      b.player
+    )||
+    a.line-b.line
+  );
 }
 
+function latestDate(rows){
+
+  let d=null;
+
+  for(
+    const r
+    of rows
+  ){
+
+    const x=
+    new Date(r.date);
+
+    if(
+      !d ||
+      x>d
+    )
+    d=x;
+  }
+
+  return d;
+}
+
+function assessFreshness(){
+
+  if(
+    !state.selectedGame ||
+    !state.history.length
+  ){
+
+    state.freshness=null;
+
+    return null;
+  }
+
+  const latest=
+  latestDate(
+    state.history
+  );
+
+  const game=
+  new Date(
+    state.selectedGame.commence_time
+  );
+
+  const ageDays=
+  (game-latest)/
+  86400000;
+
+  const maxDays=
+  Number(
+    $('freshnessDays').value
+  )||
+  10;
+
+  const matched=
+  new Set(
+    state.history.map(
+      r=>
+      r.playerKey
+    )
+  ).size;
+
+  const coverage=
+  state.players.length
+  ? matched/state.players.length
+  : 0;
+
+  const pass=
+  ageDays<=maxDays &&
+  coverage>=.95;
+
+  state.freshness={
+    latest:
+    latest.toISOString(),
+    ageDays,
+    maxDays,
+    coverage,
+    pass
+  };
+
+  $('buildBtn').disabled=
+  !pass;
+
+  if(pass){
+
+    setStatus(
+      'freshnessStatus',
+      `FRESHNESS PASS — latest player data ${ageDays.toFixed(1)} days before the selected match; ${(coverage*100).toFixed(0)}% player coverage.`,
+      'good'
+    );
+  }
+
+  else{
+
+    setStatus(
+      'freshnessStatus',
+      `FRESHNESS FAIL — latest data is ${ageDays.toFixed(1)} days before the selected match (limit ${maxDays}); ${(coverage*100).toFixed(0)}% coverage. Build is blocked.`,
+      'bad'
+    );
+  }
+
+  renderSummary();
+
+  return state.freshness;
+}
+
+async function fetchText(url){
+
+  const r=
+  await fetch(
+    url,
+    {
+      cache:'no-store'
+    }
+  );
+
+  if(!r.ok)
+  throw new Error(
+    `HTTP ${r.status}`
+  );
+
+  return r.text();
+}
 
 async function loadHistory(){
 
@@ -2482,233 +1677,225 @@ async function loadHistory(){
     !state.selectedGame ||
     !state.players.length
   )
-    return;
-
+  return;
 
   const progress=
-    $('historyProgress');
-
+  $('historyProgress');
 
   progress.style.width=
-    '5%';
-
+  '4%';
 
   setStatus(
     'dataStatus',
-    'Checking local history cache…'
+    'Checking cache…'
   );
-
 
   try{
 
-    const playerSig=
-      state.players
-        .map(
-          p=>
-            p.playerKey
-        )
-        .sort()
-        .join('|');
-
-
     const cutoff=
-      new Date(
-        state.selectedGame.commence_time
-      );
+    new Date(
+      state.selectedGame.commence_time
+    );
 
+    const year=
+    cutoff.getFullYear();
+
+    const playerSig=
+    state.players
+    .map(
+      p=>
+      p.playerKey
+    )
+    .sort()
+    .join('|');
+
+    const cacheSig=
+    `${playerSig}|${cutoff.toISOString()}|${year}|v03`;
 
     const cached=
-      await cacheGet(
-        CACHE_KEY
-      );
-
+    await cacheGet(
+      CACHE_KEY
+    );
 
     if(
       cached &&
-      cached.playerSig===playerSig &&
-      cached.cutoff===cutoff.toISOString() &&
-      Array.isArray(cached.rows) &&
+      cached.cacheSig===cacheSig &&
+      Array.isArray(
+        cached.rows
+      ) &&
       cached.rows.length
     ){
 
       state.history=
-        cached.rows;
-
+      cached.rows;
 
       state.historyMeta=
-        cached.meta;
-
+      cached.meta;
 
       progress.style.width=
-        '100%';
-
+      '100%';
 
       setStatus(
         'dataStatus',
-        `Loaded ${state.history.length} historical rows from local cache.`,
+        `Loaded ${state.history.length} merged historical rows from local cache.`,
         'good'
       );
 
-
-      afterHistoryLoaded();
+      assessFreshness();
+      renderSummary();
 
       return;
-
     }
-
 
     setStatus(
       'dataStatus',
-      'Downloading independent AFL history from GitHub… first load may be several MB.'
+      'Downloading baseline AFL history…'
     );
 
+    progress.style.width=
+    '15%';
+
+    const baseText=
+    await fetchText(
+      `${BASE_URL}?v=${Date.now()}`
+    );
 
     progress.style.width=
-      '15%';
+    '38%';
 
-
-    const res=
-      await fetch(
-        HISTORY_URL,
-        {
-          cache:
-            'no-store'
-        }
-      );
-
-
-    if(!res.ok){
-
-      throw new Error(
-        `History download failed: HTTP ${res.status}`
-      );
-
-    }
-
-
-    progress.style.width=
-      '35%';
-
-
-    const text=
-      await res.text();
-
-
-    progress.style.width=
-      '60%';
-
+    const base=
+    parseSource(
+      baseText,
+      state.players,
+      cutoff,
+      'BASE'
+    );
 
     setStatus(
       'dataStatus',
-      `Downloaded ${(text.length/1024/1024).toFixed(1)} MB. Filtering to selected players…`
+      `Baseline loaded (${base.rows.length} matched player-games). Checking current-season patch…`
     );
 
-
-    await new Promise(
-      r=>
-        setTimeout(
-          r,
-          40
-        )
-    );
-
-
-    const parsed=
-      parseHistoryCSV(
-        text,
-        state.players,
-        cutoff
-      );
-
-
-    progress.style.width=
-      '88%';
-
-
-    if(
-      !parsed.rows.length
-    ){
-
-      throw new Error(
-        'History downloaded, but none of the Sportsbet player names matched the AFL dataset.'
-      );
-
-    }
-
-
-    state.history=
-      parsed.rows;
-
-
-    state.historyMeta={
-
-      source:
-        HISTORY_URL,
-
-      downloadedAt:
-        new Date()
-          .toISOString(),
-
-      latest:
-        parsed.latest,
-
-      matchedKeys:
-        parsed.matchedKeys
-
+    let patch={
+      rows:[],
+      matchedKeys:[],
+      latest:null
     };
 
+    let patchError=null;
+
+    progress.style.width=
+    '55%';
+
+    try{
+
+      const patchText=
+      await fetchText(
+        `${PATCH_URL(year)}?v=${Date.now()}`
+      );
+
+      patch=
+      parseSource(
+        patchText,
+        state.players,
+        cutoff,
+        'PATCH'
+      );
+    }
+
+    catch(e){
+
+      patchError=
+      e.message;
+    }
+
+    progress.style.width=
+    '78%';
+
+    state.history=
+    mergeHistory(
+      base.rows,
+      patch.rows
+    );
+
+    state.historyMeta={
+      baseSource:
+      BASE_URL,
+
+      patchSource:
+      PATCH_URL(year),
+
+      downloadedAt:
+      new Date().toISOString(),
+
+      baseLatest:
+      base.latest,
+
+      patchLatest:
+      patch.latest,
+
+      patchRows:
+      patch.rows.length,
+
+      patchError,
+
+      mergedLatest:
+      latestDate(
+        state.history
+      )?.toISOString()||
+      null
+    };
 
     try{
 
       await cacheSet(
         CACHE_KEY,
         {
-
-          playerSig,
-
-          cutoff:
-            cutoff.toISOString(),
-
+          cacheSig,
           rows:
-            state.history,
-
+          state.history,
           meta:
-            state.historyMeta
-
+          state.historyMeta
         }
       );
-
     }
+
     catch(e){
 
       console.warn(
         'Cache save failed',
         e
       );
-
     }
 
-
     progress.style.width=
-      '100%';
+    '100%';
 
+    const patchMsg=
+    patch.rows.length
+
+    ? `patch ${patch.rows.length} rows`
+
+    : `patch unavailable${
+        patchError
+        ? ` (${patchError})`
+        : ''
+      }`;
 
     setStatus(
       'dataStatus',
-      `Independent history ready: ${state.history.length} player-game rows, `+
-      `${parsed.matchedKeys.length}/${state.players.length} players matched.`,
+      `History merged: ${state.history.length} player-game rows; ${patchMsg}.`,
       'good'
     );
 
-
-    afterHistoryLoaded();
-
+    assessFreshness();
+    renderSummary();
   }
+
   catch(e){
 
     progress.style.width=
-      '0%';
-
+    '0%';
 
     setStatus(
       'dataStatus',
@@ -2716,203 +1903,151 @@ async function loadHistory(){
       'bad'
     );
 
+    $('buildBtn').disabled=
+    true;
   }
-
 }
-
-
-function afterHistoryLoaded(){
-
-  $('buildBtn').disabled=
-    !(
-      state.history.length &&
-      state.players.length
-    );
-
-
-  state.projections=[];
-
-  state.frozen=null;
-
-
-  lockPrices();
-
-  renderSummary();
-
-  renderProjections();
-
-}
-
 
 function eventCutoff(){
 
   return state.selectedGame
-    ? new Date(
-        state.selectedGame.commence_time
-      )
-    : new Date();
-
+  ? new Date(
+      state.selectedGame.commence_time
+    )
+  : new Date();
 }
-
 
 function playerGames(key){
 
   const cut=
-    eventCutoff();
-
+  eventCutoff();
 
   return state.history
-    .filter(
-      r=>
-        r.playerKey===key &&
-        new Date(r.date)<cut
-    )
-    .sort(
-      (a,b)=>
-        new Date(b.date)-
-        new Date(a.date)
-    );
-
+  .filter(
+    r=>
+    r.playerKey===key &&
+    new Date(r.date)<cut
+  )
+  .sort(
+    (a,b)=>
+    new Date(b.date)-
+    new Date(a.date)
+  );
 }
-
 
 function buildModel(){
 
+  const fresh=
+  assessFreshness();
+
   if(
-    !state.history.length ||
-    !state.players.length ||
-    !state.selectedGame
+    !fresh?.pass
   ){
 
     setStatus(
       'modelStatus',
-      'Game, market universe and independent history are required.',
+      'Model blocked: independent history is not fresh enough.',
       'bad'
     );
 
     return;
-
   }
 
-
   const cut=
-    eventCutoff();
-
+  eventCutoff();
 
   const halfLife=
-    Number(
-      $('halfLife').value
-    ) ||
-    180;
-
+  Number(
+    $('halfLife').value
+  )||
+  180;
 
   const shrink=
-    Number(
-      $('shrinkGames').value
-    ) ||
-    8;
+  Number(
+    $('shrinkGames').value
+  )||
+  8;
 
-
-  const minGames=
-    Number(
-      $('minGames').value
-    ) ||
-    8;
-
+  const minGames=8;
 
   const target=
-    new Set(
-      state.players.map(
-        p=>
-          p.playerKey
-      )
-    );
-
+  new Set(
+    state.players.map(
+      p=>
+      p.playerKey
+    )
+  );
 
   const population=
-    state.history.filter(
-      r=>
-        target.has(
-          r.playerKey
-        )
-    );
-
+  state.history.filter(
+    r=>
+    target.has(
+      r.playerKey
+    )
+  );
 
   const popRates=
-    population.map(
-      r=>
-        r.disposals /
-        (
-          Number.isFinite(r.tog)
-            ? r.tog/100
-            : 1
-        )
-    );
-
+  population.map(
+    r=>
+    r.disposals/
+    (
+      Number.isFinite(r.tog)
+      ? r.tog/100
+      : 1
+    )
+  );
 
   const popMean=
-    mean(
-      popRates
-    );
-
+  mean(popRates);
 
   const popTOG=
-    mean(
-      population.map(
-        r=>
-          r.tog
-      )
-    );
-
+  mean(
+    population.map(
+      r=>
+      r.tog
+    )
+  );
 
   const playerVars=
-    state.players.map(
-      p=>{
+  state.players.map(
+    p=>{
 
-        const g=
-          playerGames(
-            p.playerKey
-          );
+      const g=
+      playerGames(
+        p.playerKey
+      );
 
+      if(
+        g.length<2
+      )
+      return NaN;
 
-        if(
-          g.length<2
+      const vals=
+      g.map(
+        x=>
+        x.disposals
+      );
+
+      const m=
+      mean(vals);
+
+      return mean(
+        vals.map(
+          v=>
+          (v-m)**2
         )
-          return NaN;
-
-
-        const vals=
-          g.map(
-            x=>
-              x.disposals
-          );
-
-
-        const m=
-          mean(vals);
-
-
-        return mean(
-          vals.map(
-            v=>
-              (v-m)**2
-          )
-        );
-
-      }
-    );
-
+      );
+    }
+  );
 
   const popVar=
-    Math.max(
-      12,
-      mean(playerVars) ||
-      25
-    );
-
+  Math.max(
+    12,
+    mean(playerVars)||
+    25
+  );
 
   const out=[];
-
 
   for(
     const p
@@ -2920,376 +2055,331 @@ function buildModel(){
   ){
 
     const games=
-      playerGames(
-        p.playerKey
-      );
+    playerGames(
+      p.playerKey
+    );
 
-
-    if(!games.length){
+    if(!games){
 
       out.push({
-
         player:
-          p.player,
-
+        p.player,
         playerKey:
-          p.playerKey,
-
+        p.playerKey,
         status:
-          'NO_HISTORY',
-
-        games:
-          0
-
+        'NO_HISTORY',
+        games:0
       });
 
       continue;
-
     }
 
-
     const weights=
-      games.map(
-        g=>
-          Math.pow(
-            .5,
-            Math.max(
-              0,
-              (
-                cut-
-                new Date(g.date)
-              ) /
-              86400000
-            ) /
-            halfLife
-          )
-      );
-
+    games.map(
+      g=>
+      Math.pow(
+        .5,
+        Math.max(
+          0,
+          (
+            cut-
+            new Date(g.date)
+          )/
+          86400000
+        )/
+        halfLife
+      )
+    );
 
     const rates=
-      games.map(
-        g=>
-          g.disposals /
-          (
-            Number.isFinite(g.tog)
-              ? g.tog/100
-              : 1
-          )
-      );
-
+    games.map(
+      g=>
+      g.disposals/
+      (
+        Number.isFinite(g.tog)
+        ? g.tog/100
+        : 1
+      )
+    );
 
     const nEff=
-      effectiveN(
-        weights
-      );
-
+    effectiveN(weights);
 
     const playerRate=
-      weightedMean(
-        rates,
-        weights
-      );
-
+    weightedMean(
+      rates,
+      weights
+    );
 
     const prior=
-      Number.isFinite(popMean)
-        ? popMean
-        : playerRate;
-
+    Number.isFinite(popMean)
+    ? popMean
+    : playerRate;
 
     const rate=
-      (
-        nEff*playerRate +
-        shrink*prior
-      ) /
-      (
-        nEff+
-        shrink
-      );
-
+    (
+      nEff*playerRate+
+      shrink*prior
+    )/
+    (
+      nEff+
+      shrink
+    );
 
     const togGames=
-      games.filter(
-        g=>
-          Number.isFinite(
-            g.tog
-          )
-      );
-
+    games.filter(
+      g=>
+      Number.isFinite(
+        g.tog
+      )
+    );
 
     const togW=
-      togGames.map(
-        g=>
-          Math.pow(
-            .5,
-            Math.max(
-              0,
-              (
-                cut-
-                new Date(g.date)
-              ) /
-              86400000
-            ) /
-            90
-          )
-      );
-
+    togGames.map(
+      g=>
+      Math.pow(
+        .5,
+        Math.max(
+          0,
+          (
+            cut-
+            new Date(g.date)
+          )/
+          86400000
+        )/
+        90
+      )
+    );
 
     const recentTOG=
-      weightedMean(
-        togGames.map(
-          g=>
-            g.tog
-        ),
-        togW
-      );
-
+    weightedMean(
+      togGames.map(
+        g=>
+        g.tog
+      ),
+      togW
+    );
 
     const expectedTOG=
-      Number.isFinite(
-        recentTOG
+    Number.isFinite(
+      recentTOG
+    )
+
+    ? clamp(
+        (
+          nEff*recentTOG+
+          4*
+          (
+            Number.isFinite(popTOG)
+            ? popTOG
+            : recentTOG
+          )
+        )/
+        (
+          nEff+4
+        ),
+        45,
+        96
       )
 
-        ? clamp(
-            (
-              nEff*recentTOG +
-              4*
-              (
-                Number.isFinite(popTOG)
-                  ? popTOG
-                  : recentTOG
-              )
-            ) /
-            (
-              nEff+4
-            ),
-            45,
-            96
-          )
-
-        : 100;
-
+    : 100;
 
     const mu=
-      rate *
-      (
-        expectedTOG /
-        100
-      );
-
+    rate*
+    (
+      expectedTOG/
+      100
+    );
 
     const residuals=
-      games.map(
-        g=>
-          g.disposals -
-          rate *
-          (
-            (
-              Number.isFinite(g.tog)
-                ? g.tog
-                : expectedTOG
-            ) /
-            100
-          )
-      );
-
+    games.map(
+      g=>
+      g.disposals-
+      rate*
+      (
+        (
+          Number.isFinite(g.tog)
+          ? g.tog
+          : expectedTOG
+        )/
+        100
+      )
+    );
 
     const rm=
-      weightedMean(
-        residuals,
-        weights
-      );
-
+    weightedMean(
+      residuals,
+      weights
+    );
 
     const ownVar=
-      weightedVariance(
-        residuals,
-        weights,
-        rm
-      );
-
+    weightedVariance(
+      residuals,
+      weights,
+      rm
+    );
 
     const vw=
-      clamp(
-        nEff /
-        (
-          nEff+10
-        ),
-        0,
-        1
-      );
-
+    clamp(
+      nEff/
+      (
+        nEff+10
+      ),
+      0,
+      1
+    );
 
     const processVar=
-      (
-        Number.isFinite(ownVar)
-          ? ownVar
-          : popVar
-      ) *
-      vw
-      +
-      popVar *
-      (
-        1-vw
-      );
-
+    (
+      Number.isFinite(ownVar)
+      ? ownVar
+      : popVar
+    )*
+    vw+
+    popVar*
+    (
+      1-vw
+    );
 
     const meanUncertainty=
+    Math.max(
+      1,
+      processVar/
       Math.max(
-        1,
-        processVar /
-        Math.max(
-          3,
-          nEff+shrink
-        )
-      );
-
+        3,
+        nEff+shrink
+      )
+    );
 
     const togVar=
-      Number.isFinite(recentTOG) &&
-      togGames.length>=3
+    Number.isFinite(recentTOG) &&
+    togGames.length>=3
 
-        ? (
-            weightedVariance(
-              togGames.map(
-                g=>
-                  g.tog
-              ),
-              togW,
-              recentTOG
-            ) ||
-            0
-          ) *
-          (
-            rate/100
-          )**2
+    ? (
+        weightedVariance(
+          togGames.map(
+            g=>
+            g.tog
+          ),
+          togW,
+          recentTOG
+        )||
+        0
+      )*
+      (
+        rate/100
+      )**2
 
-        : 2;
-
+    : 2;
 
     const sd=
-      Math.sqrt(
-        Math.max(
-          9,
-          processVar+
-          meanUncertainty+
-          togVar
-        )
-      );
-
+    Math.sqrt(
+      Math.max(
+        9,
+        processVar+
+        meanUncertainty+
+        togVar
+      )
+    );
 
     const seasonYear=
-      cut.getFullYear();
-
+    cut.getFullYear();
 
     const l5=
-      mean(
-        games
-          .slice(
-            0,
-            5
-          )
-          .map(
-            g=>
-              g.disposals
-          )
-      );
-
+    mean(
+      games
+      .slice(0,5)
+      .map(
+        g=>
+        g.disposals
+      )
+    );
 
     const l10=
-      mean(
-        games
-          .slice(
-            0,
-            10
-          )
-          .map(
-            g=>
-              g.disposals
-          )
-      );
-
+    mean(
+      games
+      .slice(0,10)
+      .map(
+        g=>
+        g.disposals
+      )
+    );
 
     const season=
-      mean(
-        games
-          .filter(
-            g=>
-              new Date(
-                g.date
-              )
-              .getFullYear()===
-              seasonYear
-          )
-          .map(
-            g=>
-              g.disposals
-          )
-      );
-
+    mean(
+      games
+      .filter(
+        g=>
+        new Date(
+          g.date
+        )
+        .getFullYear()===
+        seasonYear
+      )
+      .map(
+        g=>
+        g.disposals
+      )
+    );
 
     const missingTOG=
-      games.filter(
-        g=>
-          !Number.isFinite(
-            g.tog
-          )
-      ).length;
-
+    games.filter(
+      g=>
+      !Number.isFinite(
+        g.tog
+      )
+    ).length;
 
     let quality=
-      100 -
-      Math.max(
-        0,
-        minGames-games.length
-      ) *
-      7 -
-      Math.min(
-        22,
-        missingTOG*3
-      ) -
-      (
-        nEff<5
-          ? 12
-          : 0
-      );
-
+    100-
+    Math.max(
+      0,
+      minGames-
+      games.length
+    )*
+    7-
+    Math.min(
+      22,
+      missingTOG*3
+    )-
+    (
+      nEff<5
+      ? 12
+      : 0
+    );
 
     quality=
-      clamp(
-        Math.round(
-          quality
-        ),
-        20,
-        100
-      );
-
+    clamp(
+      Math.round(
+        quality
+      ),
+      20,
+      100
+    );
 
     const recentPos=
-      games.find(
-        g=>
-          g.position
-      )?.position ||
-      '';
-
+    games.find(
+      g=>
+      g.position
+    )?.position||
+    '';
 
     out.push({
-
       player:
-        p.player,
+      p.player,
 
       playerKey:
-        p.playerKey,
+      p.playerKey,
 
       team:
-        games[0]?.team ||
-        '',
+      games[0]?.team||
+      '',
 
       position:
-        recentPos,
+      recentPos,
 
       games:
-        games.length,
+      games.length,
 
       nEff,
 
@@ -3312,453 +2402,341 @@ function buildModel(){
       quality,
 
       status:
-        games.length>=minGames
-          ? 'MODELLED'
-          : 'THIN_HISTORY'
-
+      games.length>=minGames
+      ? 'MODELLED'
+      : 'THIN_HISTORY'
     });
-
   }
 
-
   state.projections=
-    out;
+  out;
 
+  state.frozen=null;
 
-  state.frozen=
-    null;
-
-
-  state.valuations=
-    [];
-
+  state.valuations=[];
 
   lockPrices();
 
-
   $('freezeBtn').disabled=
-    !out.some(
-      x=>
-        Number.isFinite(
-          x.mu
-        )
-    );
-
+  !out.some(
+    x=>
+    Number.isFinite(
+      x.mu
+    )
+  );
 
   setStatus(
     'modelStatus',
-    `${out.filter(x=>Number.isFinite(x.mu)).length}/${out.length} players modelled independently. `+
-    `Sportsbet prices still locked.`,
+    `${out.filter(x=>Number.isFinite(x.mu)).length}/${out.length} players modelled independently. Freshness gate passed; Sportsbet prices still locked.`,
     'good'
   );
 
-
   renderProjections();
-
   renderSummary();
-
 }
-
 
 function renderProjections(){
 
   const body=
-    $('projectionBody');
-
+  $('projectionBody');
 
   if(
     !state.projections.length
   ){
 
     body.innerHTML=
-      '<tr>'+
-      '<td colspan="12" class="muted">'+
-      'Load game, universe and history first.'+
-      '</td>'+
-      '</tr>';
+    '<tr><td colspan="12" class="muted">Load game, universe and fresh history first.</td></tr>';
 
     return;
-
   }
 
-
   body.innerHTML=
-    state.projections
-      .map(
-        p=>{
+  state.projections
+  .map(
+    p=>{
 
-          if(
-            !Number.isFinite(
-              p.mu
-            )
-          ){
+      if(
+        !Number.isFinite(
+          p.mu
+        )
+      ){
 
-            return `
-              <tr>
-                <td>${esc(p.player)}</td>
-                <td colspan="10">
-                  No matching historical data
-                </td>
-                <td>
-                  <span class="pill bad">
-                    NO DATA
-                  </span>
-                </td>
-              </tr>
-            `;
+        return `
+        <tr>
+          <td>${esc(p.player)}</td>
+          <td colspan="10">No matching historical data</td>
+          <td><span class="pill bad">NO DATA</span></td>
+        </tr>`;
+      }
 
-          }
+      const q=
+      p.quality>=80
+      ? 'good'
+      : p.quality>=60
+      ? 'warn'
+      : 'bad';
 
-
-          const q=
-            p.quality>=80
-              ? 'good'
-              : p.quality>=60
-                ? 'warn'
-                : 'bad';
-
-
-          return `
-            <tr>
-
-              <td>
-                <b>${esc(p.player)}</b>
-              </td>
-
-              <td>
-                ${esc(p.team)}
-              </td>
-
-              <td>
-                ${esc(p.position)}
-              </td>
-
-              <td>
-                ${p.games}
-              </td>
-
-              <td>
-                ${fmt(p.l5)}
-              </td>
-
-              <td>
-                ${fmt(p.l10)}
-              </td>
-
-              <td>
-                ${fmt(p.season)}
-              </td>
-
-              <td>
-                ${fmt(p.recentTOG)}%
-              </td>
-
-              <td>
-
-                <input
-                  data-tog="${esc(p.playerKey)}"
-                  type="number"
-                  min="40"
-                  max="100"
-                  step="1"
-                  value="${fmt(p.expectedTOG,0)}"
-                  style="width:70px;padding:5px"
-                >
-
-              </td>
-
-              <td>
-                <b>${fmt(p.mu)}</b>
-              </td>
-
-              <td>
-                ${fmt(p.sd)}
-              </td>
-
-              <td>
-                <span class="pill ${q}">
-                  ${p.quality}/100
-                </span>
-              </td>
-
-            </tr>
-          `;
-
-        }
-      )
-      .join('');
-
+      return `
+      <tr>
+        <td><b>${esc(p.player)}</b></td>
+        <td>${esc(p.team)}</td>
+        <td>${esc(p.position)}</td>
+        <td>${p.games}</td>
+        <td>${fmt(p.l5)}</td>
+        <td>${fmt(p.l10)}</td>
+        <td>${fmt(p.season)}</td>
+        <td>${fmt(p.recentTOG)}%</td>
+        <td><input data-tog="${esc(p.playerKey)}" type="number" min="40" max="100" step="1" value="${fmt(p.expectedTOG,0)}" style="width:70px;padding:5px"></td>
+        <td><b>${fmt(p.mu)}</b></td>
+        <td>${fmt(p.sd)}</td>
+        <td><span class="pill ${q}">${p.quality}/100</span></td>
+      </tr>`;
+    }
+  )
+  .join('');
 
   body
-    .querySelectorAll(
-      '[data-tog]'
+  .querySelectorAll(
+    '[data-tog]'
+  )
+  .forEach(
+    inp=>
+    inp.addEventListener(
+      'change',
+      e=>{
+
+        if(
+          state.frozen
+        ){
+
+          renderProjections();
+
+          return;
+        }
+
+        const p=
+        state.projections.find(
+          x=>
+          x.playerKey===
+          e.target.dataset.tog
+        );
+
+        if(!p)
+        return;
+
+        const n=
+        clamp(
+          Number(
+            e.target.value
+          )||
+          p.expectedTOG,
+          40,
+          100
+        );
+
+        const ratio=
+        n/
+        p.expectedTOG;
+
+        p.expectedTOG=
+        n;
+
+        p.mu*=
+        ratio;
+
+        renderProjections();
+
+        setStatus(
+          'modelStatus',
+          'Expected TOG override applied. Freeze only after verified role adjustments are complete.',
+          'warn'
+        );
+      }
     )
-    .forEach(
-      inp=>
-        inp.addEventListener(
-          'change',
-          e=>{
-
-            if(
-              state.frozen
-            ){
-
-              renderProjections();
-
-              return;
-
-            }
-
-
-            const p=
-              state.projections.find(
-                x=>
-                  x.playerKey===
-                  e.target.dataset.tog
-              );
-
-
-            if(!p)
-              return;
-
-
-            const n=
-              clamp(
-                Number(
-                  e.target.value
-                ) ||
-                p.expectedTOG,
-                40,
-                100
-              );
-
-
-            const ratio=
-              n /
-              p.expectedTOG;
-
-
-            p.expectedTOG=
-              n;
-
-
-            p.mu*=
-              ratio;
-
-
-            renderProjections();
-
-
-            setStatus(
-              'modelStatus',
-              'Expected TOG override applied. Freeze only after verified role adjustments are complete.',
-              'warn'
-            );
-
-          }
-        )
-    );
-
+  );
 }
 
-
 function freezeModel(){
+
+  const fresh=
+  assessFreshness();
+
+  if(
+    !fresh?.pass
+  ){
+
+    setStatus(
+      'modelStatus',
+      'Freeze blocked: history freshness failed.',
+      'bad'
+    );
+
+    return;
+  }
 
   if(
     !state.projections.length
   )
-    return;
-
+  return;
 
   state.frozen={
 
     frozenAt:
-      new Date()
-        .toISOString(),
+    new Date().toISOString(),
 
     game:
-      state.selectedGame,
+    state.selectedGame,
 
     historyMeta:
-      state.historyMeta,
+    state.historyMeta,
+
+    freshness:
+    state.freshness,
 
     model:{
-
       name:
-        'AFL Disposal Player Intelligence Trial 0.2',
+      'AFL Disposal Player Intelligence Trial 0.3',
 
       halfLife:
-        Number(
-          $('halfLife').value
-        ),
+      Number(
+        $('halfLife').value
+      ),
 
       shrinkGames:
-        Number(
-          $('shrinkGames').value
-        ),
+      Number(
+        $('shrinkGames').value
+      ),
 
-      minGames:
-        Number(
-          $('minGames').value
-        ),
+      freshnessDays:
+      Number(
+        $('freshnessDays').value
+      ),
 
       distribution:
-        'Normal predictive baseline with recency weighting, TOG normalisation and shrunk variance'
-
+      'Normal predictive baseline with recency weighting, TOG normalisation and shrunk variance'
     },
 
     projections:
-      JSON.parse(
-        JSON.stringify(
-          state.projections
-        )
+    JSON.parse(
+      JSON.stringify(
+        state.projections
       )
-
+    )
   };
 
-
   $('freezeBtn').disabled=
-    true;
-
+  true;
 
   unlockPrices();
 
   renderSummary();
 
-
   setStatus(
     'modelStatus',
-    `Price-blind projections frozen at ${
-      new Date(
-        state.frozen.frozenAt
-      )
-      .toLocaleString()
-    }. Sportsbet comparison unlocked.`,
+    `Price-blind projections frozen at ${new Date(state.frozen.frozenAt).toLocaleString()}. Sportsbet comparison unlocked.`,
     'good'
   );
 
-
   buildAudit();
-
 }
-
 
 function lockPrices(){
 
   $('priceLock')
-    .classList
-    .remove(
-      'hidden'
-    );
-
+  .classList
+  .remove(
+    'hidden'
+  );
 
   $('valuationPanel')
-    .classList
-    .add(
-      'hidden'
-    );
-
+  .classList
+  .add(
+    'hidden'
+  );
 
   $('copyAuditBtn').disabled=
-    true;
-
+  true;
 
   $('downloadAuditBtn').disabled=
-    true;
-
+  true;
 
   $('kpiFrozen').textContent=
-    'NO';
-
+  'NO';
 
   $('kpiFrozen').className=
-    '';
-
+  '';
 }
-
 
 function unlockPrices(){
 
   $('priceLock')
-    .classList
-    .add(
-      'hidden'
-    );
-
+  .classList
+  .add(
+    'hidden'
+  );
 
   $('valuationPanel')
-    .classList
-    .remove(
-      'hidden'
-    );
-
+  .classList
+  .remove(
+    'hidden'
+  );
 
   $('copyAuditBtn').disabled=
-    false;
-
+  false;
 
   $('downloadAuditBtn').disabled=
-    false;
-
+  false;
 
   $('kpiFrozen').textContent=
-    'YES';
-
+  'YES';
 
   $('kpiFrozen').className=
-    'good';
-
+  'good';
 }
-
 
 function rankLines(){
 
   if(
     !state.frozen
   )
-    return;
-
+  return;
 
   const minEdge=
-    (
-      Number(
-        $('minEdge').value
-      ) ||
-      0
-    ) /
-    100;
-
+  (
+    Number(
+      $('minEdge').value
+    )||
+    0
+  )/
+  100;
 
   const minProb=
-    (
-      Number(
-        $('minProb').value
-      ) ||
-      0
-    ) /
-    100;
-
+  (
+    Number(
+      $('minProb').value
+    )||
+    0
+  )/
+  100;
 
   const maxOdds=
-    Number(
-      $('maxOdds').value
-    ) ||
-    99;
-
+  Number(
+    $('maxOdds').value
+  )||
+  99;
 
   const pm=
-    new Map(
-      state.frozen.projections.map(
-        p=>[
-          p.playerKey,
-          p
-        ]
-      )
-    );
-
+  new Map(
+    state.frozen.projections
+    .map(
+      p=>[
+        p.playerKey,
+        p
+      ]
+    )
+  );
 
   const vals=[];
-
 
   for(
     const line
@@ -3766,10 +2744,9 @@ function rankLines(){
   ){
 
     const p=
-      pm.get(
-        line.playerKey
-      );
-
+    pm.get(
+      line.playerKey
+    );
 
     if(
       !p ||
@@ -3780,243 +2757,157 @@ function rankLines(){
         p.sd
       )
     )
-      continue;
-
+    continue;
 
     const modelP=
-      overProbability(
-        line.line,
-        p.mu,
-        p.sd
-      );
-
+    overProbability(
+      line.line,
+      p.mu,
+      p.sd
+    );
 
     const breakEven=
-      1 /
-      line.odds;
-
+    1/
+    line.odds;
 
     const edge=
-      modelP-
-      breakEven;
-
+    modelP-
+    breakEven;
 
     const fair=
-      1 /
-      modelP;
-
+    1/
+    modelP;
 
     const ev=
-      modelP *
-      line.odds -
-      1;
-
+    modelP*
+    line.odds-
+    1;
 
     const uncertaintyPenalty=
-      (
-        100-
-        p.quality
-      ) /
-      100 *
-      .06;
-
+    (
+      100-
+      p.quality
+    )/
+    100*
+    .06;
 
     const conservativeP=
-      clamp(
-        modelP-
-        uncertaintyPenalty,
-        .001,
-        .999
-      );
-
+    clamp(
+      modelP-
+      uncertaintyPenalty,
+      .001,
+      .999
+    );
 
     const qualified=
-      edge>=minEdge &&
-      modelP>=minProb &&
-      line.odds<=maxOdds &&
-      conservativeP>breakEven;
-
+    edge>=minEdge &&
+    modelP>=minProb &&
+    line.odds<=maxOdds &&
+    conservativeP>breakEven;
 
     const score=
-      edge*100 +
-      ev*35 +
-      (
-        p.quality-70
-      ) *
-      .04 -
-      Math.max(
-        0,
-        line.odds-2
-      ) *
-      .35;
-
+    edge*100+
+    ev*35+
+    (
+      p.quality-
+      70
+    )*
+    .04-
+    Math.max(
+      0,
+      line.odds-
+      2
+    )*
+    .35;
 
     vals.push({
-
       ...line,
-
       modelP,
-
       breakEven,
-
       edge,
-
       fair,
-
       ev,
-
       conservativeP,
-
       quality:
-        p.quality,
-
+      p.quality,
       mu:
-        p.mu,
-
+      p.mu,
       sd:
-        p.sd,
-
+      p.sd,
       qualified,
-
       score
-
     });
-
   }
-
 
   vals.sort(
     (a,b)=>
-      b.qualified-a.qualified ||
-      b.score-a.score ||
-      b.edge-a.edge
+    b.qualified-
+    a.qualified||
+    b.score-
+    a.score||
+    b.edge-
+    a.edge
   );
 
-
   state.valuations=
-    vals;
-
+  vals;
 
   const body=
-    $('valuationBody');
-
+  $('valuationBody');
 
   body.innerHTML=
-    vals.length
+  vals.length
 
-      ? vals.map(
-          (
-            v,
-            i
-          )=>{
+  ? vals.map(
+      (v,i)=>{
 
-            const q=
-              v.qualified
-                ? 'good'
-                : v.edge>0
-                  ? 'warn'
-                  : 'bad';
+        const q=
+        v.qualified
+        ? 'good'
+        : v.edge>0
+        ? 'warn'
+        : 'bad';
 
+        const status=
+        v.qualified
+        ? 'QUALIFY'
+        : v.edge>0
+        ? 'WATCH'
+        : 'REJECT';
 
-            const status=
-              v.qualified
-                ? 'QUALIFY'
-                : v.edge>0
-                  ? 'WATCH'
-                  : 'REJECT';
+        return `
+        <tr>
+          <td>${i+1}</td>
+          <td>
+            <b>${esc(v.player)}</b>
+            <div class="small muted">
+              μ ${fmt(v.mu)} / SD ${fmt(v.sd)}
+            </div>
+          </td>
+          <td>${v.line}</td>
+          <td>$${fmt(v.odds,2)}</td>
+          <td>${pct(v.breakEven)}</td>
+          <td><b>${pct(v.modelP)}</b></td>
+          <td>${pct(v.conservativeP)}</td>
+          <td>$${fmt(v.fair,2)}</td>
+          <td class="${v.edge>=0?'good':'bad'}">${v.edge>=0?'+':''}${fmt(v.edge*100)} pp</td>
+          <td class="${v.ev>=0?'good':'bad'}">${v.ev>=0?'+':''}${pct(v.ev)}</td>
+          <td><span class="pill ${q}">${status}</span></td>
+        </tr>`;
+      }
+    )
+    .join('')
 
-
-            return `
-              <tr>
-
-                <td>
-                  ${i+1}
-                </td>
-
-                <td>
-
-                  <b>
-                    ${esc(v.player)}
-                  </b>
-
-                  <div class="small muted">
-                    μ ${fmt(v.mu)}
-                    /
-                    SD ${fmt(v.sd)}
-                  </div>
-
-                </td>
-
-                <td>
-                  ${v.line}
-                </td>
-
-                <td>
-                  $${fmt(v.odds,2)}
-                </td>
-
-                <td>
-                  ${pct(v.breakEven)}
-                </td>
-
-                <td>
-                  <b>${pct(v.modelP)}</b>
-                </td>
-
-                <td>
-                  ${pct(v.conservativeP)}
-                </td>
-
-                <td>
-                  $${fmt(v.fair,2)}
-                </td>
-
-                <td class="${v.edge>=0?'good':'bad'}">
-
-                  ${v.edge>=0?'+':''}
-
-                  ${fmt(v.edge*100)}
-                  pp
-
-                </td>
-
-                <td class="${v.ev>=0?'good':'bad'}">
-
-                  ${v.ev>=0?'+':''}
-
-                  ${pct(v.ev)}
-
-                </td>
-
-                <td>
-                  <span class="pill ${q}">
-                    ${status}
-                  </span>
-                </td>
-
-              </tr>
-            `;
-
-          }
-        )
-        .join('')
-
-      : '<tr><td colspan="11">No matched lines.</td></tr>';
-
+  : '<tr><td colspan="11">No matched lines.</td></tr>';
 
   setStatus(
     'rankStatus',
-    `${vals.length} Sportsbet lines priced; `+
-    `${vals.filter(x=>x.qualified).length} qualify. `+
-    `No multi is forced.`,
+    `${vals.length} Sportsbet lines priced; ${vals.filter(x=>x.qualified).length} qualify. No multi is forced.`,
     'good'
   );
 
-
   buildAudit();
-
 }
-
 
 function buildAudit(){
 
@@ -4025,474 +2916,417 @@ function buildAudit(){
   ){
 
     $('auditText').value=
-      '';
+    '';
 
     return;
-
   }
-
 
   const audit={
 
     app:
-      'BET INTELLIGENCE AFL — Player Intelligence Trial 0.2',
+    'BET INTELLIGENCE AFL — Player Intelligence Trial 0.3',
 
     frozenAt:
-      state.frozen.frozenAt,
+    state.frozen.frozenAt,
 
     game:
-      state.frozen.game,
+    state.frozen.game,
 
     historyMeta:
-      state.frozen.historyMeta,
+    state.frozen.historyMeta,
+
+    freshness:
+    state.frozen.freshness,
 
     model:
-      state.frozen.model,
+    state.frozen.model,
 
     historyRows:
-      state.history.length,
+    state.history.length,
 
     marketPlayerCount:
-      state.players.length,
+    state.players.length,
 
     projections:
-      state.frozen.projections,
+    state.frozen.projections,
 
     valuations:
-      state.valuations.map(
-        v=>({
-
-          player:
-            v.player,
-
-          line:
-            v.line,
-
-          sportsbetOdds:
-            v.odds,
-
-          modelProbability:
-            v.modelP,
-
-          conservativeProbability:
-            v.conservativeP,
-
-          breakEvenProbability:
-            v.breakEven,
-
-          fairOdds:
-            v.fair,
-
-          edgePercentagePoints:
-            v.edge*100,
-
-          expectedValue:
-            v.ev,
-
-          quality:
-            v.quality,
-
-          qualified:
-            v.qualified,
-
-          lastUpdate:
-            v.lastUpdate
-
-        })
-      )
-
+    state.valuations.map(
+      v=>({
+        player:
+        v.player,
+        line:
+        v.line,
+        sportsbetOdds:
+        v.odds,
+        modelProbability:
+        v.modelP,
+        conservativeProbability:
+        v.conservativeP,
+        breakEvenProbability:
+        v.breakEven,
+        fairOdds:
+        v.fair,
+        edgePercentagePoints:
+        v.edge*100,
+        expectedValue:
+        v.ev,
+        quality:
+        v.quality,
+        qualified:
+        v.qualified,
+        lastUpdate:
+        v.lastUpdate
+      })
+    )
   };
 
-
   $('auditText').value=
-    JSON.stringify(
-      audit,
-      null,
-      2
-    );
-
+  JSON.stringify(
+    audit,
+    null,
+    2
+  );
 }
 
+function dateShort(v){
+
+  return v
+  ? new Date(v)
+    .toLocaleDateString(
+      'en-AU',
+      {
+        day:'2-digit',
+        month:'short'
+      }
+    )
+  : '—';
+}
 
 function renderSummary(){
 
   $('kpiUniverse').textContent=
-    state.players.length;
-
+  state.players.length;
 
   const matched=
-    new Set(
-      state.history.map(
-        r=>
-          r.playerKey
-      )
-    ).size;
-
+  new Set(
+    state.history.map(
+      r=>
+      r.playerKey
+    )
+  ).size;
 
   $('kpiMatched').textContent=
-    matched;
-
+  matched;
 
   $('kpiHistory').textContent=
-    state.history.length;
+  state.history.length;
 
+  $('kpiBaseLatest').textContent=
+  dateShort(
+    state.historyMeta?.baseLatest
+  );
 
-  $('kpiCoverage').textContent=
-    state.players.length
+  $('kpiPatchLatest').textContent=
+  dateShort(
+    state.historyMeta?.patchLatest
+  );
 
-      ? Math.round(
-          100 *
-          matched /
-          state.players.length
-        )+
-        '%'
+  if(
+    state.freshness
+  ){
 
-      : '0%';
+    $('kpiFreshness').textContent=
+    state.freshness.pass
+    ? 'PASS'
+    : 'FAIL';
 
+    $('kpiFreshness').className=
+    state.freshness.pass
+    ? 'good'
+    : 'bad';
+  }
 
-  $('kpiLatest').textContent=
-    state.historyMeta?.latest
+  else{
 
-      ? new Date(
-          state.historyMeta.latest
-        )
-        .toLocaleDateString(
-          'en-AU',
-          {
-            day:
-              '2-digit',
+    $('kpiFreshness').textContent=
+    '—';
 
-            month:
-              'short'
-          }
-        )
-
-      : '—';
-
+    $('kpiFreshness').className=
+    '';
+  }
 
   if(
     !state.frozen
   ){
 
     $('kpiFrozen').textContent=
-      'NO';
+    'NO';
 
     $('kpiFrozen').className=
-      '';
-
+    '';
   }
-
 }
-
 
 function clearTrial(){
 
   state.games=[];
-
   state.selectedGame=null;
-
   state.marketResponse=null;
-
   state.players=[];
-
   state.marketLines=[];
-
   state.history=[];
-
   state.projections=[];
-
   state.frozen=null;
-
   state.valuations=[];
-
   state.historyMeta=null;
-
+  state.freshness=null;
 
   $('gameSelect').innerHTML=
-    '<option value="">Load games first</option>';
-
+  '<option value="">Load games first</option>';
 
   $('loadUniverseBtn').disabled=
-    true;
-
+  true;
 
   $('loadHistoryBtn').disabled=
-    true;
-
+  true;
 
   $('buildBtn').disabled=
-    true;
-
+  true;
 
   $('freezeBtn').disabled=
-    true;
-
+  true;
 
   $('historyProgress').style.width=
-    '0%';
-
+  '0%';
 
   $('projectionBody').innerHTML=
-    '<tr>'+
-    '<td colspan="12" class="muted">'+
-    'Load game, universe and history first.'+
-    '</td>'+
-    '</tr>';
-
+  '<tr><td colspan="12" class="muted">Load game, universe and fresh history first.</td></tr>';
 
   $('valuationBody').innerHTML=
-    '<tr>'+
-    '<td colspan="11" class="muted">'+
-    'Freeze projections to unlock.'+
-    '</td>'+
-    '</tr>';
-
+  '<tr><td colspan="11" class="muted">Freeze projections to unlock.</td></tr>';
 
   $('auditText').value=
-    '';
-
+  '';
 
   setStatus(
     'apiStatus',
     ''
   );
 
-
   setStatus(
     'dataStatus',
     ''
   );
 
+  setStatus(
+    'freshnessStatus',
+    ''
+  );
 
   setStatus(
     'modelStatus',
     ''
   );
 
-
   lockPrices();
-
   renderSummary();
-
 }
 
-
 $('saveKeyBtn')
-  .addEventListener(
-    'click',
-    ()=>{
+.addEventListener(
+  'click',
+  ()=>{
 
-      localStorage.setItem(
-        'bi_odds_api_key',
-        $('apiKey')
-          .value
-          .trim()
-      );
+    localStorage.setItem(
+      'bi_odds_api_key',
+      $('apiKey')
+      .value
+      .trim()
+    );
 
-
-      setStatus(
-        'apiStatus',
-        'API key saved on this device.',
-        'good'
-      );
-
-    }
-  );
-
+    setStatus(
+      'apiStatus',
+      'API key saved on this device.',
+      'good'
+    );
+  }
+);
 
 $('loadGamesBtn')
-  .addEventListener(
-    'click',
-    loadGames
-  );
-
+.addEventListener(
+  'click',
+  loadGames
+);
 
 $('gameSelect')
-  .addEventListener(
-    'change',
-    gameChanged
-  );
-
+.addEventListener(
+  'change',
+  gameChanged
+);
 
 $('loadUniverseBtn')
-  .addEventListener(
-    'click',
-    loadUniverse
-  );
-
+.addEventListener(
+  'click',
+  loadUniverse
+);
 
 $('loadHistoryBtn')
-  .addEventListener(
-    'click',
-    loadHistory
-  );
-
+.addEventListener(
+  'click',
+  loadHistory
+);
 
 $('buildBtn')
-  .addEventListener(
-    'click',
-    buildModel
-  );
-
+.addEventListener(
+  'click',
+  buildModel
+);
 
 $('freezeBtn')
-  .addEventListener(
-    'click',
-    freezeModel
-  );
-
+.addEventListener(
+  'click',
+  freezeModel
+);
 
 $('rankBtn')
-  .addEventListener(
-    'click',
-    rankLines
-  );
-
+.addEventListener(
+  'click',
+  rankLines
+);
 
 $('clearBtn')
-  .addEventListener(
-    'click',
-    clearTrial
-  );
+.addEventListener(
+  'click',
+  clearTrial
+);
 
+$('freshnessDays')
+.addEventListener(
+  'change',
+  ()=>{
+
+    if(
+      state.history.length
+    )
+    assessFreshness();
+  }
+);
 
 $('clearCacheBtn')
-  .addEventListener(
-    'click',
-    async()=>{
+.addEventListener(
+  'click',
+  async()=>{
 
-      try{
+    try{
 
-        await cacheClear();
+      await cacheClear();
 
-
-        setStatus(
-          'dataStatus',
-          'History cache cleared.',
-          'good'
-        );
-
-      }
-      catch(e){
-
-        setStatus(
-          'dataStatus',
-          'Could not clear cache: '+
-          e.message,
-          'bad'
-        );
-
-      }
-
+      setStatus(
+        'dataStatus',
+        'History cache cleared.',
+        'good'
+      );
     }
-  );
 
+    catch(e){
+
+      setStatus(
+        'dataStatus',
+        'Could not clear cache: '+
+        e.message,
+        'bad'
+      );
+    }
+  }
+);
 
 $('copyAuditBtn')
-  .addEventListener(
-    'click',
-    async()=>{
+.addEventListener(
+  'click',
+  async()=>{
 
-      buildAudit();
+    buildAudit();
 
+    try{
 
-      try{
-
-        await navigator.clipboard.writeText(
-          $('auditText').value
-        );
-
-
-        setStatus(
-          'rankStatus',
-          'Audit pack copied.',
-          'good'
-        );
-
-      }
-      catch{
-
-        $('auditText').select();
-
-        document.execCommand(
-          'copy'
-        );
-
-      }
-
-    }
-  );
-
-
-$('downloadAuditBtn')
-  .addEventListener(
-    'click',
-    ()=>{
-
-      buildAudit();
-
-
-      const blob=
-        new Blob(
-          [
-            $('auditText').value
-          ],
-          {
-            type:
-              'application/json'
-          }
-        );
-
-
-      const a=
-        document.createElement(
-          'a'
-        );
-
-
-      a.href=
-        URL.createObjectURL(
-          blob
-        );
-
-
-      a.download=
-        `bi-afl-trial-${state.selectedGame?.id||'audit'}.json`;
-
-
-      a.click();
-
-
-      setTimeout(
-        ()=>
-          URL.revokeObjectURL(
-            a.href
-          ),
-        1000
+      await navigator.clipboard.writeText(
+        $('auditText').value
       );
 
+      setStatus(
+        'rankStatus',
+        'Audit pack copied.',
+        'good'
+      );
     }
-  );
 
+    catch{
+
+      $('auditText').select();
+
+      document.execCommand(
+        'copy'
+      );
+    }
+  }
+);
+
+$('downloadAuditBtn')
+.addEventListener(
+  'click',
+  ()=>{
+
+    buildAudit();
+
+    const blob=
+    new Blob(
+      [
+        $('auditText').value
+      ],
+      {
+        type:'application/json'
+      }
+    );
+
+    const a=
+    document.createElement(
+      'a'
+    );
+
+    a.href=
+    URL.createObjectURL(
+      blob
+    );
+
+    a.download=
+    `bi-afl-trial-${state.selectedGame?.id||'audit'}.json`;
+
+    a.click();
+
+    setTimeout(
+      ()=>
+      URL.revokeObjectURL(
+        a.href
+      ),
+      1000
+    );
+  }
+);
 
 const saved=
-  localStorage.getItem(
-    'bi_odds_api_key'
-  );
-
+localStorage.getItem(
+  'bi_odds_api_key'
+);
 
 if(saved)
-  $('apiKey').value=
-    saved;
-
+$('apiKey').value=
+saved;
 
 renderSummary();
-
 lockPrices();
-
 
 })();
 </script>
-
 </body>
 </html>
