@@ -1,133 +1,126 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>BET INTELLIGENCE AFL — Player Intelligence Trial</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BET INTELLIGENCE AFL — Player Intelligence Trial 0.2</title>
 
 <style>
 :root{
-  --bg:#0b1020;
-  --panel:#121a2d;
-  --panel2:#172238;
+  --bg:#08101d;
+  --panel:#111a2c;
+  --panel2:#0d1626;
+  --line:#263754;
   --text:#eef3ff;
   --muted:#9fb0cc;
-  --line:#263754;
+  --accent:#72a7ff;
   --good:#55d38a;
   --warn:#ffc857;
-  --bad:#ff6b6b;
-  --accent:#72a7ff;
-  --chip:#1f2d49;
+  --bad:#ff6b6b
 }
 
 *{
-  box-sizing:border-box;
+  box-sizing:border-box
 }
 
 body{
   margin:0;
   font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:linear-gradient(180deg,#07101d,#0b1020 28%);
-  color:var(--text);
+  background:linear-gradient(180deg,#07101d,#0b1020 30%);
+  color:var(--text)
 }
 
 .wrap{
   max-width:1180px;
-  margin:0 auto;
-  padding:18px;
+  margin:auto;
+  padding:16px
 }
 
 .hero{
-  padding:18px 0 10px;
+  padding:14px 0
 }
 
 .hero h1{
-  font-size:24px;
-  margin:0 0 6px;
+  font-size:23px;
+  margin:0 0 6px
 }
 
 .hero p{
   margin:0;
   color:var(--muted);
-  line-height:1.45;
+  line-height:1.45
 }
 
 .grid{
   display:grid;
   grid-template-columns:repeat(12,1fr);
-  gap:12px;
+  gap:12px
 }
 
 .card{
   grid-column:span 12;
-  background:rgba(18,26,45,.96);
+  background:rgba(17,26,44,.97);
   border:1px solid var(--line);
   border-radius:16px;
-  padding:15px;
-  box-shadow:0 14px 40px rgba(0,0,0,.16);
+  padding:14px
+}
+
+.half{
+  grid-column:span 12
 }
 
 @media(min-width:860px){
   .half{
-    grid-column:span 6;
+    grid-column:span 6
   }
 
   .third{
-    grid-column:span 4;
-  }
-
-  .twoThird{
-    grid-column:span 8;
+    grid-column:span 4
   }
 }
 
 h2{
   font-size:16px;
-  margin:0 0 10px;
-}
-
-h3{
-  font-size:14px;
-  margin:14px 0 8px;
+  margin:0 0 10px
 }
 
 .muted,
 .help{
   color:var(--muted);
-  font-size:13px;
-  line-height:1.45;
+  font-size:12px;
+  line-height:1.45
 }
 
 .status{
-  font-size:13px;
-  margin-top:9px;
-  min-height:18px;
+  font-size:12px;
+  margin-top:8px;
+  min-height:18px
 }
 
 .good{
-  color:var(--good);
+  color:var(--good)
 }
 
 .warn{
-  color:var(--warn);
+  color:var(--warn)
 }
 
 .bad{
-  color:var(--bad);
+  color:var(--bad)
 }
 
 label{
   display:block;
   font-size:12px;
   color:var(--muted);
-  margin:9px 0 5px;
+  margin:8px 0 5px
 }
 
 input,
 select,
-textarea,
-button{
-  font:inherit;
+button,
+textarea{
+  font:inherit
 }
 
 input,
@@ -138,113 +131,102 @@ textarea{
   color:var(--text);
   border:1px solid var(--line);
   border-radius:10px;
-  padding:10px 11px;
-  outline:none;
-}
-
-textarea{
-  min-height:135px;
-  resize:vertical;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--accent);
+  padding:10px;
+  outline:none
 }
 
 .row{
   display:flex;
-  gap:9px;
+  gap:8px;
   align-items:center;
-  flex-wrap:wrap;
+  flex-wrap:wrap
 }
 
 .row>*{
-  flex:1;
+  flex:1
 }
 
 .row .auto{
-  flex:0 0 auto;
+  flex:0 0 auto
 }
 
 .btn{
   border:0;
   border-radius:10px;
-  padding:10px 13px;
+  padding:10px 12px;
   font-weight:700;
   cursor:pointer;
   background:var(--accent);
-  color:#07101d;
+  color:#07101d
 }
 
 .btn.secondary{
   background:#253653;
   color:var(--text);
-  border:1px solid #354b70;
+  border:1px solid #354b70
 }
 
 .btn.goodbtn{
-  background:var(--good);
+  background:var(--good)
 }
 
 .btn.warnbtn{
-  background:var(--warn);
+  background:var(--warn)
 }
 
 .btn:disabled{
   opacity:.42;
-  cursor:not-allowed;
+  cursor:not-allowed
 }
 
 .kpis{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:8px;
+  gap:8px
 }
 
 @media(min-width:700px){
   .kpis{
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(6,1fr)
   }
 }
 
 .kpi{
-  background:#0d1526;
+  background:var(--panel2);
   border:1px solid var(--line);
   border-radius:12px;
-  padding:10px;
+  padding:9px
 }
 
 .kpi b{
   display:block;
-  font-size:18px;
+  font-size:17px
 }
 
 .kpi span{
-  font-size:11px;
-  color:var(--muted);
+  font-size:10px;
+  color:var(--muted)
 }
 
 .tableWrap{
   overflow:auto;
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:12px
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:12px;
-  min-width:860px;
+  font-size:11px;
+  min-width:980px
 }
 
 th,
 td{
-  padding:8px 9px;
+  padding:8px;
   border-bottom:1px solid #22314c;
   text-align:left;
-  white-space:nowrap;
+  white-space:nowrap
 }
 
 th{
@@ -252,74 +234,66 @@ th{
   top:0;
   background:#15213a;
   color:#bdd0ee;
-  z-index:1;
-}
-
-tr:last-child td{
-  border-bottom:0;
+  z-index:1
 }
 
 .pill{
   display:inline-block;
   padding:3px 7px;
   border-radius:999px;
-  background:var(--chip);
-  font-size:11px;
+  background:#1f2d49;
+  font-size:10px
 }
 
 .pill.good{
-  background:rgba(85,211,138,.12);
+  background:rgba(85,211,138,.12)
 }
 
 .pill.warn{
-  background:rgba(255,200,87,.12);
+  background:rgba(255,200,87,.12)
 }
 
 .pill.bad{
-  background:rgba(255,107,107,.12);
+  background:rgba(255,107,107,.12)
 }
 
-.lock{
-  border:1px dashed #4d5f7e;
-  background:#0e1728;
-  border-radius:12px;
-  padding:12px;
-  margin-top:10px;
-}
-
-.mono{
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-}
-
-.hidden{
-  display:none!important;
-}
-
-.small{
-  font-size:11px;
-}
-
-.right{
-  text-align:right;
-}
-
-.sep{
-  height:1px;
-  background:var(--line);
-  margin:12px 0;
-}
-
+.lock,
 .notice{
   padding:10px 12px;
   border-radius:10px;
   background:#0d1628;
   border:1px solid var(--line);
   font-size:12px;
-  line-height:1.45;
+  line-height:1.45
 }
 
-.notice strong{
-  color:#fff;
+.hidden{
+  display:none!important
+}
+
+.small{
+  font-size:10px
+}
+
+.progress{
+  height:8px;
+  background:#0b1322;
+  border:1px solid var(--line);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:8px
+}
+
+.progress>div{
+  height:100%;
+  width:0;
+  background:var(--accent);
+  transition:width .2s
+}
+
+textarea{
+  min-height:130px;
+  resize:vertical
 }
 </style>
 </head>
@@ -329,13 +303,10 @@ tr:last-child td{
 <div class="wrap">
 
   <div class="hero">
-    <h1>BET INTELLIGENCE AFL — Player Intelligence Trial 0.1</h1>
-
+    <h1>BET INTELLIGENCE AFL — Player Intelligence Trial 0.2</h1>
     <p>
-      Independent disposal projections first.
-      Sportsbet prices second.
-      This trial is designed to test whether BET INTELLIGENCE can add information
-      rather than reorganise bookmaker opinions.
+      Automatic independent AFL history → price-blind disposal model →
+      freeze → Sportsbet ladder valuation.
     </p>
   </div>
 
@@ -343,18 +314,17 @@ tr:last-child td{
 
     <section class="card half">
 
-      <h2>1. The Odds API + AFL game</h2>
+      <h2>1. Sportsbet market universe</h2>
 
-      <label>API key</label>
+      <label>The Odds API key</label>
 
       <div class="row">
-
         <input
           id="apiKey"
           type="password"
           autocomplete="off"
-          placeholder="Paste The Odds API key"
-        />
+          placeholder="Paste API key"
+        >
 
         <button
           class="btn secondary auto"
@@ -362,14 +332,12 @@ tr:last-child td{
         >
           Save
         </button>
-
       </div>
 
       <div
         class="row"
-        style="margin-top:9px"
+        style="margin-top:8px"
       >
-
         <button
           class="btn"
           id="loadGamesBtn"
@@ -383,34 +351,29 @@ tr:last-child td{
         >
           Clear trial
         </button>
-
       </div>
 
       <label>Game</label>
 
       <select id="gameSelect">
-        <option value="">Load games first</option>
+        <option value="">
+          Load games first
+        </option>
       </select>
 
       <button
         class="btn secondary"
         id="loadUniverseBtn"
-        style="margin-top:9px;width:100%"
+        style="width:100%;margin-top:8px"
         disabled
       >
-        Load player universe — keep prices hidden
+        Load player universe — prices hidden
       </button>
 
       <div
         id="apiStatus"
         class="status muted"
       ></div>
-
-      <div class="help">
-        The Sportsbet response is used only to identify players with disposal markets.
-        Prices are stored but are not shown to the model or ranking process until you
-        freeze the independent projections.
-      </div>
 
     </section>
 
@@ -420,31 +383,11 @@ tr:last-child td{
       <h2>2. Independent AFL history</h2>
 
       <div class="notice">
-        <strong>Required CSV columns:</strong>
-        player, team, date, disposals.
-
-        <strong>Recommended:</strong>
-        tog, opponent, venue.
-
-        Dates should be YYYY-MM-DD.
-        TOG should be a percentage such as 82.5.
+        Source: public AFLPlayerStats dataset generated from official AFL data
+        via fitzRoy. The app downloads it from GitHub, keeps only useful fields,
+        matches the selected Sportsbet players, and caches the filtered history
+        on this device.
       </div>
-
-      <label>Upload CSV</label>
-
-      <input
-        id="csvFile"
-        type="file"
-        accept=".csv,text/csv"
-      />
-
-      <label>Or paste CSV</label>
-
-      <textarea
-        id="csvText"
-        placeholder="player,team,date,opponent,venue,disposals,tog
-Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
-      ></textarea>
 
       <div
         class="row"
@@ -453,18 +396,23 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 
         <button
           class="btn"
-          id="importCsvBtn"
+          id="loadHistoryBtn"
+          disabled
         >
-          Import history
+          Load independent AFL history
         </button>
 
         <button
           class="btn secondary"
-          id="templateBtn"
+          id="clearCacheBtn"
         >
-          Insert template
+          Clear history cache
         </button>
 
+      </div>
+
+      <div class="progress">
+        <div id="historyProgress"></div>
       </div>
 
       <div
@@ -472,17 +420,22 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
         class="status muted"
       ></div>
 
+      <div class="help">
+        Current source includes TOG, position and CBA counts.
+        Trial 0.2 stores those fields but only disposals + TOG drive
+        the probability model.
+      </div>
+
     </section>
 
 
     <section class="card">
 
-      <h2>3. Price-blind model controls</h2>
+      <h2>3. Model controls</h2>
 
       <div class="grid">
 
         <div class="third">
-
           <label>
             Recency half-life (days)
           </label>
@@ -494,12 +447,10 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
             max="730"
             step="10"
             value="180"
-          />
-
+          >
         </div>
 
         <div class="third">
-
           <label>
             Shrinkage strength (pseudo-games)
           </label>
@@ -511,12 +462,10 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
             max="30"
             step="1"
             value="8"
-          />
-
+          >
         </div>
 
         <div class="third">
-
           <label>
             Minimum history games
           </label>
@@ -528,27 +477,14 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
             max="30"
             step="1"
             value="8"
-          />
-
+          >
         </div>
-
-      </div>
-
-      <div class="help">
-
-        Baseline model:
-        exponentially weighted disposal rate per TOG,
-        shrunk toward the match-player population,
-        with shrunk predictive variance.
-
-        It intentionally starts simpler than the final model
-        so we can measure whether added complexity genuinely helps.
 
       </div>
 
       <div
         class="row"
-        style="margin-top:12px"
+        style="margin-top:10px"
       >
 
         <button
@@ -577,10 +513,7 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
     </section>
 
 
-    <section
-      class="card"
-      id="summaryCard"
-    >
+    <section class="card">
 
       <h2>Model summary</h2>
 
@@ -592,8 +525,8 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
         </div>
 
         <div class="kpi">
-          <b id="kpiModelled">0</b>
-          <span>modelled</span>
+          <b id="kpiMatched">0</b>
+          <span>history matched</span>
         </div>
 
         <div class="kpi">
@@ -602,8 +535,13 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
         </div>
 
         <div class="kpi">
+          <b id="kpiLatest">—</b>
+          <span>latest history</span>
+        </div>
+
+        <div class="kpi">
           <b id="kpiCoverage">0%</b>
-          <span>player coverage</span>
+          <span>coverage</span>
         </div>
 
         <div class="kpi">
@@ -621,14 +559,14 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
       <h2>4. Independent player projections</h2>
 
       <div class="help">
-        These projections contain no Sportsbet price or implied probability.
-        Expected TOG can be manually overridden before freezing if verified role
-        information justifies it.
+        No Sportsbet odds are used in this table.
+        Expected TOG may be manually adjusted before freezing only when
+        verified team/role information justifies it.
       </div>
 
       <div
         class="tableWrap"
-        style="margin-top:10px"
+        style="margin-top:9px"
       >
 
         <table>
@@ -638,15 +576,16 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
             <tr>
               <th>Player</th>
               <th>Team</th>
+              <th>Pos</th>
               <th>Games</th>
               <th>L5</th>
               <th>L10</th>
-              <th>Season*</th>
+              <th>Season</th>
+              <th>Recent TOG</th>
               <th>Expected TOG</th>
               <th>Mean</th>
-              <th>Median</th>
               <th>SD</th>
-              <th>Data quality</th>
+              <th>Quality</th>
             </tr>
 
           </thead>
@@ -655,10 +594,10 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 
             <tr>
               <td
-                colspan="11"
+                colspan="12"
                 class="muted"
               >
-                Load player universe and history, then build the model.
+                Load game, universe and history first.
               </td>
             </tr>
 
@@ -666,14 +605,6 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 
         </table>
 
-      </div>
-
-      <div
-        class="small muted"
-        style="margin-top:7px"
-      >
-        *Season is the selected game's calendar year and only uses games dated
-        before the selected match.
       </div>
 
     </section>
@@ -692,16 +623,11 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
           Sportsbet prices locked.
         </b>
 
-        <div
-          class="muted"
-          style="margin-top:4px"
-        >
-          Build and freeze the independent model first.
-          This is intentional.
+        <div class="muted">
+          Build and freeze the independent projections first.
         </div>
 
       </div>
-
 
       <div
         id="valuationPanel"
@@ -711,9 +637,8 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
         <div class="row">
 
           <div>
-
             <label>
-              Minimum model edge (percentage points)
+              Minimum edge (percentage points)
             </label>
 
             <input
@@ -723,15 +648,12 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
               max="30"
               step="0.5"
               value="4"
-            />
-
+            >
           </div>
 
-
           <div>
-
             <label>
-              Minimum model probability
+              Minimum BI probability
             </label>
 
             <input
@@ -741,13 +663,10 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
               max="99"
               step="1"
               value="65"
-            />
-
+            >
           </div>
 
-
           <div>
-
             <label>
               Maximum single-leg odds
             </label>
@@ -759,31 +678,27 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
               max="10"
               step="0.05"
               value="3"
-            />
-
+            >
           </div>
 
         </div>
 
-
         <button
           class="btn"
           id="rankBtn"
-          style="margin-top:10px"
+          style="margin-top:9px"
         >
-          Rank all Sportsbet disposal lines
+          Rank every disposal line
         </button>
-
 
         <div
           id="rankStatus"
           class="status muted"
         ></div>
 
-
         <div
           class="tableWrap"
-          style="margin-top:10px"
+          style="margin-top:9px"
         >
 
           <table>
@@ -791,16 +706,16 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
             <thead>
 
               <tr>
-                <th>Rank</th>
+                <th>#</th>
                 <th>Player</th>
                 <th>Line</th>
                 <th>Sportsbet</th>
                 <th>Break-even</th>
-                <th>BI probability</th>
+                <th>BI P</th>
+                <th>Conservative P</th>
                 <th>Fair odds</th>
-                <th>Edge pp</th>
+                <th>Edge</th>
                 <th>EV</th>
-                <th>Quality</th>
                 <th>Status</th>
               </tr>
 
@@ -830,16 +745,17 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 
     <section class="card">
 
-      <h2>6. Trial export</h2>
+      <h2>6. Pre-match audit</h2>
 
       <div class="help">
-        Export the frozen pre-match model and price comparison before the bounce.
-        This is the record used later for calibration, ROI and closing-line-value testing.
+        Save this after ranking.
+        It preserves the frozen price-blind model and Sportsbet comparison
+        for later calibration, ROI and CLV audits.
       </div>
 
       <div
         class="row"
-        style="margin-top:10px"
+        style="margin-top:8px"
       >
 
         <button
@@ -860,7 +776,6 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 
       </div>
 
-
       <textarea
         id="auditText"
         readonly
@@ -880,76 +795,121 @@ Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86"
 'use strict';
 
 
-const SPORT = 'aussierules_afl';
+const SPORT='aussierules_afl';
 
-const API = 'https://api.the-odds-api.com/v4';
+const API=
+  'https://api.the-odds-api.com/v4';
 
 
-const state = {
+const HISTORY_URL=
+  'https://raw.githubusercontent.com/CooperDenny/AFLPlayerStats/main/Player%20Data/AFL/afl_player_stats.csv';
 
-  games: [],
 
-  selectedGame: null,
+const CACHE_DB=
+  'bi-afl-history-v1';
 
-  history: [],
+const CACHE_STORE=
+  'history';
 
-  marketResponse: null,
+const CACHE_KEY=
+  'selected-player-history';
 
-  players: [],
 
-  marketLines: [],
+const state={
 
-  projections: [],
+  games:[],
 
-  frozen: null,
+  selectedGame:null,
 
-  valuations: []
+  marketResponse:null,
+
+  players:[],
+
+  marketLines:[],
+
+  history:[],
+
+  projections:[],
+
+  frozen:null,
+
+  valuations:[],
+
+  historyMeta:null
 
 };
 
 
-const $ = id => document.getElementById(id);
+const $=
+  id=>
+    document.getElementById(id);
 
 
-const fmt = (n,d=1) =>
-  Number.isFinite(n)
-    ? n.toFixed(d)
-    : '—';
+const clamp=
+  (x,a,b)=>
+    Math.max(
+      a,
+      Math.min(b,x)
+    );
 
 
-const pct = (n,d=1) =>
-  Number.isFinite(n)
-    ? (100*n).toFixed(d)+'%'
-    : '—';
+const fmt=
+  (n,d=1)=>
+    Number.isFinite(n)
+      ? n.toFixed(d)
+      : '—';
 
 
-const esc = s =>
-  String(s ?? '').replace(
-    /[&<>"']/g,
-    c => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#039;'
-    }[c])
-  );
+const pct=
+  (n,d=1)=>
+    Number.isFinite(n)
+      ? (100*n).toFixed(d)+'%'
+      : '—';
 
 
-const norm = s =>
-  String(s ?? '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g,'')
-    .replace(/[^a-z0-9]+/g,' ')
-    .trim();
+const esc=
+  s=>
+    String(s??'')
+      .replace(
+        /[&<>"']/g,
+        c=>({
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#039;'
+        }[c])
+      );
 
 
-const clamp = (x,a,b) =>
-  Math.max(
-    a,
-    Math.min(b,x)
-  );
+const norm=
+  s=>
+    String(s??'')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(
+        /[\u0300-\u036f]/g,
+        ''
+      )
+      .replace(
+        /[^a-z0-9]+/g,
+        ' '
+      )
+      .trim();
+
+
+const compactName=
+  s=>
+    norm(s)
+      .replace(
+        /\b(jr|senior|junior)\b/g,
+        ''
+      )
+      .replace(
+        /\s+/g,
+        ' '
+      )
+      .trim();
 
 
 function setStatus(
@@ -960,119 +920,25 @@ function setStatus(
 
   const el=$(id);
 
-  el.className='status '+cls;
+  el.className=
+    'status '+cls;
 
-  el.textContent=msg;
-
-}
-
-
-function weightedMean(
-  values,
-  weights
-){
-
-  let sw=0;
-
-  let s=0;
-
-  for(
-    let i=0;
-    i<values.length;
-    i++
-  ){
-
-    if(
-      Number.isFinite(values[i]) &&
-      Number.isFinite(weights[i]) &&
-      weights[i]>0
-    ){
-
-      sw+=weights[i];
-
-      s+=values[i]*weights[i];
-
-    }
-
-  }
-
-  return sw
-    ? s/sw
-    : NaN;
+  el.textContent=
+    msg;
 
 }
 
 
-function effectiveN(weights){
-
-  const s=
-    weights.reduce(
-      (a,b)=>a+b,
-      0
-    );
-
-  const s2=
-    weights.reduce(
-      (a,b)=>a+b*b,
-      0
-    );
-
-  return s2
-    ? s*s/s2
-    : 0;
-
-}
-
-
-function weightedVariance(
-  values,
-  weights,
-  mean
-){
-
-  let sw=0;
-
-  let s=0;
-
-  for(
-    let i=0;
-    i<values.length;
-    i++
-  ){
-
-    if(
-      Number.isFinite(values[i]) &&
-      Number.isFinite(weights[i]) &&
-      weights[i]>0
-    ){
-
-      sw+=weights[i];
-
-      s+=
-        weights[i] *
-        (values[i]-mean)**2;
-
-    }
-
-  }
-
-  return sw
-    ? s/sw
-    : NaN;
-
-}
-
-
-function mean(arr){
+function mean(a){
 
   const v=
-    arr.filter(
+    a.filter(
       Number.isFinite
     );
 
   return v.length
     ? v.reduce(
-        (a,b)=>a+b,
+        (x,y)=>x+y,
         0
       ) / v.length
     : NaN;
@@ -1080,26 +946,100 @@ function mean(arr){
 }
 
 
-function median(arr){
+function weightedMean(
+  v,
+  w
+){
 
-  const v=
-    arr
-      .filter(Number.isFinite)
-      .sort(
-        (a,b)=>a-b
-      );
+  let sw=0;
 
-  if(!v.length)
-    return NaN;
+  let s=0;
 
-  const m=
-    Math.floor(
-      v.length/2
+  for(
+    let i=0;
+    i<v.length;
+    i++
+  ){
+
+    if(
+      Number.isFinite(v[i]) &&
+      Number.isFinite(w[i]) &&
+      w[i]>0
+    ){
+
+      sw+=w[i];
+
+      s+=
+        v[i] *
+        w[i];
+
+    }
+
+  }
+
+  return sw
+    ? s/sw
+    : NaN;
+
+}
+
+
+function weightedVariance(
+  v,
+  w,
+  m
+){
+
+  let sw=0;
+
+  let s=0;
+
+  for(
+    let i=0;
+    i<v.length;
+    i++
+  ){
+
+    if(
+      Number.isFinite(v[i]) &&
+      Number.isFinite(w[i]) &&
+      w[i]>0
+    ){
+
+      sw+=w[i];
+
+      s+=
+        w[i] *
+        (v[i]-m)**2;
+
+    }
+
+  }
+
+  return sw
+    ? s/sw
+    : NaN;
+
+}
+
+
+function effectiveN(w){
+
+  const s=
+    w.reduce(
+      (a,b)=>a+b,
+      0
     );
 
-  return v.length%2
-    ? v[m]
-    : (v[m-1]+v[m])/2;
+  const s2=
+    w.reduce(
+      (a,b)=>a+b*b,
+      0
+    );
+
+  return s2
+    ? s*s/s2
+    : 0;
 
 }
 
@@ -1136,7 +1076,7 @@ function erf(x){
           )*t+a2
         )*t+a1
       )*t
-    ) *
+    )*
     Math.exp(
       -x*x
     );
@@ -1159,7 +1099,7 @@ function normalCDF(
 
   return .5 *
     (
-      1 +
+      1+
       erf(
         (x-mu) /
         (
@@ -1185,41 +1125,269 @@ function overProbability(
       mu,
       sd
     ),
-    0.001,
-    0.999
+    .001,
+    .999
   );
 
 }
 
 
-function parseCSV(text){
+function openDB(){
 
-  const rows=[];
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
 
-  let row=[];
+      const req=
+        indexedDB.open(
+          CACHE_DB,
+          1
+        );
 
-  let cell='';
+
+      req.onupgradeneeded=
+        ()=>{
+
+          const db=
+            req.result;
+
+          if(
+            !db.objectStoreNames.contains(
+              CACHE_STORE
+            )
+          ){
+
+            db.createObjectStore(
+              CACHE_STORE
+            );
+
+          }
+
+        };
+
+
+      req.onsuccess=
+        ()=>
+          resolve(
+            req.result
+          );
+
+
+      req.onerror=
+        ()=>
+          reject(
+            req.error
+          );
+
+    }
+  );
+
+}
+
+
+async function cacheSet(
+  key,
+  value
+){
+
+  const db=
+    await openDB();
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const tx=
+        db.transaction(
+          CACHE_STORE,
+          'readwrite'
+        );
+
+
+      tx
+        .objectStore(
+          CACHE_STORE
+        )
+        .put(
+          value,
+          key
+        );
+
+
+      tx.oncomplete=
+        ()=>{
+
+          db.close();
+
+          resolve();
+
+        };
+
+
+      tx.onerror=
+        ()=>{
+
+          db.close();
+
+          reject(
+            tx.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function cacheGet(key){
+
+  const db=
+    await openDB();
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const tx=
+        db.transaction(
+          CACHE_STORE,
+          'readonly'
+        );
+
+
+      const req=
+        tx
+          .objectStore(
+            CACHE_STORE
+          )
+          .get(
+            key
+          );
+
+
+      req.onsuccess=
+        ()=>{
+
+          db.close();
+
+          resolve(
+            req.result ||
+            null
+          );
+
+        };
+
+
+      req.onerror=
+        ()=>{
+
+          db.close();
+
+          reject(
+            req.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function cacheClear(){
+
+  const db=
+    await openDB();
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const tx=
+        db.transaction(
+          CACHE_STORE,
+          'readwrite'
+        );
+
+
+      tx
+        .objectStore(
+          CACHE_STORE
+        )
+        .clear();
+
+
+      tx.oncomplete=
+        ()=>{
+
+          db.close();
+
+          resolve();
+
+        };
+
+
+      tx.onerror=
+        ()=>{
+
+          db.close();
+
+          reject(
+            tx.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+function parseCSVLine(line){
+
+  const out=[];
+
+  let c='';
 
   let q=false;
 
+
   for(
     let i=0;
-    i<text.length;
+    i<line.length;
     i++
   ){
 
-    const c=text[i];
+    const ch=
+      line[i];
 
-    const n=text[i+1];
+    const n=
+      line[i+1];
 
-    if(c==='"'){
+
+    if(ch==='"'){
 
       if(
         q &&
         n==='"'
       ){
 
-        cell+='"';
+        c+='"';
 
         i++;
 
@@ -1234,286 +1402,611 @@ function parseCSV(text){
     }
 
     else if(
-      c===',' &&
+      ch===',' &&
       !q
     ){
 
-      row.push(cell);
+      out.push(c);
 
-      cell='';
-
-    }
-
-    else if(
-      (
-        c==='\n' ||
-        c==='\r'
-      ) &&
-      !q
-    ){
-
-      if(
-        c==='\r' &&
-        n==='\n'
-      )
-        i++;
-
-      row.push(cell);
-
-      if(
-        row.some(
-          x=>
-            String(x)
-              .trim() !== ''
-        )
-      )
-        rows.push(row);
-
-      row=[];
-
-      cell='';
+      c='';
 
     }
 
     else{
 
-      cell+=c;
+      c+=ch;
 
     }
 
   }
 
-  row.push(cell);
 
-  if(
-    row.some(
-      x=>
-        String(x)
-          .trim() !== ''
-    )
-  )
-    rows.push(row);
+  out.push(c);
 
-  if(rows.length<2)
-    return [];
-
-  const headers=
-    rows
-      .shift()
-      .map(
-        h=>
-          norm(h)
-            .replace(/ /g,'_')
-      );
-
-  return rows.map(
-    r=>
-      Object.fromEntries(
-        headers.map(
-          (h,i)=>[
-            h,
-            (r[i]??'').trim()
-          ]
-        )
-      )
-  );
+  return out;
 
 }
 
 
-function historyFromCSV(text){
+function cleanHeader(h){
 
-  const raw=
-    parseCSV(text);
+  return String(h??'')
+    .trim()
+    .replace(
+      /^\uFEFF/,
+      ''
+    );
 
-
-  const aliases={
-
-    player:[
-      'player',
-      'player_name',
-      'name'
-    ],
-
-    team:[
-      'team',
-      'club'
-    ],
-
-    date:[
-      'date',
-      'game_date',
-      'match_date'
-    ],
-
-    opponent:[
-      'opponent',
-      'opp'
-    ],
-
-    venue:[
-      'venue',
-      'ground'
-    ],
-
-    disposals:[
-      'disposals',
-      'disp',
-      'd'
-    ],
-
-    tog:[
-      'tog',
-      'time_on_ground',
-      'tog_percent',
-      'percentage_game_played'
-    ]
-
-  };
+}
 
 
-  const pick=(
-    r,
-    key
-  )=>{
+function num(v){
 
-    for(
-      const a
-      of aliases[key]
+  if(
+    v===null ||
+    v===undefined ||
+    v===''
+  )
+    return NaN;
+
+
+  const n=
+    Number(
+      String(v)
+        .replace(
+          '%',
+          ''
+        )
+        .trim()
+    );
+
+
+  return Number.isFinite(n)
+    ? n
+    : NaN;
+
+}
+
+
+function fullName(
+  first,
+  surname
+){
+
+  return [
+    first,
+    surname
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .replace(
+      /\s+/g,
+      ' '
+    )
+    .trim();
+
+}
+
+
+function makeMatcher(players){
+
+  const exact=
+    new Map(
+      players.map(
+        p=>[
+          compactName(
+            p.player
+          ),
+          p
+        ]
+      )
+    );
+
+
+  const bySurname=
+    new Map();
+
+
+  for(
+    const p
+    of players
+  ){
+
+    const parts=
+      compactName(
+        p.player
+      ).split(' ');
+
+
+    const sur=
+      parts.at(-1) ||
+      '';
+
+
+    if(
+      !bySurname.has(sur)
     ){
 
-      if(
-        r[a]!==undefined &&
-        r[a]!==''
-      )
-        return r[a];
+      bySurname.set(
+        sur,
+        []
+      );
 
     }
 
-    return '';
+
+    bySurname
+      .get(sur)
+      .push(p);
+
+  }
+
+
+  return name=>{
+
+    const k=
+      compactName(name);
+
+
+    if(
+      exact.has(k)
+    )
+      return exact.get(k);
+
+
+    const parts=
+      k.split(' ');
+
+    const sur=
+      parts.at(-1) ||
+      '';
+
+    const first=
+      parts[0] ||
+      '';
+
+
+    const candidates=
+      bySurname.get(sur) ||
+      [];
+
+
+    if(
+      candidates.length===1
+    )
+      return candidates[0];
+
+
+    const initial=
+      first[0] ||
+      '';
+
+
+    const same=
+      candidates.filter(
+        p=>
+          (
+            compactName(
+              p.player
+            )
+            .split(' ')[0] ||
+            ''
+          )[0]===initial
+      );
+
+
+    return same.length===1
+      ? same[0]
+      : null;
 
   };
+
+}
+
+
+function parseHistoryCSV(
+  text,
+  players,
+  cutoff
+){
+
+  const lines=
+    text.split(
+      /\r?\n/
+    );
+
+
+  if(lines.length<2)
+    throw new Error(
+      'Historical CSV is empty.'
+    );
+
+
+  const headers=
+    parseCSVLine(
+      lines[0]
+    )
+    .map(
+      cleanHeader
+    );
+
+
+  const ix={};
+
+
+  headers.forEach(
+    (
+      h,
+      i
+    )=>
+      ix[h]=i
+  );
+
+
+  const required=[
+    'First.Name',
+    'Surname',
+    'Match.Start.UTC',
+    'Team.Name',
+    'Disposals'
+  ];
+
+
+  for(
+    const h
+    of required
+  ){
+
+    if(
+      ix[h]===undefined
+    ){
+
+      throw new Error(
+        'History source is missing required column: '+
+        h
+      );
+
+    }
+
+  }
+
+
+  const matcher=
+    makeMatcher(
+      players
+    );
+
+
+  const targetKeys=
+    new Set(
+      players.map(
+        p=>
+          p.playerKey
+      )
+    );
 
 
   const out=[];
 
+  const matchedKeys=
+    new Set();
+
+  let latest=null;
+
 
   for(
-    const r
-    of raw
+    let r=1;
+    r<lines.length;
+    r++
   ){
 
-    const player=
-      pick(
-        r,
-        'player'
-      );
-
-    const team=
-      pick(
-        r,
-        'team'
-      );
-
-    const dateRaw=
-      pick(
-        r,
-        'date'
-      );
-
-    const disposals=
-      Number(
-        pick(
-          r,
-          'disposals'
-        )
-      );
-
-    const togRaw=
-      pick(
-        r,
-        'tog'
-      );
-
-    const tog=
-      togRaw===''
-        ? NaN
-        : Number(
-            String(togRaw)
-              .replace(
-                '%',
-                ''
-              )
-          );
-
-
-    const date=
-      new Date(
-        dateRaw+
-        'T12:00:00'
-      );
+    const line=
+      lines[r];
 
 
     if(
-      !player ||
-      !Number.isFinite(disposals) ||
-      Number.isNaN(
-        date.getTime()
+      !line ||
+      line.length<5
+    )
+      continue;
+
+
+    const row=
+      parseCSVLine(
+        line
+      );
+
+
+    const first=
+      row[
+        ix['First.Name']
+      ] ||
+      '';
+
+
+    const surname=
+      row[
+        ix['Surname']
+      ] ||
+      '';
+
+
+    const name=
+      fullName(
+        first,
+        surname
+      );
+
+
+    const match=
+      matcher(name);
+
+
+    if(
+      !match ||
+      !targetKeys.has(
+        match.playerKey
       )
     )
       continue;
 
 
+    const dateRaw=
+      row[
+        ix['Match.Start.UTC']
+      ] ||
+      '';
+
+
+    const date=
+      new Date(
+        dateRaw
+      );
+
+
+    if(
+      Number.isNaN(
+        date.getTime()
+      ) ||
+      date>=cutoff
+    )
+      continue;
+
+
+    const disposals=
+      num(
+        row[
+          ix['Disposals']
+        ]
+      );
+
+
+    if(
+      !Number.isFinite(
+        disposals
+      )
+    )
+      continue;
+
+
+    const tog=
+      ix[
+        'Time.On.Ground.Percentage'
+      ]!==undefined
+
+        ? num(
+            row[
+              ix[
+                'Time.On.Ground.Percentage'
+              ]
+            ]
+          )
+
+        : NaN;
+
+
+    const cba=
+      ix[
+        'Centre.Bounce.Attendances'
+      ]!==undefined
+
+        ? num(
+            row[
+              ix[
+                'Centre.Bounce.Attendances'
+              ]
+            ]
+          )
+
+        : NaN;
+
+
+    const kicks=
+      ix['Kicks']!==undefined
+
+        ? num(
+            row[
+              ix['Kicks']
+            ]
+          )
+
+        : NaN;
+
+
+    const handballs=
+      ix['Handballs']!==undefined
+
+        ? num(
+            row[
+              ix['Handballs']
+            ]
+          )
+
+        : NaN;
+
+
+    const pos=
+      ix[
+        'Player.Position'
+      ]!==undefined
+
+        ? (
+            row[
+              ix[
+                'Player.Position'
+              ]
+            ] ||
+            ''
+          )
+
+        : '';
+
+
+    const team=
+      row[
+        ix['Team.Name']
+      ] ||
+      '';
+
+
+    const opp=
+      ix[
+        'Opponent.Name'
+      ]!==undefined
+
+        ? (
+            row[
+              ix[
+                'Opponent.Name'
+              ]
+            ] ||
+            ''
+          )
+
+        : '';
+
+
+    const venue=
+      ix[
+        'Venue.Name'
+      ]!==undefined
+
+        ? (
+            row[
+              ix[
+                'Venue.Name'
+              ]
+            ] ||
+            ''
+          )
+
+        : '';
+
+
+    const gameId=
+      ix[
+        'Game.ID'
+      ]!==undefined
+
+        ? (
+            row[
+              ix[
+                'Game.ID'
+              ]
+            ] ||
+            ''
+          )
+
+        : '';
+
+
     out.push({
 
-      player,
+      player:
+        match.player,
 
       playerKey:
-        norm(player),
+        match.playerKey,
+
+      sourceName:
+        name,
+
+      gameId,
 
       team,
 
       teamKey:
         norm(team),
 
-      date,
-
-      dateISO:
-        dateRaw,
-
       opponent:
-        pick(
-          r,
-          'opponent'
-        ),
+        opp,
 
-      venue:
-        pick(
-          r,
-          'venue'
-        ),
+      venue,
+
+      position:
+        pos,
+
+      date:
+        date.toISOString(),
 
       disposals,
 
       tog:
         Number.isFinite(tog) &&
         tog>0
+
           ? clamp(
               tog,
-              20,
+              1,
               100
             )
-          : NaN
+
+          : NaN,
+
+      cba,
+
+      kicks,
+
+      handballs
 
     });
+
+
+    matchedKeys.add(
+      match.playerKey
+    );
+
+
+    if(
+      !latest ||
+      date>latest
+    )
+      latest=date;
 
   }
 
 
-  return out.sort(
+  out.sort(
     (a,b)=>
-      a.date-b.date
+      new Date(a.date)-
+      new Date(b.date)
   );
+
+
+  return {
+
+    rows:
+      out,
+
+    matchedKeys:
+      [...matchedKeys],
+
+    latest:
+      latest
+        ? latest.toISOString()
+        : null
+
+  };
 
 }
 
@@ -1525,7 +2018,7 @@ async function apiFetch(url){
       url,
       {
         headers:{
-          'Accept':
+          Accept:
             'application/json'
         }
       }
@@ -1535,6 +2028,7 @@ async function apiFetch(url){
   if(!res.ok){
 
     let t='';
+
 
     try{
 
@@ -1547,7 +2041,10 @@ async function apiFetch(url){
 
     throw new Error(
       `API ${res.status}: ${
-        t.slice(0,220) ||
+        t.slice(
+          0,
+          220
+        ) ||
         res.statusText
       }`
     );
@@ -1590,13 +2087,15 @@ async function loadGames(){
   try{
 
     const url=
-      `${API}/sports/${SPORT}/events` +
-      `?apiKey=${encodeURIComponent(key)}` +
+      `${API}/sports/${SPORT}/events`+
+      `?apiKey=${encodeURIComponent(key)}`+
       `&dateFormat=iso`;
 
 
     const games=
-      await apiFetch(url);
+      await apiFetch(
+        url
+      );
 
 
     state.games=
@@ -1605,19 +2104,15 @@ async function loadGames(){
         : [];
 
 
-    const sel=
-      $('gameSelect');
-
-
-    sel.innerHTML=
-      '<option value="">Select a game</option>' +
+    $('gameSelect').innerHTML=
+      '<option value="">Select a game</option>'+
 
       state.games
         .map(
           g=>
-            `<option value="${esc(g.id)}">` +
-            `${esc(g.away_team)} @ ${esc(g.home_team)}` +
-            ` — ${new Date(g.commence_time).toLocaleString()}` +
+            `<option value="${esc(g.id)}">`+
+            `${esc(g.away_team)} @ ${esc(g.home_team)}`+
+            ` — ${new Date(g.commence_time).toLocaleString()}`+
             `</option>`
         )
         .join('');
@@ -1643,12 +2138,12 @@ async function loadGames(){
 }
 
 
-function selectedGameChanged(){
+function gameChanged(){
 
   state.selectedGame=
     state.games.find(
       g=>
-        g.id ===
+        g.id===
         $('gameSelect').value
     ) ||
     null;
@@ -1660,15 +2155,23 @@ function selectedGameChanged(){
 
   state.marketLines=[];
 
+  state.history=[];
+
   state.projections=[];
 
   state.frozen=null;
 
   state.valuations=[];
 
+  state.historyMeta=null;
+
 
   $('loadUniverseBtn').disabled=
     !state.selectedGame;
+
+
+  $('loadHistoryBtn').disabled=
+    true;
 
 
   $('buildBtn').disabled=
@@ -1684,6 +2187,11 @@ function selectedGameChanged(){
   renderSummary();
 
   renderProjections();
+
+  setStatus(
+    'dataStatus',
+    ''
+  );
 
 }
 
@@ -1705,7 +2213,7 @@ async function loadUniverse(){
 
   setStatus(
     'apiStatus',
-    'Loading Sportsbet disposal player universe. Prices remain hidden…'
+    'Loading Sportsbet disposal universe. Prices remain hidden…'
   );
 
 
@@ -1720,20 +2228,18 @@ async function loadUniverse(){
 
 
     const url=
-      `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds` +
-      `?apiKey=${encodeURIComponent(key)}` +
-      `&bookmakers=sportsbet` +
-      `&markets=${markets}` +
-      `&oddsFormat=decimal` +
+      `${API}/sports/${SPORT}/events/${encodeURIComponent(id)}/odds`+
+      `?apiKey=${encodeURIComponent(key)}`+
+      `&bookmakers=sportsbet`+
+      `&markets=${markets}`+
+      `&oddsFormat=decimal`+
       `&dateFormat=iso`;
 
 
-    const data=
-      await apiFetch(url);
-
-
     state.marketResponse=
-      data;
+      await apiFetch(
+        url
+      );
 
 
     extractSportsbetLines();
@@ -1773,17 +2279,14 @@ async function loadUniverse(){
         );
 
 
-    $('buildBtn').disabled=
-      !(
-        state.players.length &&
-        state.history.length
-      );
+    $('loadHistoryBtn').disabled=
+      !state.players.length;
 
 
     setStatus(
       'apiStatus',
-      `${state.players.length} disposal-market players loaded. ` +
-      `${state.marketLines.length} Sportsbet lines retained but hidden.`,
+      `${state.players.length} disposal-market players loaded; `+
+      `${state.marketLines.length} Sportsbet lines retained and hidden.`,
       'good'
     );
 
@@ -1808,14 +2311,11 @@ function extractSportsbetLines(){
 
   const lines=[];
 
-  const books=
-    state.marketResponse?.bookmakers ||
-    [];
-
 
   for(
     const book
-    of books
+    of state.marketResponse?.bookmakers ||
+    []
   ){
 
     if(
@@ -1827,7 +2327,8 @@ function extractSportsbetLines(){
 
     for(
       const market
-      of book.markets || []
+      of book.markets ||
+      []
     ){
 
       if(
@@ -1843,7 +2344,8 @@ function extractSportsbetLines(){
 
       for(
         const o
-        of market.outcomes || []
+        of market.outcomes ||
+        []
       ){
 
         let player='';
@@ -1862,7 +2364,6 @@ function extractSportsbetLines(){
           isOver=true;
 
         }
-
 
         else if(
           market.key===
@@ -1899,13 +2400,19 @@ function extractSportsbetLines(){
           player,
 
           playerKey:
-            norm(player),
+            compactName(
+              player
+            ),
 
           line:
-            Number(o.point),
+            Number(
+              o.point
+            ),
 
           odds:
-            Number(o.price),
+            Number(
+              o.price
+            ),
 
           market:
             market.key,
@@ -1944,11 +2451,14 @@ function extractSportsbetLines(){
     if(
       !old ||
       x.odds>old.odds
-    )
+    ){
+
       dedup.set(
         k,
         x
       );
+
+    }
 
   }
 
@@ -1966,54 +2476,270 @@ function extractSportsbetLines(){
 }
 
 
-function importHistory(){
+async function loadHistory(){
 
-  const text=
-    $('csvText')
-      .value
-      .trim();
-
-
-  if(!text){
-
-    setStatus(
-      'dataStatus',
-      'Paste or upload CSV data first.',
-      'bad'
-    );
-
+  if(
+    !state.selectedGame ||
+    !state.players.length
+  )
     return;
 
-  }
+
+  const progress=
+    $('historyProgress');
 
 
-  const rows=
-    historyFromCSV(text);
-
-
-  state.history=
-    rows;
-
-
-  $('buildBtn').disabled=
-    !(
-      state.players.length &&
-      state.history.length
-    );
+  progress.style.width=
+    '5%';
 
 
   setStatus(
     'dataStatus',
-    rows.length
-      ? `${rows.length} valid historical game rows imported.`
-      : 'No valid rows found. Check the column names and date format.',
-    rows.length
-      ? 'good'
-      : 'bad'
+    'Checking local history cache…'
   );
 
 
+  try{
+
+    const playerSig=
+      state.players
+        .map(
+          p=>
+            p.playerKey
+        )
+        .sort()
+        .join('|');
+
+
+    const cutoff=
+      new Date(
+        state.selectedGame.commence_time
+      );
+
+
+    const cached=
+      await cacheGet(
+        CACHE_KEY
+      );
+
+
+    if(
+      cached &&
+      cached.playerSig===playerSig &&
+      cached.cutoff===cutoff.toISOString() &&
+      Array.isArray(cached.rows) &&
+      cached.rows.length
+    ){
+
+      state.history=
+        cached.rows;
+
+
+      state.historyMeta=
+        cached.meta;
+
+
+      progress.style.width=
+        '100%';
+
+
+      setStatus(
+        'dataStatus',
+        `Loaded ${state.history.length} historical rows from local cache.`,
+        'good'
+      );
+
+
+      afterHistoryLoaded();
+
+      return;
+
+    }
+
+
+    setStatus(
+      'dataStatus',
+      'Downloading independent AFL history from GitHub… first load may be several MB.'
+    );
+
+
+    progress.style.width=
+      '15%';
+
+
+    const res=
+      await fetch(
+        HISTORY_URL,
+        {
+          cache:
+            'no-store'
+        }
+      );
+
+
+    if(!res.ok){
+
+      throw new Error(
+        `History download failed: HTTP ${res.status}`
+      );
+
+    }
+
+
+    progress.style.width=
+      '35%';
+
+
+    const text=
+      await res.text();
+
+
+    progress.style.width=
+      '60%';
+
+
+    setStatus(
+      'dataStatus',
+      `Downloaded ${(text.length/1024/1024).toFixed(1)} MB. Filtering to selected players…`
+    );
+
+
+    await new Promise(
+      r=>
+        setTimeout(
+          r,
+          40
+        )
+    );
+
+
+    const parsed=
+      parseHistoryCSV(
+        text,
+        state.players,
+        cutoff
+      );
+
+
+    progress.style.width=
+      '88%';
+
+
+    if(
+      !parsed.rows.length
+    ){
+
+      throw new Error(
+        'History downloaded, but none of the Sportsbet player names matched the AFL dataset.'
+      );
+
+    }
+
+
+    state.history=
+      parsed.rows;
+
+
+    state.historyMeta={
+
+      source:
+        HISTORY_URL,
+
+      downloadedAt:
+        new Date()
+          .toISOString(),
+
+      latest:
+        parsed.latest,
+
+      matchedKeys:
+        parsed.matchedKeys
+
+    };
+
+
+    try{
+
+      await cacheSet(
+        CACHE_KEY,
+        {
+
+          playerSig,
+
+          cutoff:
+            cutoff.toISOString(),
+
+          rows:
+            state.history,
+
+          meta:
+            state.historyMeta
+
+        }
+      );
+
+    }
+    catch(e){
+
+      console.warn(
+        'Cache save failed',
+        e
+      );
+
+    }
+
+
+    progress.style.width=
+      '100%';
+
+
+    setStatus(
+      'dataStatus',
+      `Independent history ready: ${state.history.length} player-game rows, `+
+      `${parsed.matchedKeys.length}/${state.players.length} players matched.`,
+      'good'
+    );
+
+
+    afterHistoryLoaded();
+
+  }
+  catch(e){
+
+    progress.style.width=
+      '0%';
+
+
+    setStatus(
+      'dataStatus',
+      e.message,
+      'bad'
+    );
+
+  }
+
+}
+
+
+function afterHistoryLoaded(){
+
+  $('buildBtn').disabled=
+    !(
+      state.history.length &&
+      state.players.length
+    );
+
+
+  state.projections=[];
+
+  state.frozen=null;
+
+
+  lockPrices();
+
   renderSummary();
+
+  renderProjections();
 
 }
 
@@ -2029,9 +2755,7 @@ function eventCutoff(){
 }
 
 
-function filteredHistoryForPlayer(
-  playerKey
-){
+function playerGames(key){
 
   const cut=
     eventCutoff();
@@ -2040,12 +2764,13 @@ function filteredHistoryForPlayer(
   return state.history
     .filter(
       r=>
-        r.playerKey===playerKey &&
-        r.date<cut
+        r.playerKey===key &&
+        new Date(r.date)<cut
     )
     .sort(
       (a,b)=>
-        b.date-a.date
+        new Date(b.date)-
+        new Date(a.date)
     );
 
 }
@@ -2054,14 +2779,14 @@ function filteredHistoryForPlayer(
 function buildModel(){
 
   if(
-    !state.selectedGame ||
+    !state.history.length ||
     !state.players.length ||
-    !state.history.length
+    !state.selectedGame
   ){
 
     setStatus(
       'modelStatus',
-      'Game, player universe and history are required.',
+      'Game, market universe and independent history are required.',
       'bad'
     );
 
@@ -2095,15 +2820,7 @@ function buildModel(){
     8;
 
 
-  const pre=
-    state.history
-      .filter(
-        r=>
-          r.date<cut
-      );
-
-
-  const targetKeys=
+  const target=
     new Set(
       state.players.map(
         p=>
@@ -2113,9 +2830,9 @@ function buildModel(){
 
 
   const population=
-    pre.filter(
+    state.history.filter(
       r=>
-        targetKeys.has(
+        target.has(
           r.playerKey
         )
     );
@@ -2134,7 +2851,9 @@ function buildModel(){
 
 
   const popMean=
-    mean(popRates);
+    mean(
+      popRates
+    );
 
 
   const popTOG=
@@ -2146,45 +2865,48 @@ function buildModel(){
     );
 
 
-  const popDispVar=
+  const playerVars=
+    state.players.map(
+      p=>{
+
+        const g=
+          playerGames(
+            p.playerKey
+          );
+
+
+        if(
+          g.length<2
+        )
+          return NaN;
+
+
+        const vals=
+          g.map(
+            x=>
+              x.disposals
+          );
+
+
+        const m=
+          mean(vals);
+
+
+        return mean(
+          vals.map(
+            v=>
+              (v-m)**2
+          )
+        );
+
+      }
+    );
+
+
+  const popVar=
     Math.max(
       12,
-
-      mean(
-        state.players.map(
-          p=>{
-
-            const g=
-              filteredHistoryForPlayer(
-                p.playerKey
-              );
-
-
-            if(g.length<2)
-              return NaN;
-
-
-            const vals=
-              g.map(
-                x=>
-                  x.disposals
-              );
-
-
-            const m=
-              mean(vals);
-
-
-            return mean(
-              vals.map(
-                v=>
-                  (v-m)**2
-              )
-            );
-
-          }
-        )
-      ) ||
+      mean(playerVars) ||
       25
     );
 
@@ -2198,7 +2920,7 @@ function buildModel(){
   ){
 
     const games=
-      filteredHistoryForPlayer(
+      playerGames(
         p.playerKey
       );
 
@@ -2230,12 +2952,12 @@ function buildModel(){
       games.map(
         g=>
           Math.pow(
-            0.5,
-
+            .5,
             Math.max(
               0,
               (
-                cut-g.date
+                cut-
+                new Date(g.date)
               ) /
               86400000
             ) /
@@ -2269,7 +2991,7 @@ function buildModel(){
       );
 
 
-    const priorRate=
+    const prior=
       Number.isFinite(popMean)
         ? popMean
         : playerRate;
@@ -2278,25 +3000,12 @@ function buildModel(){
     const rate=
       (
         nEff*playerRate +
-        shrink*priorRate
+        shrink*prior
       ) /
       (
-        nEff+shrink
+        nEff+
+        shrink
       );
-
-
-    const togVals=
-      games
-        .filter(
-          g=>
-            Number.isFinite(
-              g.tog
-            )
-        )
-        .map(
-          g=>
-            g.tog
-        );
 
 
     const togGames=
@@ -2308,16 +3017,16 @@ function buildModel(){
       );
 
 
-    const togWeights=
+    const togW=
       togGames.map(
         g=>
           Math.pow(
-            0.5,
-
+            .5,
             Math.max(
               0,
               (
-                cut-g.date
+                cut-
+                new Date(g.date)
               ) /
               86400000
             ) /
@@ -2332,12 +3041,14 @@ function buildModel(){
           g=>
             g.tog
         ),
-        togWeights
+        togW
       );
 
 
     const expectedTOG=
-      Number.isFinite(recentTOG)
+      Number.isFinite(
+        recentTOG
+      )
 
         ? clamp(
             (
@@ -2353,7 +3064,7 @@ function buildModel(){
               nEff+4
             ),
             45,
-            95
+            96
           )
 
         : 100;
@@ -2362,7 +3073,8 @@ function buildModel(){
     const mu=
       rate *
       (
-        expectedTOG/100
+        expectedTOG /
+        100
       );
 
 
@@ -2382,7 +3094,7 @@ function buildModel(){
       );
 
 
-    const resMean=
+    const rm=
       weightedMean(
         residuals,
         weights
@@ -2393,11 +3105,11 @@ function buildModel(){
       weightedVariance(
         residuals,
         weights,
-        resMean
+        rm
       );
 
 
-    const varWeight=
+    const vw=
       clamp(
         nEff /
         (
@@ -2412,20 +3124,19 @@ function buildModel(){
       (
         Number.isFinite(ownVar)
           ? ownVar
-          : popDispVar
+          : popVar
       ) *
-      varWeight
+      vw
       +
-      popDispVar *
+      popVar *
       (
-        1-varWeight
+        1-vw
       );
 
 
     const meanUncertainty=
       Math.max(
-        1.0,
-
+        1,
         processVar /
         Math.max(
           3,
@@ -2434,28 +3145,24 @@ function buildModel(){
       );
 
 
-    const togUncertainty=
+    const togVar=
       Number.isFinite(recentTOG) &&
-      togVals.length>=3
+      togGames.length>=3
 
-        ? Math.max(
-            0.5,
-
-            (
-              weightedVariance(
-                togGames.map(
-                  g=>
-                    g.tog
-                ),
-                togWeights,
-                recentTOG
-              ) ||
-              0
-            ) *
-            (
-              rate/100
-            )**2
-          )
+        ? (
+            weightedVariance(
+              togGames.map(
+                g=>
+                  g.tog
+              ),
+              togW,
+              recentTOG
+            ) ||
+            0
+          ) *
+          (
+            rate/100
+          )**2
 
         : 2;
 
@@ -2464,12 +3171,15 @@ function buildModel(){
       Math.sqrt(
         Math.max(
           9,
-
-          processVar +
-          meanUncertainty +
-          togUncertainty
+          processVar+
+          meanUncertainty+
+          togVar
         )
       );
+
+
+    const seasonYear=
+      cut.getFullYear();
 
 
     const l5=
@@ -2500,16 +3210,15 @@ function buildModel(){
       );
 
 
-    const seasonYear=
-      cut.getFullYear();
-
-
     const season=
       mean(
         games
           .filter(
             g=>
-              g.date.getFullYear()===
+              new Date(
+                g.date
+              )
+              .getFullYear()===
               seasonYear
           )
           .map(
@@ -2529,28 +3238,21 @@ function buildModel(){
 
 
     let quality=
-      100;
-
-
-    quality-=
+      100 -
       Math.max(
         0,
         minGames-games.length
       ) *
-      7;
-
-
-    quality-=
+      7 -
       Math.min(
         22,
         missingTOG*3
+      ) -
+      (
+        nEff<5
+          ? 12
+          : 0
       );
-
-
-    quality-=
-      nEff<5
-        ? 12
-        : 0;
 
 
     quality=
@@ -2561,6 +3263,14 @@ function buildModel(){
         20,
         100
       );
+
+
+    const recentPos=
+      games.find(
+        g=>
+          g.position
+      )?.position ||
+      '';
 
 
     out.push({
@@ -2575,6 +3285,9 @@ function buildModel(){
         games[0]?.team ||
         '',
 
+      position:
+        recentPos,
+
       games:
         games.length,
 
@@ -2586,12 +3299,11 @@ function buildModel(){
 
       season,
 
+      recentTOG,
+
       expectedTOG,
 
       mu,
-
-      median:
-        mu,
 
       sd,
 
@@ -2635,7 +3347,8 @@ function buildModel(){
 
   setStatus(
     'modelStatus',
-    `${out.filter(x=>Number.isFinite(x.mu)).length}/${out.length} players modelled independently. Sportsbet prices still locked.`,
+    `${out.filter(x=>Number.isFinite(x.mu)).length}/${out.length} players modelled independently. `+
+    `Sportsbet prices still locked.`,
     'good'
   );
 
@@ -2653,13 +3366,15 @@ function renderProjections(){
     $('projectionBody');
 
 
-  if(!state.projections.length){
+  if(
+    !state.projections.length
+  ){
 
     body.innerHTML=
-      '<tr>' +
-      '<td colspan="11" class="muted">' +
-      'Load player universe and history, then build the model.' +
-      '</td>' +
+      '<tr>'+
+      '<td colspan="12" class="muted">'+
+      'Load game, universe and history first.'+
+      '</td>'+
       '</tr>';
 
     return;
@@ -2681,9 +3396,7 @@ function renderProjections(){
             return `
               <tr>
                 <td>${esc(p.player)}</td>
-                <td>—</td>
-                <td>0</td>
-                <td colspan="7">
+                <td colspan="10">
                   No matching historical data
                 </td>
                 <td>
@@ -2717,6 +3430,10 @@ function renderProjections(){
               </td>
 
               <td>
+                ${esc(p.position)}
+              </td>
+
+              <td>
                 ${p.games}
               </td>
 
@@ -2733,6 +3450,10 @@ function renderProjections(){
               </td>
 
               <td>
+                ${fmt(p.recentTOG)}%
+              </td>
+
+              <td>
 
                 <input
                   data-tog="${esc(p.playerKey)}"
@@ -2741,17 +3462,13 @@ function renderProjections(){
                   max="100"
                   step="1"
                   value="${fmt(p.expectedTOG,0)}"
-                  style="width:74px;padding:5px"
-                />
+                  style="width:70px;padding:5px"
+                >
 
               </td>
 
               <td>
                 <b>${fmt(p.mu)}</b>
-              </td>
-
-              <td>
-                ${fmt(p.median)}
               </td>
 
               <td>
@@ -2782,10 +3499,11 @@ function renderProjections(){
           'change',
           e=>{
 
-            if(state.frozen){
+            if(
+              state.frozen
+            ){
 
-              e.target.value=
-                e.target.defaultValue;
+              renderProjections();
 
               return;
 
@@ -2804,7 +3522,7 @@ function renderProjections(){
               return;
 
 
-            const newTog=
+            const n=
               clamp(
                 Number(
                   e.target.value
@@ -2816,20 +3534,16 @@ function renderProjections(){
 
 
             const ratio=
-              newTog /
+              n /
               p.expectedTOG;
 
 
             p.expectedTOG=
-              newTog;
+              n;
 
 
             p.mu*=
               ratio;
-
-
-            p.median=
-              p.mu;
 
 
             renderProjections();
@@ -2837,7 +3551,7 @@ function renderProjections(){
 
             setStatus(
               'modelStatus',
-              'Expected TOG override applied. Re-freeze after all verified role adjustments.',
+              'Expected TOG override applied. Freeze only after verified role adjustments are complete.',
               'warn'
             );
 
@@ -2865,10 +3579,13 @@ function freezeModel(){
     game:
       state.selectedGame,
 
+    historyMeta:
+      state.historyMeta,
+
     model:{
 
       name:
-        'AFL Disposal Player Intelligence Trial 0.1',
+        'AFL Disposal Player Intelligence Trial 0.2',
 
       halfLife:
         Number(
@@ -2886,7 +3603,7 @@ function freezeModel(){
         ),
 
       distribution:
-        'Normal predictive baseline with shrunk variance'
+        'Normal predictive baseline with recency weighting, TOG normalisation and shrunk variance'
 
     },
 
@@ -2911,7 +3628,12 @@ function freezeModel(){
 
   setStatus(
     'modelStatus',
-    `Price-blind projections frozen at ${new Date(state.frozen.frozenAt).toLocaleString()}. Sportsbet comparison unlocked.`,
+    `Price-blind projections frozen at ${
+      new Date(
+        state.frozen.frozenAt
+      )
+      .toLocaleString()
+    }. Sportsbet comparison unlocked.`,
     'good'
   );
 
@@ -2947,6 +3669,10 @@ function lockPrices(){
 
   $('kpiFrozen').textContent=
     'NO';
+
+
+  $('kpiFrozen').className=
+    '';
 
 }
 
@@ -2987,7 +3713,9 @@ function unlockPrices(){
 
 function rankLines(){
 
-  if(!state.frozen)
+  if(
+    !state.frozen
+  )
     return;
 
 
@@ -3045,8 +3773,12 @@ function rankLines(){
 
     if(
       !p ||
-      !Number.isFinite(p.mu) ||
-      !Number.isFinite(p.sd)
+      !Number.isFinite(
+        p.mu
+      ) ||
+      !Number.isFinite(
+        p.sd
+      )
     )
       continue;
 
@@ -3065,7 +3797,7 @@ function rankLines(){
 
 
     const edge=
-      modelP -
+      modelP-
       breakEven;
 
 
@@ -3082,18 +3814,19 @@ function rankLines(){
 
     const uncertaintyPenalty=
       (
-        100-p.quality
+        100-
+        p.quality
       ) /
       100 *
-      0.06;
+      .06;
 
 
     const conservativeP=
       clamp(
-        modelP -
+        modelP-
         uncertaintyPenalty,
-        0.001,
-        0.999
+        .001,
+        .999
       );
 
 
@@ -3110,12 +3843,12 @@ function rankLines(){
       (
         p.quality-70
       ) *
-      0.04 -
+      .04 -
       Math.max(
         0,
         line.odds-2
       ) *
-      0.35;
+      .35;
 
 
     vals.push({
@@ -3227,16 +3960,11 @@ function rankLines(){
                 </td>
 
                 <td>
+                  <b>${pct(v.modelP)}</b>
+                </td>
 
-                  <b>
-                    ${pct(v.modelP)}
-                  </b>
-
-                  <div class="small muted">
-                    conservative
-                    ${pct(v.conservativeP)}
-                  </div>
-
+                <td>
+                  ${pct(v.conservativeP)}
                 </td>
 
                 <td>
@@ -3261,15 +3989,9 @@ function rankLines(){
                 </td>
 
                 <td>
-                  ${v.quality}/100
-                </td>
-
-                <td>
-
                   <span class="pill ${q}">
                     ${status}
                   </span>
-
                 </td>
 
               </tr>
@@ -3279,12 +4001,14 @@ function rankLines(){
         )
         .join('')
 
-      : '<tr><td colspan="11" class="muted">No modelled Sportsbet lines matched the imported player data.</td></tr>';
+      : '<tr><td colspan="11">No matched lines.</td></tr>';
 
 
   setStatus(
     'rankStatus',
-    `${vals.length} lines priced; ${vals.filter(x=>x.qualified).length} currently qualify. No multi is forced.`,
+    `${vals.length} Sportsbet lines priced; `+
+    `${vals.filter(x=>x.qualified).length} qualify. `+
+    `No multi is forced.`,
     'good'
   );
 
@@ -3296,7 +4020,9 @@ function rankLines(){
 
 function buildAudit(){
 
-  if(!state.frozen){
+  if(
+    !state.frozen
+  ){
 
     $('auditText').value=
       '';
@@ -3309,7 +4035,7 @@ function buildAudit(){
   const audit={
 
     app:
-      'BET INTELLIGENCE AFL — Player Intelligence Trial 0.1',
+      'BET INTELLIGENCE AFL — Player Intelligence Trial 0.2',
 
     frozenAt:
       state.frozen.frozenAt,
@@ -3317,10 +4043,13 @@ function buildAudit(){
     game:
       state.frozen.game,
 
+    historyMeta:
+      state.frozen.historyMeta,
+
     model:
       state.frozen.model,
 
-    historyRowsImported:
+    historyRows:
       state.history.length,
 
     marketPlayerCount:
@@ -3366,9 +4095,6 @@ function buildAudit(){
           qualified:
             v.qualified,
 
-          market:
-            v.market,
-
           lastUpdate:
             v.lastUpdate
 
@@ -3394,17 +4120,17 @@ function renderSummary(){
     state.players.length;
 
 
-  const modelled=
-    state.projections.filter(
-      x=>
-        Number.isFinite(
-          x.mu
-        )
-    ).length;
+  const matched=
+    new Set(
+      state.history.map(
+        r=>
+          r.playerKey
+      )
+    ).size;
 
 
-  $('kpiModelled').textContent=
-    modelled;
+  $('kpiMatched').textContent=
+    matched;
 
 
   $('kpiHistory').textContent=
@@ -3416,15 +4142,37 @@ function renderSummary(){
 
       ? Math.round(
           100 *
-          modelled /
+          matched /
           state.players.length
-        ) +
+        )+
         '%'
 
       : '0%';
 
 
-  if(!state.frozen){
+  $('kpiLatest').textContent=
+    state.historyMeta?.latest
+
+      ? new Date(
+          state.historyMeta.latest
+        )
+        .toLocaleDateString(
+          'en-AU',
+          {
+            day:
+              '2-digit',
+
+            month:
+              'short'
+          }
+        )
+
+      : '—';
+
+
+  if(
+    !state.frozen
+  ){
 
     $('kpiFrozen').textContent=
       'NO';
@@ -3443,13 +4191,13 @@ function clearTrial(){
 
   state.selectedGame=null;
 
-  state.history=[];
-
   state.marketResponse=null;
 
   state.players=[];
 
   state.marketLines=[];
+
+  state.history=[];
 
   state.projections=[];
 
@@ -3457,20 +4205,18 @@ function clearTrial(){
 
   state.valuations=[];
 
+  state.historyMeta=null;
+
 
   $('gameSelect').innerHTML=
     '<option value="">Load games first</option>';
 
 
-  $('csvText').value=
-    '';
-
-
-  $('csvFile').value=
-    '';
-
-
   $('loadUniverseBtn').disabled=
+    true;
+
+
+  $('loadHistoryBtn').disabled=
     true;
 
 
@@ -3482,12 +4228,24 @@ function clearTrial(){
     true;
 
 
+  $('historyProgress').style.width=
+    '0%';
+
+
   $('projectionBody').innerHTML=
-    '<tr><td colspan="11" class="muted">Load player universe and history, then build the model.</td></tr>';
+    '<tr>'+
+    '<td colspan="12" class="muted">'+
+    'Load game, universe and history first.'+
+    '</td>'+
+    '</tr>';
 
 
   $('valuationBody').innerHTML=
-    '<tr><td colspan="11" class="muted">Freeze projections to unlock.</td></tr>';
+    '<tr>'+
+    '<td colspan="11" class="muted">'+
+    'Freeze projections to unlock.'+
+    '</td>'+
+    '</tr>';
 
 
   $('auditText').value=
@@ -3552,7 +4310,7 @@ $('loadGamesBtn')
 $('gameSelect')
   .addEventListener(
     'change',
-    selectedGameChanged
+    gameChanged
   );
 
 
@@ -3563,55 +4321,10 @@ $('loadUniverseBtn')
   );
 
 
-$('importCsvBtn')
+$('loadHistoryBtn')
   .addEventListener(
     'click',
-    importHistory
-  );
-
-
-$('csvFile')
-  .addEventListener(
-    'change',
-    async e=>{
-
-      const f=
-        e.target.files?.[0];
-
-
-      if(!f)
-        return;
-
-
-      $('csvText').value=
-        await f.text();
-
-
-      importHistory();
-
-    }
-  );
-
-
-$('templateBtn')
-  .addEventListener(
-    'click',
-    ()=>{
-
-      $('csvText').value=
-`player,team,date,opponent,venue,disposals,tog
-Matt Rowell,Gold Coast Suns,2026-08-15,GWS Giants,People First Stadium,31,86
-Matt Rowell,Gold Coast Suns,2026-08-08,Carlton,Marvel Stadium,28,84
-`;
-
-
-      setStatus(
-        'dataStatus',
-        'Template inserted. Replace the sample rows with real historical game data.',
-        'warn'
-      );
-
-    }
+    loadHistory
   );
 
 
@@ -3640,6 +4353,38 @@ $('clearBtn')
   .addEventListener(
     'click',
     clearTrial
+  );
+
+
+$('clearCacheBtn')
+  .addEventListener(
+    'click',
+    async()=>{
+
+      try{
+
+        await cacheClear();
+
+
+        setStatus(
+          'dataStatus',
+          'History cache cleared.',
+          'good'
+        );
+
+      }
+      catch(e){
+
+        setStatus(
+          'dataStatus',
+          'Could not clear cache: '+
+          e.message,
+          'bad'
+        );
+
+      }
+
+    }
   );
 
 
