@@ -1,4147 +1,749 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BET INTELLIGENCE V16</title>
-
-<style>
-:root{--bg:#081019;--panel:#111b27;--line:#26384d;--text:#edf4fb;--muted:#93a6b9;--good:#58d99f;--warn:#f1c466;--bad:#ff7379;--blue:#62a9ff;--purple:#a78bfa;--cyan:#65d8e5}
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(180deg,#07101a,#0a121c 50%,#07101a);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
-.wrap{max-width:1240px;margin:auto;padding:14px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px}
-.top h1{margin:0;font-size:clamp(23px,5vw,34px);letter-spacing:.03em}
-.sub{color:var(--muted);font-size:12px;margin-top:4px}
-.badge{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--good);font-size:11px;font-weight:900;white-space:nowrap}
-.card{background:rgba(17,27,39,.97);border:1px solid var(--line);border-radius:15px;margin:12px 0;overflow:hidden}
-.card h2{font-size:14px;margin:0;padding:13px 14px;border-bottom:1px solid var(--line)}
-.body{padding:14px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-@media(max-width:760px){.grid,.grid2{grid-template-columns:1fr}.wrap{padding:9px}}
-label{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-bottom:5px}
-input,select,button,textarea{font:inherit}
-input,select,textarea{width:100%;background:#08121c;color:var(--text);border:1px solid #30445b;border-radius:10px;padding:11px 12px;outline:none}
-button{border:0;border-radius:10px;padding:11px 13px;font-weight:900;cursor:pointer;background:#26394f;color:var(--text)}
-button.primary{background:linear-gradient(135deg,#348ff4,#5f68e8)}
-button.good{background:#173a30;border:1px solid #2c5e4c;color:#7de9ba}
-button.purple{background:#2a2143;border:1px solid #5a478d;color:#d9ccff}
-button:disabled{opacity:.45;cursor:not-allowed}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.status{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#0a141e;color:var(--muted);font-size:12px;line-height:1.45}
-.status.good{color:var(--good)}
-.status.bad{color:var(--bad)}
-.status.warn{color:var(--warn)}
-.games{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-@media(max-width:720px){.games{grid-template-columns:1fr}}
-.game{padding:11px;border:1px solid var(--line);border-radius:10px;background:#0a141e;cursor:pointer}
-.game.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(98,169,255,.13)}
-.small{font-size:11px;color:var(--muted)}
-.metricGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}
-@media(max-width:760px){.metricGrid{grid-template-columns:repeat(2,1fr)}}
-.metric{border:1px solid var(--line);border-radius:10px;background:#0a141e;padding:10px}
-.metric strong{display:block;font-size:20px}
-.metric span{font-size:10px;color:var(--muted);text-transform:uppercase}
-.familyRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.familyChip{border:1px solid var(--line);background:#0a141e;border-radius:999px;padding:5px 8px;font-size:10px;color:#c0cfdd}
-.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:10px;max-height:520px}
-table{width:100%;border-collapse:collapse;min-width:800px;background:#0a141e}
-th,td{padding:8px 9px;border-bottom:1px solid #203044;text-align:left;font-size:11px;vertical-align:top}
-th{position:sticky;top:0;background:#101c29;color:#b9cada;z-index:1}
-td code{font-size:10px;color:#d7e3ef}
-.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 6px;margin:2px 2px 0 0;font-size:10px;color:#b7c7d6}
-.pill.good{color:var(--good);border-color:#285845}
-.pill.warn{color:var(--warn);border-color:#6b5525}
-.export{white-space:pre-wrap;word-break:break-word;background:#071019;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:760px;overflow:auto;font:11px/1.48 ui-monospace,SFMono-Regular,Menlo,monospace}
-.note{font-size:11px;color:var(--muted);line-height:1.5}
-.hidden{display:none!important}
-.footer{text-align:center;color:#6e8398;font-size:10px;padding:15px 0 25px}
-.trustGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-@media(max-width:700px){.trustGrid{grid-template-columns:1fr 1fr}}
-.trust{border:1px solid var(--line);border-radius:10px;background:#0a141e;padding:9px}
-.trust b{display:block;font-size:11px}
-.trust span{font-size:10px;color:var(--warn)}
-details{margin-top:10px}
-summary{cursor:pointer;color:var(--muted);font-size:11px}
-.diag{white-space:pre-wrap;color:#9fb1c5;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}
-</style>
-</head>
-
-<body>
-
-<div class="wrap">
-
-<div class="top">
-  <div>
-    <h1>BET INTELLIGENCE V16</h1>
-    <div class="sub">
-      Complete Sportsbet universe → trim useless tails → hierarchical market views → full ladder dictionary → master analysis prompt
-    </div>
-  </div>
-  <div class="badge">DATA ENGINE</div>
-</div>
-
-
-<section class="card">
-<h2>1. LOAD CURRENT GAMES</h2>
-
-<div class="body">
-
-<div class="grid2">
-
-<div>
-<label>The Odds API key</label>
-<input
-  id="apiKey"
-  type="password"
-  placeholder="Paste key for this session"
-  autocomplete="off">
-</div>
-
-<div>
-<label>Sport</label>
-<select id="sport">
-<option value="aussierules_afl">AFL</option>
-<option value="rugbyleague_nrl">NRL</option>
-</select>
-</div>
-
-</div>
-
-<div class="row" style="margin-top:10px">
-<button id="connectBtn" class="primary">
-LOAD CURRENT GAMES
-</button>
-
-<button id="clearBtn">
-CLEAR
-</button>
-</div>
-
-<div id="status" class="status">
-Paste your API key and load current games.
-</div>
-
-<div id="games" class="games"></div>
-
-</div>
-</section>
-
-
-<section id="setupCard" class="card hidden">
-
-<h2>2. SELECT MATCH & EXPORT RANGE</h2>
-
-<div class="body">
-
-<div id="selectedGame" class="status good">
-No game selected.
-</div>
-
-<div class="grid" style="margin-top:10px">
-
-<div>
-<label>Team focus</label>
-
-<select id="teamFocus">
-<option value="both">Both teams</option>
-<option value="home">Home team only</option>
-<option value="away">Away team only</option>
-</select>
-</div>
-
-
-<div>
-<label>Minimum individual odds exported</label>
-
-<select id="minOdds">
-<option value="1.05">1.05</option>
-<option value="1.08" selected>1.08 — recommended</option>
-<option value="1.10">1.10</option>
-<option value="1.15">1.15</option>
-</select>
-</div>
-
-
-<div>
-<label>Maximum individual odds exported</label>
-
-<select id="maxOdds">
-<option value="3">3.00</option>
-<option value="4">4.00</option>
-<option value="5" selected>5.00 — recommended</option>
-<option value="6">6.00</option>
-<option value="8">8.00</option>
-</select>
-</div>
-
-</div>
-
-<div class="note" style="margin-top:10px">
-
-V16 keeps every player and every player-market ladder internally.
-
-The odds range only trims irrelevant ladder points from the ChatGPT pack.
-It does not remove a player or market because one line is unattractive.
-
-</div>
-
-<div class="row" style="margin-top:10px">
-
-<button id="marketsBtn" class="good">
-LOAD COMPLETE SPORTSBET PLAYER DATA
-</button>
-
-</div>
-
-<div id="marketStatus" class="status">
-Ready to load the selected match.
-</div>
-
-</div>
-</section>
-
-
-<section id="universeCard" class="card hidden">
-
-<h2>3. COMPLETE MARKET UNIVERSE</h2>
-
-<div class="body">
-
-<div class="metricGrid">
-
-<div class="metric">
-<strong id="rawCount">0</strong>
-<span>Raw outcomes</span>
-</div>
-
-<div class="metric">
-<strong id="ladderCount">0</strong>
-<span>All ladders</span>
-</div>
-
-<div class="metric">
-<strong id="exportLadderCount">0</strong>
-<span>Export ladders</span>
-</div>
-
-<div class="metric">
-<strong id="playerCount">0</strong>
-<span>Unique players</span>
-</div>
-
-<div class="metric">
-<strong id="marketCount">0</strong>
-<span>Markets loaded</span>
-</div>
-
-<div class="metric">
-<strong id="quota">—</strong>
-<span>API remaining</span>
-</div>
-
-</div>
-
-<div id="familyRep" class="familyRow"></div>
-
-<div class="note" style="margin-top:10px">
-
-The browser view below is hierarchical:
-
-player map first, then market-family comparison matrices,
-then the exact full ladder dictionary in the exported pack.
-
-</div>
-
-<div id="playerMapWrap"></div>
-
-<div id="marketMatricesWrap"></div>
-
-</div>
-</section>
-
-
-<section id="discoveryCard" class="card hidden">
-
-<h2>4. MARKET DISCOVERY & TRUST</h2>
-
-<div class="body">
-
-<div id="marketDiscovery" class="status">
-No discovery data.
-</div>
-
-<div class="trustGrid">
-
-<div class="trust">
-<b>Market / odds</b>
-<span>VERIFIED — Sportsbet via The Odds API</span>
-</div>
-
-<div class="trust">
-<b>Selection</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-<div class="trust">
-<b>Role / injury / minutes</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-<div class="trust">
-<b>Form / matchup / weather</b>
-<span>UNVERIFIED — external check required</span>
-</div>
-
-</div>
-
-</div>
-</section>
-
-
-<section id="exportCard" class="card hidden">
-
-<h2>5. CREATE V16 ANALYSIS PACK</h2>
-
-<div class="body">
-
-<div class="row">
-
-<button id="createExportBtn" class="primary">
-CREATE V16 PACK
-</button>
-
-<button id="copyBtn" disabled>
-COPY
-</button>
-
-<button id="downloadBtn" disabled>
-DOWNLOAD TXT
-</button>
-
-</div>
-
-<div
-  id="exportBox"
-  class="export"
-  style="margin-top:10px">
-
-Create the analysis pack after markets are loaded.
-
-</div>
-
-</div>
-</section>
-
-
-<section class="card">
-
-<h2>6. POST-MATCH AUDIT LOG</h2>
-
-<div class="body">
-
-<div class="grid2">
-
-<div>
-
-<label>Completed-leg audit line</label>
-
-<textarea
-  id="auditInput"
-  rows="3"
-  placeholder="Player | market | line | odds | actual | HIT/MISS | reason">
-</textarea>
-
-</div>
-
-<div>
-
-<label>Allowed failure classifications</label>
-
-<div class="status" style="margin-top:0">
-
-Variance · Bad line selection · Incorrect role assumption ·
-Injury/substitution · Team-selection error · Matchup error ·
-Correlation error · Data-quality problem · Model error
-
-</div>
-
-</div>
-
-</div>
-
-<div class="row" style="margin-top:10px">
-
-<button id="saveAuditBtn" class="purple">
-SAVE AUDIT LINE
-</button>
-
-<button id="clearAuditBtn">
-CLEAR AUDIT HISTORY
-</button>
-
-</div>
-
-<div id="auditStatus" class="status">
-Audit history is stored locally in this browser only.
-</div>
-
-<details>
-
-<summary>
-Stored audit history
-</summary>
-
-<div
-  id="auditHistory"
-  class="export"
-  style="margin-top:8px;max-height:260px">
-
-No audit history.
-
-</div>
-
-</details>
-
-</div>
-</section>
-
-
-<section class="card">
-
-<div class="body note">
-
-<b>V16 architecture:</b>
-
-no arbitrary candidate cap.
-
-Every player/market remains visible.
-
-Only useless extreme-price ladder tails are removed from the exported analytical range.
-
-The pack is hierarchical so ChatGPT can scan the whole universe efficiently
-without losing access to exact lines.
-
-<details>
-
-<summary>
-Diagnostics
-</summary>
-
-<div id="diag" class="diag">
-Ready.
-</div>
-
-</details>
-
-</div>
-
-</section>
-
-
-<div class="footer">
-
-BET INTELLIGENCE V16 — data acquisition and structured decision support only.
-
-</div>
-
-</div>
-
-
-<script>
-
-'use strict';
-
-
-const API=
-  'https://api.the-odds-api.com/v4';
-
-
-const KNOWN_AFL_MARKETS=[
-
-  'player_disposals_over',
-  'player_disposals',
-
-  'player_goals_scored_over',
-  'player_goal_scorer_anytime',
-
-  'player_marks_over',
-  'player_tackles_over',
-  'player_clearances_over',
-
-  'player_kicks_over',
-  'player_handballs_over',
-
-  'player_afl_fantasy_points',
-  'player_afl_fantasy_points_over',
-
-  'player_hitouts_over',
-  'player_hitouts'
-
-];
-
-
-const KNOWN_NRL_MARKETS=[
-
-  'player_try_scorer_anytime',
-  'player_try_scorer_over',
-  'player_try_scorer_first',
-  'player_try_scorer_last',
-
-  'player_points',
-  'player_points_over',
-
-  'player_tackles_over',
-
-  'player_run_metres_over'
-
-];
-
-
-const FAMILY={
-
-  player_disposals_over:'disposals',
-  player_disposals:'disposals',
-
-  player_goals_scored_over:'goals',
-  player_goal_scorer_anytime:'goals',
-
-  player_marks_over:'marks',
-
-  player_tackles_over:'tackles',
-
-  player_clearances_over:'clearances',
-
-  player_kicks_over:'kicks',
-
-  player_handballs_over:'handballs',
-
-  player_afl_fantasy_points:'fantasy',
-  player_afl_fantasy_points_over:'fantasy',
-
-  player_hitouts_over:'hitouts',
-  player_hitouts:'hitouts',
-
-  player_try_scorer_anytime:'tries',
-  player_try_scorer_over:'tries',
-  player_try_scorer_first:'tries',
-  player_try_scorer_last:'tries',
-
-  player_points:'points',
-  player_points_over:'points',
-
-  player_run_metres_over:'run_metres'
-
-};
-
-
-const NON_PLAYER_PREFIXES=[
-
-  'h2h',
-  'spreads',
-  'totals',
-  'alternate_',
-  'team_'
-
-];
-
-
-const PRICE_LANDMARKS=[
-
-  1.10,
-  1.25,
-  1.40,
-  1.60,
-  1.85,
-  2.20,
-  3.00,
-  4.00
-
-];
-
-
-const state={
-
-  events:[],
-
-  game:null,
-
-  raw:[],
-
-  ladders:
-    new Map(),
-
-  quota:null,
-
-  availableMarkets:[],
-
-  requestedMarkets:[],
-
-  unknownMarkets:[]
-
-};
-
-
-const $=
-  id=>
-    document.getElementById(id);
-
-
-const esc=
-  s=>
-    String(s??'')
-      .replace(
-        /[&<>"']/g,
-        c=>({
-
-          '&':'&amp;',
-          '<':'&lt;',
-          '>':'&gt;',
-          '"':'&quot;',
-          "'":'&#039;'
-
-        }[c])
-      );
-
-
-const num=
-  (v,d=0)=>
-    Number.isFinite(
-      Number(v)
-    )
-      ?
-      Number(v)
-      :
-      d;
-
-
-const implied=
-  o=>
-    o>1
-      ?
-      1/o
-      :
-      0;
-
-
-/* ============================================================
-   LOGGING
-============================================================ */
-
-function log(x){
-
-  $('diag').textContent=
-
-    new Date()
-      .toLocaleTimeString()
-
-    +
-
-    '\n'
-
-    +
-
-    (
-      typeof x==='string'
-        ?
-        x
-        :
-        JSON.stringify(
-          x,
-          null,
-          2
-        )
-    );
-
-}
-
-
-function status(
-  msg,
-  type=''
-){
-
-  $('status').textContent=
-    msg;
-
-
-  $('status').className=
-
-    'status'
-
-    +
-
-    (
-      type
-        ?
-        ' '+type
-        :
-        ''
-    );
-
-}
-
-
-function marketStatus(
-  msg,
-  type=''
-){
-
-  $('marketStatus').textContent=
-    msg;
-
-
-  $('marketStatus').className=
-
-    'status'
-
-    +
-
-    (
-      type
-        ?
-        ' '+type
-        :
-        ''
-    );
-
-}
-
-
-/* ============================================================
-   MARKET CLASSIFICATION
-============================================================ */
-
-function inferFamily(market){
-
-  if(
-    FAMILY[market]
-  ){
-
-    return(
-      FAMILY[market]
-    );
-
-  }
-
-
-  const k=
-    String(
-      market||
-      ''
-    )
-    .toLowerCase();
-
-
-  if(
-    k.includes(
-      'disposal'
-    )
-  ){
-
-    return(
-      'disposals'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'goal'
-    )
-  ){
-
-    return(
-      'goals'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'mark'
-    )
-  ){
-
-    return(
-      'marks'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'tackle'
-    )
-  ){
-
-    return(
-      'tackles'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'clearance'
-    )
-  ){
-
-    return(
-      'clearances'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'kick'
-    )
-  ){
-
-    return(
-      'kicks'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'handball'
-    )
-  ){
-
-    return(
-      'handballs'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'fantasy'
-    )
-  ){
-
-    return(
-      'fantasy'
-    );
-
-  }
-
-
-  if(
-    k.includes('hitout') ||
-    k.includes('hit_out')
-  ){
-
-    return(
-      'hitouts'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'try'
-    )
-  ){
-
-    return(
-      'tries'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'run_met'
-    )
-  ){
-
-    return(
-      'run_metres'
-    );
-
-  }
-
-
-  if(
-    k.includes(
-      'point'
-    )
-  ){
-
-    return(
-      'points'
-    );
-
-  }
-
-
-  return(
-    'other'
-  );
-
-}
-
-
-function isPlayerMarketKey(k){
-
-  const s=
-    String(
-      k||
-      ''
-    );
-
-
-  return(
-
-    s.startsWith(
-      'player_'
-    )
-
-    &&
-
-    !NON_PLAYER_PREFIXES.some(
-      p=>
-        s.startsWith(p)
-    )
-
-  );
-
-}
-
-
-/* ============================================================
-   API
-============================================================ */
-
-async function getJson(url){
-
-  let r;
-
-
-  try{
-
-    r=
-      await fetch(
-        url,
-        {
-          cache:'no-store'
-        }
-      );
-
-  }
-  catch(e){
-
-    throw new Error(
-
-      (
-        location.protocol==='file:'
-          ?
-          'Browser/network blocked the request from a local file. Host V16 on GitHub Pages/HTTPS. '
-          :
-          ''
-      )
-
-      +
-
-      e.message
-
-    );
-
-  }
-
-
-  state.quota=
-    r.headers.get(
-      'x-requests-remaining'
-    );
-
-
-  if(
-    $('quota')
-  ){
-
-    $('quota').textContent=
-      state.quota??'—';
-
-  }
-
-
-  const text=
-    await r.text();
-
-
-  let data;
-
-
-  try{
-
-    data=
-      JSON.parse(
-        text
-      );
-
-  }
-  catch{
-
-    data=
-      text;
-
-  }
-
-
-  if(
-    !r.ok
-  ){
-
-    throw new Error(
-
-      'HTTP '
-
-      +
-
-      r.status
-
-      +
-
-      ' — '
-
-      +
-
-      (
-        typeof data==='string'
-          ?
-          data.slice(
-            0,
-            300
-          )
-          :
-          JSON.stringify(
-            data
-          )
-          .slice(
-            0,
-            300
-          )
-      )
-
-    );
-
-  }
-
-
-  return(
-    data
-  );
-
-}
-
-
-/* ============================================================
-   RESET
-============================================================ */
-
-function resetAfterGame(){
-
-  state.raw=[];
-
-
-  state.ladders=
-    new Map();
-
-
-  state.availableMarkets=[];
-
-
-  state.requestedMarkets=[];
-
-
-  state.unknownMarkets=[];
-
-
-  [
-
-    'universeCard',
-    'discoveryCard',
-    'exportCard'
-
-  ]
-  .forEach(
-    id=>
-      $(id)
-        .classList
-        .add(
-          'hidden'
-        )
-  );
-
-
-  $('exportBox').textContent=
-    'Create the analysis pack after markets are loaded.';
-
-
-  $('copyBtn').disabled=
-    true;
-
-
-  $('downloadBtn').disabled=
-    true;
-
-}
-
-
-/* ============================================================
-   LOAD GAMES
-============================================================ */
-
-async function loadGames(){
-
-  const key=
-    $('apiKey')
-      .value
-      .trim();
-
-
-  if(
-    !key
-  ){
-
-    return status(
-      'Enter your API key first.',
-      'bad'
-    );
-
-  }
-
-
-  status(
-    'Loading current games…',
-    'warn'
-  );
-
-
-  $('connectBtn').disabled=
-    true;
-
-
-  resetAfterGame();
-
-
-  try{
-
-    const sport=
-      $('sport').value;
-
-
-    const data=
-      await getJson(
-
-        `${API}/sports/${encodeURIComponent(sport)}/events?apiKey=${encodeURIComponent(key)}`
-
-      );
-
-
-    state.events=
-
-      (
-        Array.isArray(data)
-          ?
-          data
-          :
-          []
-      )
-
-      .sort(
-        (a,b)=>
-
-          Date.parse(
-            a.commence_time
-          )
-
-          -
-
-          Date.parse(
-            b.commence_time
-          )
-      );
-
-
-    $('games').innerHTML=
-
-      state.events.length
-
-        ?
-
-        state.events
-          .map(
-            (g,i)=>
-              `
-              <div
-                class="game"
-                data-game="${i}">
-
-                <b>
-                  ${esc(g.away_team)}
-                  @
-                  ${esc(g.home_team)}
-                </b>
-
-                <div class="small">
-
-                  ${
-                    new Date(
-                      g.commence_time
-                    )
-                    .toLocaleString()
-                  }
-
-                </div>
-
-              </div>
-              `
-          )
-          .join('')
-
-        :
-
-        `
-        <div class="status">
-          No current/upcoming games returned.
-        </div>
-        `;
-
-
-    document
-      .querySelectorAll(
-        '[data-game]'
-      )
-      .forEach(
-        el=>
-          el.onclick=
-            ()=>
-              selectGame(
-                num(
-                  el.dataset.game
-                )
-              )
-      );
-
-
-    status(
-
-      `Loaded ${state.events.length} current/upcoming game(s). Select one. ${
-        state.quota!==null
-          ?
-          'API remaining: '+state.quota+'.'
-          :
-          ''
-      }`,
-
-      'good'
-
-    );
-
-
-    log({
-
-      eventCount:
-        state.events.length,
-
-      sport
-
-    });
-
-  }
-  catch(e){
-
-    status(
-      'Load failed: '+
-      e.message,
-      'bad'
-    );
-
-
-    log(
-      e.message
-    );
-
-  }
-  finally{
-
-    $('connectBtn').disabled=
-      false;
-
-  }
-
-}
-
-
-/* ============================================================
-   SELECT GAME
-============================================================ */
-
-function selectGame(i){
-
-  state.game=
-    state.events[i];
-
-
-  if(
-    !state.game
-  ){
-
-    return;
-
-  }
-
-
-  document
-    .querySelectorAll(
-      '[data-game]'
-    )
-    .forEach(
-      x=>
-        x.classList.remove(
-          'selected'
-        )
-    );
-
-
-  document
-    .querySelector(
-      `[data-game="${i}"]`
-    )
-    ?.classList
-    .add(
-      'selected'
-    );
-
-
-  $('setupCard')
-    .classList
-    .remove(
-      'hidden'
-    );
-
-
-  $('selectedGame').innerHTML=
-    `
-    <b>
-
-      ${esc(state.game.away_team)}
-      @
-      ${esc(state.game.home_team)}
-
-    </b>
-
-    <br>
-
-    <span class="small">
-
-      ${
-        new Date(
-          state.game.commence_time
-        )
-        .toLocaleString()
-      }
-
-    </span>
-    `;
-
-
-  resetAfterGame();
-
-
-  marketStatus(
-    'Ready to load the complete player-prop universe.'
-  );
-
-}
-
-
-/* ============================================================
-   NORMALISE
-============================================================ */
-
-function normalizeOutcome(
-  outcome,
-  market
-){
-
-  const side=
-    String(
-      outcome.name||
-      ''
-    )
-    .toLowerCase();
-
-
-  if(
-    side==='under' ||
-    side==='no'
-  ){
-
-    return(
-      null
-    );
-
-  }
-
-
-  const player=
-    String(
-
-      outcome.description
-
-      ||
-
-      outcome.name
-
-      ||
-
-      ''
-
-    )
-    .trim();
-
-
-  const odds=
-    num(
-      outcome.price
-    );
-
-
-  if(
-    !player ||
-    odds<=1
-  ){
-
-    return(
-      null
-    );
-
-  }
-
-
-  return{
-
-    player,
-
-    market,
-
-    family:
-      inferFamily(
-        market
-      ),
-
-    name:
-      String(
-        outcome.name ||
-        player
-      ),
-
-    line:
-      outcome.point??null,
-
-    odds,
-
-    implied:
-      implied(
-        odds
-      )
-
-  };
-
-}
-
-
-/* ============================================================
-   DEDUPE
-============================================================ */
-
-function dedupe(rows){
-
-  const map=
-    new Map();
-
-
-  for(
-    const r
-    of rows
-  ){
-
-    const key=[
-
-      r.player.toLowerCase(),
-
-      r.market,
-
-      r.line,
-
-      r.name.toLowerCase()
-
-    ]
-    .join('|');
-
-
-    if(
-
-      !map.has(key)
-
-      ||
-
-      map.get(key).odds<r.odds
-
-    ){
-
-      map.set(
-        key,
-        r
-      );
-
-    }
-
-  }
-
-
-  return(
-    [
-      ...map.values()
-    ]
-  );
-
-}
-
-
-/* ============================================================
-   LADDERS
-============================================================ */
-
-function ladderKey(x){
-
-  return(
-
-    x.player.toLowerCase()
-
-    +
-
-    '|'
-
-    +
-
-    x.market
-
-  );
-
-}
-
-
-function buildLadders(rows){
-
-  const m=
-    new Map();
-
-
-  for(
-    const x
-    of rows
-  ){
-
-    const k=
-      ladderKey(x);
-
-
-    if(
-      !m.has(k)
-    ){
-
-      m.set(
-        k,
-        []
-      );
-
-    }
-
-
-    m.get(k)
-      .push(x);
-
-  }
-
-
-  for(
-    const arr
-    of m.values()
-  ){
-
-    arr.sort(
-      (a,b)=>{
-
-        const al=
-
-          a.line===null
-
-            ?
-
-            Infinity
-
-            :
-
-            num(
-              a.line,
-              Infinity
-            );
-
-
-        const bl=
-
-          b.line===null
-
-            ?
-
-            Infinity
-
-            :
-
-            num(
-              b.line,
-              Infinity
-            );
-
-
-        return(
-
-          al-bl
-
-          ||
-
-          a.odds-b.odds
-
-        );
-
-      }
-    );
-
-  }
-
-
-  return(
-    m
-  );
-
-}
-
-
-/* ============================================================
-   EXPORT RANGE
-============================================================ */
-
-function exportOddsRange(){
-
-  return{
-
-    min:
-      num(
-        $('minOdds').value,
-        1.08
-      ),
-
-    max:
-      num(
-        $('maxOdds').value,
-        5
-      )
-
-  };
-
-}
-
-
-function trimLadder(arr){
-
-  const {
-    min,
-    max
-  }=
-    exportOddsRange();
-
-
-  return(
-    arr.filter(
-      x=>
-        x.odds>=min &&
-        x.odds<=max
-    )
-  );
-
-}
-
-
-function exportableLadders(){
-
-  return(
-
-    [
-      ...state.ladders.values()
-    ]
-
-    .map(
-      arr=>({
-
-        all:
-          arr,
-
-        trimmed:
-          trimLadder(arr)
-
-      })
-    )
-
-    .filter(
-      x=>
-        x.trimmed.length>0
-    )
-
-  );
-
-}
-
-
-/* ============================================================
-   HELPERS
-============================================================ */
-
-function uniquePlayers(){
-
-  return new Set(
-
-    [
-      ...state.ladders.values()
-    ]
-
-    .map(
-      arr=>
-        (
-          arr[0]?.player||
-          ''
-        )
-        .toLowerCase()
-    )
-
-    .filter(Boolean)
-
-  );
-
-}
-
-
-function familyRepresentation(){
-
-  const m=
-    new Map();
-
-
-  for(
-    const arr
-    of state.ladders.values()
-  ){
-
-    const fam=
-      arr[0]?.family||
-      'other';
-
-
-    m.set(
-
-      fam,
-
-      (
-        m.get(fam)
-        ||
-        0
-      )
-
-      +
-
-      1
-
-    );
-
-  }
-
-
-  return(
-    m
-  );
-
-}
-
-
-function lineText(x){
-
-  return(
-
-    `${x.line??x.name}@${x.odds.toFixed(2)}`
-
-  );
-
-}
-
-
-function nearestPrice(
-  arr,
-  target
-){
-
-  if(
-    !arr.length
-  ){
-
-    return(
-      null
-    );
-
-  }
-
-
-  return(
-
-    [
-      ...arr
-    ]
-
-    .sort(
-      (a,b)=>
-
-        Math.abs(
-          a.odds-target
-        )
-
-        -
-
-        Math.abs(
-          b.odds-target
-        )
-
-        ||
-
-        a.odds-b.odds
-    )[0]
-
-  );
-
-}
-
-
-/* ============================================================
-   LADDER IDS
-============================================================ */
-
-function ladderIdFactory(){
-
-  const counts=
-    new Map();
-
-
-  const ids=
-    new Map();
-
-
-  const sorted=
-
-    [
-      ...state.ladders.values()
-    ]
-
-    .sort(
-      (a,b)=>
-
-        (
-          a[0]?.family||
-          ''
-        )
-        .localeCompare(
-          b[0]?.family||
-          ''
-        )
-
-        ||
-
-        (
-          a[0]?.player||
-          ''
-        )
-        .localeCompare(
-          b[0]?.player||
-          ''
-        )
-
-        ||
-
-        (
-          a[0]?.market||
-          ''
-        )
-        .localeCompare(
-          b[0]?.market||
-          ''
-        )
-    );
-
-
-  for(
-    const arr
-    of sorted
-  ){
-
-    const fam=
-
-      (
-        arr[0]?.family||
-        'other'
-      )
-
-      .toUpperCase()
-
-      .replace(
-        /[^A-Z0-9]/g,
-        ''
-      )
-
-      .slice(
-        0,
-        5
-      )
-
-      ||
-
-      'OTHER';
-
-
-    const n=
-
-      (
-        counts.get(fam)
-        ||
-        0
-      )
-
-      +
-
-      1;
-
-
-    counts.set(
-      fam,
-      n
-    );
-
-
-    ids.set(
-
-      ladderKey(
-        arr[0]
-      ),
-
-      `${fam}-${String(n).padStart(3,'0')}`
-
-    );
-
-  }
-
-
-  return(
-    ids
-  );
-
-}
-
-
-/* ============================================================
-   PLAYER / MARKET GROUPS
-============================================================ */
-
-function playerMap(){
-
-  const map=
-    new Map();
-
-
-  for(
-    const arr
-    of state.ladders.values()
-  ){
-
-    const p=
-      arr[0]?.player||
-      '';
-
-
-    if(
-      !p
-    ){
-
-      continue;
-
-    }
-
-
-    if(
-      !map.has(p)
-    ){
-
-      map.set(
-        p,
-        []
-      );
-
-    }
-
-
-    map.get(p)
-      .push(arr);
-
-  }
-
-
-  return(
-    map
-  );
-
-}
-
-
-function marketGroups(){
-
-  const map=
-    new Map();
-
-
-  for(
-    const arr
-    of state.ladders.values()
-  ){
-
-    const fam=
-      arr[0]?.family||
-      'other';
-
-
-    if(
-      !map.has(fam)
-    ){
-
-      map.set(
-        fam,
-        []
-      );
-
-    }
-
-
-    map.get(fam)
-      .push(arr);
-
-  }
-
-
-  return(
-    map
-  );
-
-}
-
-
-/* ============================================================
-   RENDER UNIVERSE
-============================================================ */
-
-function renderUniverse(){
-
-  const rep=
-    familyRepresentation();
-
-
-  const exportable=
-    exportableLadders();
-
-
-  $('rawCount').textContent=
-    state.raw.length;
-
-
-  $('ladderCount').textContent=
-    state.ladders.size;
-
-
-  $('exportLadderCount').textContent=
-    exportable.length;
-
-
-  $('playerCount').textContent=
-    uniquePlayers().size;
-
-
-  $('marketCount').textContent=
-    state.requestedMarkets.length;
-
-
-  $('quota').textContent=
-    state.quota??'—';
-
-
-  $('familyRep').innerHTML=
-
-    [
-      ...rep.entries()
-    ]
-
-    .map(
-      ([k,v])=>
-        `
-        <span class="familyChip">
-          ${esc(k)}: ${v}
-        </span>
-        `
-    )
-
-    .join('');
-
-
-  const ids=
-    ladderIdFactory();
-
-
-  /* ----------------------------------------------------------
-     PLAYER MAP
-  ---------------------------------------------------------- */
-
-  const pmap=
-    playerMap();
-
-
-  const playerRows=
-
-    [
-      ...pmap.entries()
-    ]
-
-    .sort(
-      (a,b)=>
-        a[0]
-          .localeCompare(
-            b[0]
-          )
-    )
-
-    .map(
-      ([player,arrs])=>{
-
-        const markets=
-
-          arrs
-            .map(
-              arr=>{
-
-                const t=
-                  trimLadder(arr);
-
-
-                if(
-                  !t.length
-                ){
-
-                  return(
-                    null
-                  );
-
-                }
-
-
-                return(
-
-                  `${ids.get(ladderKey(arr[0]))} `
-
-                  +
-
-                  `${arr[0].family} `
-
-                  +
-
-                  `${lineText(t[0])}`
-
-                  +
-
-                  '..'
-
-                  +
-
-                  `${lineText(t[t.length-1])}`
-
-                );
-
-              }
-            )
-
-            .filter(Boolean)
-
-            .join(
-              ' | '
-            );
-
-
-        return(
-
-          markets
-
-            ?
-
-            `
-            <tr>
-
-              <td>
-                ${esc(player)}
-              </td>
-
-              <td>
-                <code>
-                  ${esc(markets)}
-                </code>
-              </td>
-
-            </tr>
-            `
-
-            :
-
-            ''
-
-        );
-
-      }
-    )
-
-    .join('');
-
-
-  $('playerMapWrap').innerHTML=
-
-    `
-    <h3 style="font-size:12px;margin:16px 0 6px">
-      PLAYER MAP
-    </h3>
-
-    <div class="tableWrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>
-              Player
-            </th>
-
-            <th>
-              Available exported markets
-            </th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          ${
-            playerRows
-            ||
-            '<tr><td colspan="2">No exportable ladders in current odds range.</td></tr>'
-          }
-
-        </tbody>
-
-      </table>
-
-    </div>
-    `;
-
-
-  /* ----------------------------------------------------------
-     MARKET FAMILY MATRICES
-  ---------------------------------------------------------- */
-
-  const mg=
-    marketGroups();
-
-
-  let html=
-
-    '<h3 style="font-size:12px;margin:16px 0 6px">MARKET-FAMILY MATRICES</h3>';
-
-
-  for(
-    const [fam,arrs]
-    of[
-      ...mg.entries()
-    ]
-    .sort(
-      (a,b)=>
-        a[0]
-          .localeCompare(
-            b[0]
-          )
-    )
-  ){
-
-    const rows=
-
-      arrs
-        .map(
-          arr=>{
-
-            const t=
-              trimLadder(arr);
-
-
-            if(
-              !t.length
-            ){
-
-              return(
-                ''
-              );
-
-            }
-
-
-            const marks=
-
-              PRICE_LANDMARKS
-                .map(
-                  p=>
-                    nearestPrice(
-                      t,
-                      p
-                    )
-                )
-
-                .map(
-                  x=>
-                    x
-                      ?
-                      lineText(x)
-                      :
-                      '—'
-                );
-
-
-            return`
-            <tr>
-
-              <td>
-                ${esc(ids.get(ladderKey(arr[0])))}
-              </td>
-
-              <td>
-                ${esc(arr[0].player)}
-              </td>
-
-              ${
-                marks
-                  .map(
-                    x=>
-                      `<td>${esc(x)}</td>`
-                  )
-                  .join('')
-              }
-
-            </tr>
-            `;
-
-          }
-        )
-
-        .join('');
-
-
-    if(
-      !rows
-    ){
-
-      continue;
-
-    }
-
-
-    html+=
-      `
-      <details open>
-
-        <summary>
-          ${esc(fam)}
-        </summary>
-
-        <div class="tableWrap">
-
-          <table>
-
-            <thead>
-
-              <tr>
-
-                <th>ID</th>
-
-                <th>Player</th>
-
-                ${
-                  PRICE_LANDMARKS
-                    .map(
-                      p=>
-                        `<th>~${p.toFixed(2)}</th>`
-                    )
-                    .join('')
-                }
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              ${rows}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </details>
-      `;
-
-  }
-
-
-  $('marketMatricesWrap').innerHTML=
-    html;
-
-}
-
-
-/* ============================================================
-   DISCOVERY
-============================================================ */
-
-function renderDiscovery(){
-
-  const known=
-
-    state.requestedMarkets
-      .filter(
-        x=>
-          !state.unknownMarkets
-            .includes(x)
-      );
-
-
-  const {
-    min,
-    max
-  }=
-    exportOddsRange();
-
-
-  $('marketDiscovery').innerHTML=
-    `
-    <b>
-      Sportsbet player markets detected:
-    </b>
-
-    ${state.availableMarkets.length}
-
-    <br>
-
-    <b>
-      Loaded:
-    </b>
-
-    ${
-      esc(
-        state.requestedMarkets.join(', ')
-        ||
-        'none'
-      )
-    }
-
-    <br>
-
-    <b>
-      Recognised:
-    </b>
-
-    ${
-      esc(
-        known.join(', ')
-        ||
-        'none'
-      )
-    }
-
-    <br>
-
-    <b>
-      New / unclassified:
-    </b>
-
-    ${
-      state.unknownMarkets.length
-        ?
-        esc(
-          state.unknownMarkets.join(', ')
-        )
-        :
-        'none'
-    }
-
-    <br>
-
-    <b>
-      ChatGPT export odds range:
-    </b>
-
-    ${min.toFixed(2)}
-    to
-    ${max.toFixed(2)}.
-
-    Full API ladders remain retained internally.
-    `;
-
-}
-
-
-/* ============================================================
-   LOAD ALL SPORTSBET PLAYER MARKETS
-============================================================ */
-
-async function loadMarkets(){
-
-  if(
-    !state.game
-  ){
-
-    return marketStatus(
-      'Select a game first.',
-      'bad'
-    );
-
-  }
-
-
-  const key=
-    $('apiKey')
-      .value
-      .trim();
-
-
-  if(
-    !key
-  ){
-
-    return marketStatus(
-      'API key is missing.',
-      'bad'
-    );
-
-  }
-
-
-  marketStatus(
-    'Discovering Sportsbet player markets…',
-    'warn'
-  );
-
-
-  $('marketsBtn').disabled=
-    true;
-
-
-  resetAfterGame();
-
-
-  try{
-
-    const sport=
-      state.game.sport_key
-      ||
-      $('sport').value;
-
-
-    const base=
-
-      `${API}/sports/${encodeURIComponent(sport)}/events/${encodeURIComponent(state.game.id)}`;
-
-
-    const availability=
-      await getJson(
-
-        `${base}/markets?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet`
-
-      );
-
-
-    const availBook=
-
-      (
-        availability.bookmakers
-        ||
-        []
-      )
-
-      .find(
-        x=>
-          x.key==='sportsbet'
-      );
-
-
-    if(
-      !availBook
-    ){
-
-      throw new Error(
-        'Sportsbet currently has no market list for this event.'
-      );
-
-    }
-
-
-    state.availableMarkets=
-
-      [
-        ...new Set(
-
-          (
-            availBook.markets
-            ||
-            []
-          )
-
-          .map(
-            x=>
-              x.key
-          )
-
-          .filter(
-            isPlayerMarketKey
-          )
-
-        )
-      ];
-
-
-    const knownSet=
-
-      new Set(
-
-        $('sport').value==='aussierules_afl'
-
-          ?
-
-          KNOWN_AFL_MARKETS
-
-          :
-
-          KNOWN_NRL_MARKETS
-
-      );
-
-
-    state.unknownMarkets=
-
-      state.availableMarkets
-        .filter(
-          k=>
-            !knownSet.has(k)
-        );
-
-
-    state.requestedMarkets=
-
-      [
-        ...state.availableMarkets
-      ];
-
-
-    if(
-      !state.requestedMarkets.length
-    ){
-
-      throw new Error(
-        'Sportsbet has no player-prop markets open for this event yet.'
-      );
-
-    }
-
-
-    marketStatus(
-
-      `Found ${state.requestedMarkets.length} Sportsbet player market(s). Loading every line…`,
-
-      'warn'
-
-    );
-
-
-    const chunks=[];
-
-
-    for(
-
-      let i=0;
-
-      i<state.requestedMarkets.length;
-
-      i+=10
-
-    ){
-
-      chunks.push(
-
-        state.requestedMarkets.slice(
-          i,
-          i+10
-        )
-
-      );
-
-    }
-
-
-    let rows=[];
-
-
-    const returnedMarkets=
-      new Set();
-
-
-    for(
-      const chunk
-      of chunks
-    ){
-
-      const url=
-
-        `${base}/odds?apiKey=${encodeURIComponent(key)}&regions=au&bookmakers=sportsbet&oddsFormat=decimal&markets=${encodeURIComponent(chunk.join(','))}`;
-
-
-      const data=
-        await getJson(
-          url
-        );
-
-
-      const book=
-
-        (
-          data.bookmakers
-          ||
-          []
-        )
-
-        .find(
-          x=>
-            x.key==='sportsbet'
-        );
-
-
-      if(
-        !book
-      ){
-
-        continue;
-
-      }
-
-
-      for(
-        const m
-        of(
-          book.markets
-          ||
-          []
-        )
-      ){
-
-        returnedMarkets.add(
-          m.key
-        );
-
-
-        for(
-          const o
-          of(
-            m.outcomes
-            ||
-            []
-          )
-        ){
-
-          const x=
-            normalizeOutcome(
-              o,
-              m.key
-            );
-
-
-          if(
-            x
-          ){
-
-            rows.push(
-              x
-            );
-
-          }
-
-        }
-
-      }
-
-    }
-
-
-    if(
-      !rows.length
-    ){
-
-      throw new Error(
-        'Sportsbet player markets were discovered, but no usable player outcomes were returned.'
-      );
-
-    }
-
-
-    state.requestedMarkets=
-
-      [
-        ...returnedMarkets
-      ];
-
-
-    state.raw=
-      dedupe(
-        rows
-      );
-
-
-    state.ladders=
-      buildLadders(
-        state.raw
-      );
-
-
-    renderUniverse();
-
-
-    renderDiscovery();
-
-
-    $('universeCard')
-      .classList
-      .remove(
-        'hidden'
-      );
-
-
-    $('discoveryCard')
-      .classList
-      .remove(
-        'hidden'
-      );
-
-
-    $('exportCard')
-      .classList
-      .remove(
-        'hidden'
-      );
-
-
-    const {
-      min,
-      max
-    }=
-      exportOddsRange();
-
-
-    marketStatus(
-
-      `Loaded ${state.raw.length} usable outcomes across ${state.requestedMarkets.length} player markets and retained all ${state.ladders.size} ladders. Export will include every ladder with at least one point between ${min.toFixed(2)} and ${max.toFixed(2)}.`,
-
-      'good'
-
-    );
-
-
-    log({
-
-      bookmaker:
-        'Sportsbet',
-
-      markets:
-        state.requestedMarkets,
-
-      unknown:
-        state.unknownMarkets,
-
-      raw:
-        state.raw.length,
-
-      ladders:
-        state.ladders.size,
-
-      players:
-        uniquePlayers().size,
-
-      exportable:
-        exportableLadders().length,
-
-      quota:
-        state.quota
-
-    });
-
-  }
-  catch(e){
-
-    marketStatus(
-
-      'Market load failed: '
-      +
-      e.message,
-
-      'bad'
-
-    );
-
-
-    log(
-      e.message
-    );
-
-  }
-  finally{
-
-    $('marketsBtn').disabled=
-      false;
-
-  }
-
-}
-
-
-/* ============================================================
-   TEAM FOCUS
-============================================================ */
-
-function focusText(){
-
-  const v=
-    $('teamFocus').value;
-
-
-  if(
-    v==='home'
-  ){
-
-    return(
-      state.game?.home_team
-      ||
-      'Home team'
-    );
-
-  }
-
-
-  if(
-    v==='away'
-  ){
-
-    return(
-      state.game?.away_team
-      ||
-      'Away team'
-    );
-
-  }
-
-
-  return(
-    'Both teams'
-  );
-
-}
-
-
-/* ============================================================
-   V16 EXPORT
-============================================================ */
-
-function exportText(){
-
-  const g=
-    state.game
-    ||
-    {};
-
-
-  const {
-    min,
-    max
-  }=
-    exportOddsRange();
-
-
-  const ids=
-    ladderIdFactory();
-
-
-  const allPairs=
-
-    exportableLadders()
-
-      .sort(
-        (a,b)=>
-
-          (
-            a.trimmed[0]?.family
-            ||
-            ''
-          )
-          .localeCompare(
-            b.trimmed[0]?.family
-            ||
-            ''
-          )
-
-          ||
-
-          (
-            a.trimmed[0]?.player
-            ||
-            ''
-          )
-          .localeCompare(
-            b.trimmed[0]?.player
-            ||
-            ''
-          )
-
-          ||
-
-          (
-            a.trimmed[0]?.market
-            ||
-            ''
-          )
-          .localeCompare(
-            b.trimmed[0]?.market
-            ||
-            ''
-          )
-      );
-
-
-  const lines=[];
-
-
-  lines.push(
-
-    'BET INTELLIGENCE V16 DATA PACK',
-
-    '================================',
-
-    '',
-
-    `Sport: ${$('sport').value}`,
-
-    `Game: ${g.away_team||'-'} @ ${g.home_team||'-'}`,
-
-    `Commence: ${g.commence_time||'-'}`,
-
-    'Bookmaker: Sportsbet',
-
-    `Team focus: ${focusText()}`,
-
-    `Raw usable outcomes retained internally: ${state.raw.length}`,
-
-    `Total player/market ladders retained internally: ${state.ladders.size}`,
-
-    `Exportable ladders in odds range: ${allPairs.length}`,
-
-    `Unique players: ${uniquePlayers().size}`,
-
-    `Sportsbet player markets detected: ${state.availableMarkets.length}`,
-
-    `Player markets loaded: ${state.requestedMarkets.join(', ')||'-'}`,
-
-    `New/unclassified player markets: ${state.unknownMarkets.join(', ')||'none'}`,
-
-    `Export odds range: ${min.toFixed(2)} to ${max.toFixed(2)}`,
-
-    ''
-
-  );
-
-
-  /* ==========================================================
-     DATA RULES
-  ========================================================== */
-
-  lines.push(
-
-    'V16 DATA RULES',
-
-    '- Removed Under/No outcomes.',
-
-    '- Removed duplicate outcomes.',
-
-    '- Dynamically discovered all Sportsbet player markets available for the selected event.',
-
-    '- Retained every player/market ladder internally.',
-
-    '- No arbitrary candidate cap or candidate ranking is applied.',
-
-    '- Export trimming removes only individual ladder points outside the configured odds range; it does not remove a player/market if useful lines remain.',
-
-    '- The browser does NOT invent selection, role, injury, form, matchup, weather, model probability, fair odds or edge.',
-
-    ''
-
-  );
-
-
-  /* ==========================================================
-     TRUST
-  ========================================================== */
-
-  lines.push(
-
-    'DATA TRUST GATE',
-
-    'Market/odds: VERIFIED from current Sportsbet markets returned by The Odds API.',
-
-    'Player selected to play: UNVERIFIED — must be externally checked.',
-
-    'Role/minutes/TOG/injury/late change: UNVERIFIED — must be externally checked.',
-
-    'Last-5/last-10/season/form/matchup/venue/weather: UNVERIFIED — must be externally checked.',
-
-    ''
-
-  );
-
-
-  /* ==========================================================
-     PLAYER MAP
-  ========================================================== */
-
-  lines.push(
-
-    'PLAYER MAP — SCAN THE WHOLE PLAYER UNIVERSE FIRST',
-
-    '# player | exported market references'
-
-  );
-
-
-  const pmap=
-    new Map();
-
-
-  for(
-    const pair
-    of allPairs
-  ){
-
-    const arr=
-      pair.trimmed;
-
-
-    const p=
-      arr[0].player;
-
-
-    if(
-      !pmap.has(p)
-    ){
-
-      pmap.set(
-        p,
-        []
-      );
-
-    }
-
-
-    pmap.get(p)
-      .push(arr);
-
-  }
-
-
-  for(
-    const [player,arrs]
-    of[
-      ...pmap.entries()
-    ]
-    .sort(
-      (a,b)=>
-        a[0]
-          .localeCompare(
-            b[0]
-          )
-    )
-  ){
-
-    lines.push(
-
-      `${player} | `
-
-      +
-
-      arrs
-        .map(
-          arr=>
-
-            `${ids.get(ladderKey(arr[0]))}`
-
-            +
-
-            ':'
-
-            +
-
-            `${arr[0].family}`
-
-            +
-
-            ':'
-
-            +
-
-            `${lineText(arr[0])}`
-
-            +
-
-            '..'
-
-            +
-
-            `${lineText(arr[arr.length-1])}`
-
-        )
-        .join(' | ')
-
-    );
-
-  }
-
-
-  lines.push('');
-
-
-  /* ==========================================================
-     MARKET MATRICES
-  ========================================================== */
-
-  lines.push(
-
-    'MARKET-FAMILY MATRICES — COMPARE ALL PLAYERS HORIZONTALLY',
-
-    '# ID | player | family | market | ~1.10 | ~1.25 | ~1.40 | ~1.60 | ~1.85 | ~2.20 | ~3.00 | ~4.00'
-
-  );
-
-
-  for(
-    const pair
-    of allPairs
-  ){
-
-    const arr=
-      pair.trimmed;
-
-
-    const row=
-
-      PRICE_LANDMARKS
-        .map(
-          p=>
-            nearestPrice(
-              arr,
-              p
-            )
-        )
-        .map(
-          x=>
-            x
-              ?
-              lineText(x)
-              :
-              '—'
-        );
-
-
-    lines.push(
-
-      `${ids.get(ladderKey(arr[0]))} | `
-
-      +
-
-      `${arr[0].player} | `
-
-      +
-
-      `${arr[0].family} | `
-
-      +
-
-      `${arr[0].market} | `
-
-      +
-
-      `${row.join(' | ')}`
-
-    );
-
-  }
-
-
-  lines.push('');
-
-
-  /* ==========================================================
-     FULL DICTIONARY
-  ========================================================== */
-
-  lines.push(
-
-    'FULL LADDER DICTIONARY — EXACT EXPORTED LINES',
-
-    '# ID | player | market | full exported ladder'
-
-  );
-
-
-  for(
-    const pair
-    of allPairs
-  ){
-
-    const arr=
-      pair.trimmed;
-
-
-    lines.push(
-
-      `${ids.get(ladderKey(arr[0]))} | `
-
-      +
-
-      `${arr[0].player} | `
-
-      +
-
-      `${arr[0].market} | `
-
-      +
-
-      `${arr.map(lineText).join('; ')}`
-
-    );
-
-  }
-
-
-  lines.push('');
-
-
-  /* ==========================================================
-     MASTER PROMPT
-  ========================================================== */
-
-  lines.push(
-
-    'MASTER ANALYSIS PROMPT — USE THIS EVERY TIME'
-
-  );
-
-
-  lines.push(
-
-    'You are the lead quantitative AFL/NRL betting analyst. Treat this V16 pack as the complete meaningful Sportsbet player-prop universe inside the configured individual-odds range. Bet Intelligence is a data engine, not a betting model. Do not anchor to Sportsbet Hot Legs, promotions, previous multis, previous user screenshots or browser labels. Start independently from this V16 universe.'
-
-  );
-
-
-  lines.push('');
-
-
-  lines.push(
-    'OBJECTIVE'
-  );
-
-
-  lines.push(
-
-    'Maximise probability-adjusted selection quality. Evidence > intuition. Verified current information > remembered information. Probability > attractive payout. Do not force a multi or a target price. A valid conclusion is NO BET.'
-
-  );
-
-
-  lines.push('');
-
-
-  lines.push(
-    'HOW TO HANDLE THE LARGE DATASET'
-  );
-
-
-  lines.push(
-
-    '1. Do NOT process the pack sequentially line by line. First scan the PLAYER MAP to understand every player and their available market families.'
-
-  );
-
-
-  lines.push(
-
-    '2. Next scan each MARKET-FAMILY MATRIX horizontally. Compare all players at similar Sportsbet price landmarks. Look for potentially interesting differences in required performance, ladder steepness, price jumps and alternate-line structure. This is only a structural screen — Sportsbet pricing is not our probability model.'
-
-  );
-
-
-  lines.push(
-
-    '3. Use the FULL LADDER DICTIONARY only when a player/market warrants closer inspection. Nothing is excluded merely because it was not immediately attractive in the matrix.'
-
-  );
-
-
-  lines.push(
-
-    '4. Build an internal research queue dynamically from the evidence. Do not impose an arbitrary fixed candidate count. Research as many or as few ladders as necessary to reach a defensible conclusion.'
-
-  );
-
-
-  lines.push(
-
-    '5. Before recommending any player, verify current/final team selection, injuries, late changes and substitution/interchange risk. Reject any player whose participation cannot reasonably be established.'
-
-  );
-
-
-  lines.push(
-
-    '6. Verify CURRENT ROLE. AFL: position, midfield/forward split, CBAs where relevant, TOG expectation, kick-ins, ruck share and goal-kicking role. NRL: starting position, expected minutes, interchange role, goal-kicking role and attacking/tackling involvement.'
-
-  );
-
-
-  lines.push(
-
-    '7. Retrieve the actual exact stat for recent completed matches where useful, preferably L5 and L10 plus season/longer-term baseline. Shrink small samples toward the longer prior and do not let one outlier dominate.'
-
-  );
-
-
-  lines.push(
-
-    '8. Check opponent, venue, team changes, tactical matchup, pace/game environment and weather where material. H2H is supporting evidence only.'
-
-  );
-
-
-  lines.push(
-
-    '9. For every serious surviving player/market, estimate true hit probability with uncertainty across the useful points in the full ladder. Calculate implied probability = 1/decimal odds, fair odds = 1/model probability, and edge = model probability - implied probability.'
-
-  );
-
-
-  lines.push(
-
-    '10. Select the best probability-adjusted point from the FULL ladder. Do not automatically choose the shortest line, a round-number line, the highest price, or a Sportsbet-promoted line.'
-
-  );
-
-
-  lines.push(
-
-    '11. Distinguish GOOD PLAYER vs GOOD BET vs GOOD MULTI LEG. A good player at a bad line must be rejected.'
-
-  );
-
-
-  lines.push(
-
-    '12. Explicitly assess correlation: same-player redundancy, teammates competing for stat opportunity, shared game-script dependence, scoring-environment dependence and other positive/negative relationships. Do not multiply correlated leg probabilities as if independent.'
-
-  );
-
-
-  lines.push(
-
-    '13. Before finalising a leg, conduct an adversarial check: try to disprove the bet using role instability, data freshness, sample relevance, matchup, uncertainty, injury/sub risk, line suitability and price/value. Remove any leg that does not survive.'
-
-  );
-
-
-  lines.push('');
-
-
-  lines.push(
-    'ANTI-BIAS RULES'
-  );
-
-
-  lines.push(
-
-    '- Do not anchor to Sportsbet Hot Legs or promotional markets.',
-
-    '- Do not select a leg merely because it hit 5/5 recently.',
-
-    '- Do not force market-family diversity.',
-
-    '- Do not treat very short odds as automatically safe.',
-
-    '- Do not add weak legs just to reach a requested total price.',
-
-    '- Do not recommend a player you cannot reasonably establish is playing.',
-
-    '- If critical information cannot be verified, reject the player rather than guessing.',
-
-    '- If the strongest justified multi is only $3, $5 or $8, return it rather than padding it.'
-
-  );
-
-
-  lines.push('');
-
-
-  lines.push(
-    'FINAL OUTPUT — KEEP IT SHORT'
-  );
-
-
-  lines.push(
-
-    'Return only:',
-
-    'BEST MULTI: selections with individual odds, approximate combined individual-leg odds, and confidence.',
-
-    'OPTIONAL ALTERNATIVE MULTI only if genuinely justified and preferably using different players.',
-
-    'BEST BET / strongest leg.',
-
-    'WEAKEST selected leg.',
-
-    'ONE short warning if material.',
-
-    'If evidence does not justify a bet: NO BET and the single most important reason.'
-
-  );
-
-
-  lines.push('');
-
-
-  lines.push(
-    'POST-MATCH RULE'
-  );
-
-
-  lines.push(
-
-    'When results are available, classify every failed leg only as: Variance; Bad line selection; Incorrect role assumption; Injury/substitution; Team-selection error; Matchup error; Correlation error; Data-quality problem; Model error. Do not rationalise losses after the event.'
-
-  );
-
-
-  return(
-    lines.join('\n')
-  );
-
-}
-
-
-/* ============================================================
-   EXPORT ACTIONS
-============================================================ */
-
-function createExport(){
-
-  if(
-    !state.ladders.size
-  ){
-
-    $('exportBox').textContent=
-      'No market ladders to export.';
-
-
-    return;
-
-  }
-
-
-  $('exportBox').textContent=
-    exportText();
-
-
-  $('copyBtn').disabled=
-    false;
-
-
-  $('downloadBtn').disabled=
-    false;
-
-}
-
-
-async function copyExport(){
-
-  try{
-
-    await navigator
-      .clipboard
-      .writeText(
-        exportText()
-      );
-
-
-    const b=
-      $('copyBtn');
-
-
-    const old=
-      b.textContent;
-
-
-    b.textContent=
-      'COPIED';
-
-
-    setTimeout(
-      ()=>
-        b.textContent=
-          old,
-      1000
-    );
-
-  }
-  catch{
-
-    alert(
-      'Clipboard access is blocked. Select the export text manually.'
-    );
-
-  }
-
-}
-
-
-function downloadExport(){
-
-  const blob=
-    new Blob(
-      [
-        exportText()
-      ],
-      {
-        type:'text/plain'
-      }
-    );
-
-
-  const url=
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const a=
-    document.createElement(
-      'a'
-    );
-
-
-  a.href=
-    url;
-
-
-  a.download=
-    'bet-intelligence-v16-data-pack.txt';
-
-
-  document.body.appendChild(
-    a
-  );
-
-
-  a.click();
-
-
-  a.remove();
-
-
-  setTimeout(
-    ()=>
-      URL.revokeObjectURL(
-        url
-      ),
-    500
-  );
-
-}
-
-
-/* ============================================================
-   AUDIT
-============================================================ */
-
-const AUDIT_KEY=
-  'betIntelV16Audit';
-
-
-function loadAudit(){
-
-  let arr=[];
-
-
-  try{
-
-    arr=
-      JSON.parse(
-        localStorage.getItem(
-          AUDIT_KEY
-        )
-        ||
-        '[]'
-      );
-
-
-    if(
-      !Array.isArray(arr)
-    ){
-
-      arr=[];
-
-    }
-
-  }
-  catch{
-
-    arr=[];
-
-  }
-
-
-  $('auditHistory').textContent=
-
-    arr.length
-
-      ?
-
-      arr
-        .map(
-          (x,i)=>
-            `${i+1}. ${x}`
-        )
-        .join('\n')
-
-      :
-
-      'No audit history.';
-
-}
-
-
-function saveAudit(){
-
-  const v=
-    $('auditInput')
-      .value
-      .trim();
-
-
-  if(
-    !v
-  ){
-
-    $('auditStatus').textContent=
-      'Enter an audit line first.';
-
-
-    return;
-
-  }
-
-
-  let arr=[];
-
-
-  try{
-
-    arr=
-      JSON.parse(
-        localStorage.getItem(
-          AUDIT_KEY
-        )
-        ||
-        '[]'
-      );
-
-
-    if(
-      !Array.isArray(arr)
-    ){
-
-      arr=[];
-
-    }
-
-  }
-  catch{
-
-    arr=[];
-
-  }
-
-
-  arr.push(
-    v
-  );
-
-
-  localStorage.setItem(
-
-    AUDIT_KEY,
-
-    JSON.stringify(
-      arr.slice(-200)
-    )
-
-  );
-
-
-  $('auditInput').value=
-    '';
-
-
-  $('auditStatus').textContent=
-    'Audit line saved locally.';
-
-
-  loadAudit();
-
-}
-
-
-function clearAudit(){
-
-  localStorage.removeItem(
-    AUDIT_KEY
-  );
-
-
-  $('auditStatus').textContent=
-    'Audit history cleared.';
-
-
-  loadAudit();
-
-}
-
-
-/* ============================================================
-   BUTTONS
-============================================================ */
-
-$('connectBtn').onclick=
-  loadGames;
-
-
-$('clearBtn').onclick=
-  ()=>{
-
-    state.events=[];
-
-
-    state.game=
-      null;
-
-
-    resetAfterGame();
-
-
-    $('apiKey').value=
-      '';
-
-
-    $('games').innerHTML=
-      '';
-
-
-    $('setupCard')
-      .classList
-      .add(
-        'hidden'
-      );
-
-
-    status(
-      'Cleared. API key is not stored.'
-    );
-
-
-    log(
-      'Cleared.'
-    );
-
-  };
-
-
-$('marketsBtn').onclick=
-  loadMarkets;
-
-
-$('createExportBtn').onclick=
-  createExport;
-
-
-$('copyBtn').onclick=
-  copyExport;
-
-
-$('downloadBtn').onclick=
-  downloadExport;
-
-
-$('saveAuditBtn').onclick=
-  saveAudit;
-
-
-$('clearAuditBtn').onclick=
-  clearAudit;
-
-
-$('sport').onchange=
-  ()=>{
-
-    state.events=[];
-
-
-    state.game=
-      null;
-
-
-    resetAfterGame();
-
-
-    $('games').innerHTML=
-      '';
-
-
-    $('setupCard')
-      .classList
-      .add(
-        'hidden'
-      );
-
-
-    status(
-      'Sport changed. Load current games.'
-    );
-
-  };
-
-
-function refreshRange(){
-
-  if(
-    state.ladders.size
-  ){
-
-    renderUniverse();
-
-
-    renderDiscovery();
-
-
-    $('exportBox').textContent=
-      'Odds range changed. Create a new V16 pack.';
-
-
-    $('copyBtn').disabled=
-      true;
-
-
-    $('downloadBtn').disabled=
-      true;
-
-  }
-
-}
-
-
-$('minOdds').onchange=
-  refreshRange;
-
-
-$('maxOdds').onchange=
-  refreshRange;
-
-
-/* ============================================================
-   INTERNAL TESTS
-============================================================ */
-
-window.BetIntelligenceV16Tests={
-
-  implied:
-    ()=>
-      Math.abs(
-        implied(2)-0.5
-      )
-      <
-      1e-12,
-
-
-  removesUnder:
-    ()=>
-      normalizeOutcome(
-
-        {
-          name:'Under',
-          description:'Test',
-          price:1.9,
-          point:20.5
-        },
-
-        'player_disposals_over'
-
-      )
-      ===
-      null,
-
-
-  dedupe:
-    ()=>
-      dedupe(
-        [
-          {
-            player:'A',
-            market:'x',
-            line:1,
-            name:'Over',
-            odds:1.5
-          },
-          {
-            player:'A',
-            market:'x',
-            line:1,
-            name:'Over',
-            odds:1.6
-          }
-        ]
-      )
-      .length
-      ===
-      1,
-
-
-  ladderSort:
-    ()=>
-      buildLadders(
-        [
-          {
-            player:'A',
-            market:'m',
-            family:'x',
-            line:24.5,
-            odds:1.9
-          },
-          {
-            player:'A',
-            market:'m',
-            family:'x',
-            line:19.5,
-            odds:1.2
-          }
-        ]
-      )
-      .get(
-        'a|m'
-      )[0]
-      .line
-      ===
-      19.5,
-
-
-  dynamicMarket:
-    ()=>
-      isPlayerMarketKey(
-        'player_hitouts_over'
-      )
-      &&
-      inferFamily(
-        'player_hitouts_over'
-      )
-      ===
-      'hitouts',
-
-
-  trimTail:
-    ()=>
-      trimLadder(
-        [
-          {odds:1.08},
-          {odds:2},
-          {odds:5},
-          {odds:34}
-        ]
-      )
-      .every(
-        x=>
-          x.odds
-          <=
-          num(
-            $('maxOdds').value,
-            5
-          )
-      )
-
-};
-
-
-loadAudit();
-
-</script>
-
-</body>
-</html>
+BET INTELLIGENCE V16 DATA PACK
+================================
+
+Sport: aussierules_afl
+Game: Gold Coast Suns @ St Kilda Saints
+Commence: 2026-08-20T09:30:00Z
+Bookmaker: Sportsbet
+Team focus: Both teams
+Raw usable outcomes retained internally: 2371
+Total player/market ladders retained internally: 312
+Exportable ladders in odds range: 310
+Unique players: 46
+Sportsbet player markets detected: 9
+Player markets loaded: player_afl_fantasy_points_over, player_clearances_over, player_disposals, player_disposals_over, player_goals_scored_over, player_handballs_over, player_kicks_over, player_marks_over, player_tackles_over
+New/unclassified player markets: none
+Export odds range: 1.08 to 5.00
+
+V16 DATA RULES
+- Removed Under/No outcomes.
+- Removed duplicate outcomes.
+- Dynamically discovered all Sportsbet player markets available for the selected event.
+- Retained every player/market ladder internally.
+- No arbitrary candidate cap or candidate ranking is applied.
+- Export trimming removes only individual ladder points outside the configured odds range; it does not remove a player/market if useful lines remain.
+- The browser does NOT invent selection, role, injury, form, matchup, weather, model probability, fair odds or edge.
+
+DATA TRUST GATE
+Market/odds: VERIFIED from current Sportsbet markets returned by The Odds API.
+Player selected to play: UNVERIFIED — must be externally checked.
+Role/minutes/TOG/injury/late change: UNVERIFIED — must be externally checked.
+Last-5/last-10/season/form/matchup/venue/weather: UNVERIFIED — must be externally checked.
+
+PLAYER MAP — SCAN THE WHOLE PLAYER UNIVERSE FIRST
+# player | exported market references
+Angus Hastie | DISPO-001:disposals:10.5@1.13..19.5@4.00 | FANTA-001:fantasy:69.5@1.72..89.5@4.10 | KICKS-001:kicks:9.5@1.33..15.5@4.80 | MARKS-001:marks:4.5@1.17..9.5@5.00 | TACKL-001:tackles:1.5@1.32..3.5@3.60
+Bailey Humphrey | CLEAR-001:clearances:2.5@1.33..4.5@2.90 | DISPO-002:disposals:11.5@1.13..20.5@4.00 | FANTA-002:fantasy:69.5@1.47..94.5@3.90 | GOALS-001:goals:0.5@1.25..1.5@2.25 | HANDB-001:handballs:7.5@1.73..9.5@2.80 | KICKS-002:kicks:9.5@2.60..9.5@2.60 | MARKS-002:marks:3.5@1.21..7.5@4.90 | TACKL-002:tackles:1.5@1.19..4.5@4.90
+Beau Addinsall | CLEAR-002:clearances:2.5@1.63..4.5@4.80 | DISPO-003:disposals:11.5@1.13..21.5@5.00 | FANTA-003:fantasy:69.5@2.55..79.5@4.60 | GOALS-002:goals:0.5@4.00..0.5@4.00 | HANDB-002:handballs:7.5@1.28..13.5@4.90 | MARKS-003:marks:1.5@1.09..4.5@2.95 | TACKL-003:tackles:1.5@1.17..4.5@4.60
+Ben Jepson | DISPO-004:disposals:9.5@1.11..18.5@4.25 | FANTA-004:fantasy:69.5@1.51..94.5@4.40 | GOALS-003:goals:0.5@2.65..0.5@2.65 | KICKS-004:kicks:9.5@1.71..13.5@5.00 | MARKS-004:marks:3.5@1.23..6.5@3.20 | TACKL-004:tackles:2.5@1.10..6.5@3.90
+Ben King | DISPO-005:disposals:9.5@2.08..12.5@4.65 | FANTA-005:fantasy:69.5@2.35..84.5@4.75 | GOALS-004:goals:1.5@1.32..3.5@3.70 | MARKS-005:marks:3.5@1.12..7.5@3.50 | TACKL-005:tackles:1.5@2.30..1.5@2.30
+Ben Long | DISPO-006:disposals:9.5@1.53..13.5@4.00 | FANTA-006:fantasy:69.5@3.15..74.5@4.10 | GOALS-005:goals:0.5@1.33..1.5@2.70 | KICKS-005:kicks:9.5@3.60..9.5@3.60 | MARKS-006:marks:1.5@1.09..4.5@2.95 | TACKL-006:tackles:1.5@1.17..4.5@4.50
+Bodhi Uwland | DISPO-007:disposals:19.5@1.12..28.5@4.65 | FANTA-007:fantasy:74.5@1.10..114.5@4.30 | HANDB-003:handballs:7.5@1.54..9.5@2.65 | KICKS-006:kicks:11.5@1.09..17.5@3.05 | MARKS-007:marks:5.5@1.09..11.5@4.30 | TACKL-007:tackles:1.5@1.76..2.5@3.40
+Bradley Hill | DISPO-008:disposals:33.5@1.87..33.5@1.87 | DISPO-009:disposals:27.5@1.09..39.5@4.50 | FANTA-008:fantasy:109.5@1.08..129.5@1.49 | GOALS-006:goals:0.5@2.15..0.5@2.15 | HANDB-004:handballs:9.5@1.29..13.5@3.15 | KICKS-007:kicks:17.5@1.10..25.5@3.50 | MARKS-008:marks:8.5@1.13..11.5@1.72 | TACKL-008:tackles:1.5@1.23..3.5@3.00
+Callum Wilkie | DISPO-010:disposals:18.5@1.13..27.5@4.65 | FANTA-009:fantasy:79.5@1.08..129.5@4.70 | HANDB-005:handballs:7.5@2.15..9.5@4.60 | KICKS-008:kicks:11.5@1.08..17.5@2.90 | MARKS-009:marks:9.5@1.09..11.5@1.33 | TACKL-009:tackles:1.5@2.10..2.5@4.60
+Campbell Lake | DISPO-011:disposals:9.5@1.39..15.5@4.30 | FANTA-010:fantasy:69.5@1.66..89.5@3.90 | GOALS-007:goals:0.5@1.93..0.5@1.93 | HANDB-006:handballs:7.5@2.35..9.5@4.30 | MARKS-010:marks:1.5@1.18..4.5@4.75 | TACKL-010:tackles:5.5@1.13..9.5@2.70
+Charlie Ballard | DISPO-012:disposals:9.5@1.41..15.5@4.65 | FANTA-011:fantasy:69.5@3.10..74.5@4.00 | KICKS-009:kicks:9.5@2.90..9.5@2.90 | MARKS-011:marks:4.5@1.09..9.5@3.60 | TACKL-011:tackles:1.5@2.12..2.5@4.75
+Cooper Sharman | DISPO-013:disposals:9.5@1.33..14.5@3.90 | FANTA-012:fantasy:69.5@2.40..79.5@3.90 | GOALS-008:goals:0.5@1.12..2.5@3.30 | KICKS-010:kicks:9.5@4.50..9.5@4.50 | MARKS-012:marks:2.5@1.14..5.5@3.05 | TACKL-012:tackles:1.5@1.37..3.5@4.00
+Daniel Butler | DISPO-014:disposals:9.5@1.33..17.5@4.65 | FANTA-013:fantasy:69.5@1.53..94.5@3.90 | GOALS-009:goals:0.5@1.41..1.5@3.10 | HANDB-007:handballs:7.5@4.10..7.5@4.10 | KICKS-011:kicks:9.5@3.45..9.5@3.45 | MARKS-013:marks:2.5@1.16..5.5@3.30 | TACKL-013:tackles:3.5@1.09..8.5@4.40
+Daniel Rioli | DISPO-015:disposals:16.5@1.13..25.5@4.00 | FANTA-014:fantasy:69.5@1.17..104.5@3.90 | HANDB-008:handballs:7.5@1.20..11.5@2.70 | KICKS-012:kicks:9.5@1.35..13.5@3.35 | MARKS-014:marks:5.5@1.18..10.5@4.80 | TACKL-014:tackles:1.5@1.23..3.5@3.00
+Darcy Wilson | DISPO-016:disposals:16.5@1.10..26.5@4.65 | FANTA-015:fantasy:69.5@1.14..109.5@4.60 | GOALS-010:goals:0.5@1.68..1.5@4.60 | HANDB-009:handballs:7.5@1.26..11.5@3.30 | KICKS-013:kicks:9.5@1.21..15.5@4.60 | MARKS-015:marks:3.5@1.14..7.5@3.70 | TACKL-015:tackles:1.5@1.18..4.5@4.80
+Dougal Howard | DISPO-017:disposals:12.5@1.13..22.5@4.80 | FANTA-016:fantasy:69.5@1.36..99.5@4.30 | KICKS-014:kicks:9.5@1.08..17.5@3.35 | MARKS-016:marks:5.5@1.16..10.5@4.40 | TACKL-016:tackles:1.5@1.50..2.5@2.55
+Ethan Read | DISPO-018:disposals:9.5@1.33..17.5@4.65 | FANTA-017:fantasy:69.5@2.75..79.5@4.75 | GOALS-011:goals:0.5@1.72..1.5@4.70 | HANDB-010:handballs:7.5@3.50..7.5@3.50 | KICKS-015:kicks:9.5@4.10..9.5@4.10 | MARKS-017:marks:1.5@1.21..3.5@2.80 | TACKL-017:tackles:1.5@1.55..2.5@2.70
+Hugh Boxshall | CLEAR-003:clearances:2.5@1.16..5.5@3.25 | DISPO-019:disposals:11.5@1.13..21.5@5.00 | FANTA-018:fantasy:69.5@1.21..104.5@4.25 | HANDB-011:handballs:7.5@1.42..11.5@3.60 | KICKS-016:kicks:9.5@3.80..9.5@3.80 | MARKS-018:marks:2.5@1.15..6.5@5.00 | TACKL-018:tackles:5.5@1.12..9.5@2.60
+Hugo Garcia | CLEAR-004:clearances:5.5@1.18..10.5@4.80 | DISPO-020:disposals:25.5@1.84..25.5@1.84 | DISPO-021:disposals:19.5@1.08..30.5@4.25 | FANTA-019:fantasy:89.5@1.13..129.5@3.50 | GOALS-012:goals:0.5@2.95..0.5@2.95 | HANDB-012:handballs:11.5@1.24..17.5@4.30 | KICKS-017:kicks:9.5@1.31..13.5@3.15 | MARKS-019:marks:3.5@1.16..7.5@4.00 | TACKL-019:tackles:5.5@1.18..9.5@3.10
+Jack Silvagni | DISPO-022:disposals:10.5@1.13..18.5@5.00 | FANTA-020:fantasy:69.5@1.49..94.5@4.10 | KICKS-018:kicks:9.5@1.67..11.5@2.75 | MARKS-020:marks:6.5@1.11..11.5@3.00 | TACKL-020:tackles:1.5@1.31..3.5@3.70
+Jackson Macrae | CLEAR-005:clearances:5.5@1.15..10.5@4.30 | DISPO-023:disposals:24.5@1.96..24.5@1.96 | DISPO-024:disposals:17.5@1.08..29.5@4.65 | FANTA-021:fantasy:69.5@1.08..114.5@4.30 | HANDB-013:handballs:11.5@1.13..19.5@4.40 | KICKS-019:kicks:9.5@2.60..9.5@2.60 | MARKS-021:marks:3.5@1.21..7.5@4.90 | TACKL-021:tackles:3.5@1.18..7.5@4.50
+Jake Rogers | DISPO-025:disposals:9.5@1.13..17.5@4.65 | FANTA-022:fantasy:69.5@4.30..69.5@4.30 | GOALS-013:goals:0.5@2.50..0.5@2.50 | HANDB-014:handballs:7.5@3.50..7.5@3.50 | KICKS-020:kicks:9.5@3.40..9.5@3.40 | MARKS-022:marks:1.5@1.47..3.5@5.00 | TACKL-022:tackles:1.5@1.19..4.5@4.90
+Jarrod Witts | CLEAR-006:clearances:2.5@1.24..5.5@4.25 | DISPO-026:disposals:9.5@1.25..16.5@4.60 | FANTA-023:fantasy:69.5@1.39..94.5@4.60 | HANDB-015:handballs:7.5@2.08..9.5@3.60 | MARKS-023:marks:1.5@1.10..4.5@3.35 | TACKL-023:tackles:1.5@1.33..3.5@3.70
+Jed Walter | DISPO-027:disposals:9.5@2.39..11.5@4.00 | FANTA-024:fantasy:69.5@3.05..74.5@3.90 | GOALS-014:goals:0.5@1.14..2.5@3.45 | MARKS-024:marks:2.5@1.15..5.5@3.00 | TACKL-024:tackles:1.5@1.18..4.5@4.80
+Joel Jeffrey | DISPO-028:disposals:12.5@1.08..23.5@4.65 | FANTA-025:fantasy:69.5@1.46..94.5@4.20 | HANDB-016:handballs:7.5@3.30..7.5@3.30 | KICKS-021:kicks:9.5@1.20..15.5@3.80 | MARKS-025:marks:3.5@1.11..7.5@3.35 | TACKL-025:tackles:1.5@1.27..3.5@3.30
+John Noble | DISPO-029:disposals:25.5@1.84..25.5@1.84 | DISPO-030:disposals:20.5@1.13..30.5@4.50 | FANTA-026:fantasy:84.5@1.09..129.5@3.80 | HANDB-017:handballs:7.5@1.70..9.5@3.05 | KICKS-022:kicks:13.5@1.12..21.5@4.40 | MARKS-026:marks:6.5@1.12..11.5@3.20 | TACKL-026:tackles:1.5@1.11..4.5@3.40
+Lachlan Gulbin | DISPO-031:disposals:9.5@1.34..17.5@4.65 | FANTA-027:fantasy:69.5@2.85..79.5@4.90 | GOALS-015:goals:0.5@2.05..0.5@2.05 | HANDB-018:handballs:7.5@3.90..7.5@3.90 | KICKS-023:kicks:9.5@3.90..9.5@3.90 | MARKS-027:marks:1.5@1.10..4.5@3.25 | TACKL-027:tackles:1.5@1.08..5.5@5.00
+Leo Lombard | DISPO-032:disposals:11.5@1.10..20.5@4.60 | FANTA-028:fantasy:69.5@1.45..94.5@4.00 | GOALS-016:goals:0.5@1.73..1.5@4.70 | HANDB-019:handballs:7.5@1.57..11.5@5.00 | KICKS-024:kicks:9.5@2.95..9.5@2.95 | MARKS-028:marks:3.5@1.16..7.5@4.25 | TACKL-028:tackles:2.5@1.26..5.5@4.30
+Liam O'Connell | DISPO-033:disposals:9.5@1.62..14.5@4.65 | FANTA-029:fantasy:69.5@3.35..74.5@4.50 | MARKS-029:marks:3.5@1.14..7.5@3.80 | TACKL-029:tackles:1.5@1.08..5.5@4.90
+Liam Ryan | DISPO-034:disposals:9.5@1.91..13.5@4.05 | FANTA-030:fantasy:69.5@3.60..74.5@4.70 | GOALS-017:goals:1.5@1.46..3.5@5.00 | KICKS-025:kicks:9.5@3.15..9.5@3.15 | MARKS-030:marks:1.5@1.16..4.5@4.30 | TACKL-030:tackles:1.5@2.25..1.5@2.25
+Liam Stocker | DISPO-035:disposals:15.5@1.13..24.5@4.00 | FANTA-031:fantasy:69.5@1.14..109.5@4.25 | HANDB-021:handballs:7.5@2.60..7.5@2.60 | KICKS-026:kicks:9.5@1.08..17.5@4.60 | MARKS-031:marks:5.5@1.10..11.5@4.80 | TACKL-031:tackles:1.5@1.25..3.5@3.15
+Mac Andrew | DISPO-036:disposals:12.5@1.10..23.5@4.65 | FANTA-032:fantasy:69.5@1.16..109.5@4.40 | HANDB-022:handballs:7.5@2.70..7.5@2.70 | KICKS-027:kicks:9.5@1.27..15.5@4.80 | MARKS-032:marks:6.5@1.16..11.5@3.80 | TACKL-032:tackles:1.5@1.97..2.5@4.20
+Marcus Windhager | CLEAR-007:clearances:2.5@2.07..3.5@3.80 | DISPO-037:disposals:17.5@1.10..28.5@4.30 | FANTA-033:fantasy:74.5@1.12..119.5@4.90 | GOALS-018:goals:0.5@2.95..0.5@2.95 | HANDB-023:handballs:7.5@1.21..11.5@2.70 | KICKS-028:kicks:9.5@1.12..15.5@3.05 | MARKS-033:marks:3.5@1.10..8.5@4.90 | TACKL-033:tackles:2.5@1.17..5.5@3.30
+Matt Rowell | CLEAR-008:clearances:5.5@1.11..10.5@3.50 | DISPO-038:disposals:26.5@1.85..26.5@1.85 | DISPO-039:disposals:20.5@1.08..31.5@4.25 | FANTA-034:fantasy:89.5@1.11..129.5@3.60 | GOALS-019:goals:0.5@4.00..0.5@4.00 | HANDB-024:handballs:9.5@1.18..15.5@4.00 | KICKS-029:kicks:11.5@1.24..17.5@4.50 | MARKS-034:marks:1.5@1.10..4.5@3.30 | TACKL-034:tackles:5.5@1.11..9.5@2.45
+Mattaes Phillipou | CLEAR-009:clearances:2.5@1.13..6.5@4.80 | DISPO-040:disposals:14.5@1.13..24.5@4.65 | FANTA-035:fantasy:69.5@1.17..109.5@4.70 | GOALS-020:goals:0.5@2.30..0.5@2.30 | HANDB-025:handballs:7.5@1.08..15.5@5.00 | KICKS-030:kicks:9.5@3.35..9.5@3.35 | MARKS-035:marks:4.5@1.19..8.5@3.80 | TACKL-035:tackles:2.5@1.09..6.5@3.75
+Max Hall | CLEAR-010:clearances:2.5@1.10..6.5@4.25 | DISPO-041:disposals:26.5@1.92..26.5@1.92 | DISPO-042:disposals:20.5@1.10..31.5@4.60 | FANTA-036:fantasy:94.5@1.08..129.5@2.08 | GOALS-021:goals:0.5@1.32..1.5@2.60 | HANDB-026:handballs:9.5@1.30..13.5@3.05 | KICKS-031:kicks:11.5@1.18..17.5@3.70 | MARKS-036:marks:6.5@1.10..11.5@2.95 | TACKL-036:tackles:3.5@1.19..7.5@4.50
+Mitchito Owens | DISPO-043:disposals:10.5@1.13..18.5@4.60 | FANTA-037:fantasy:69.5@1.33..104.5@4.60 | GOALS-022:goals:0.5@1.10..2.5@2.85 | HANDB-027:handballs:7.5@2.20..9.5@4.30 | KICKS-032:kicks:9.5@3.60..9.5@3.60 | MARKS-037:marks:4.5@1.15..9.5@4.90 | TACKL-037:tackles:1.5@1.47..3.5@4.90
+Ned Moyle | CLEAR-011:clearances:2.5@1.14..6.5@4.90 | DISPO-044:disposals:9.5@1.51..16.5@4.80 | FANTA-038:fantasy:69.5@1.11..109.5@4.60 | GOALS-023:goals:0.5@4.00..0.5@4.00 | HANDB-028:handballs:7.5@2.25..9.5@3.50 | MARKS-038:marks:2.5@1.25..5.5@4.20 | TACKL-038:tackles:1.5@1.11..4.5@3.40
+Nicholas Holman | DISPO-045:disposals:9.5@1.10..18.5@4.25 | FANTA-039:fantasy:69.5@1.86..89.5@4.80 | GOALS-024:goals:0.5@1.63..1.5@4.25 | HANDB-029:handballs:7.5@2.02..9.5@3.40 | KICKS-033:kicks:9.5@4.50..9.5@4.50 | MARKS-039:marks:2.5@1.09..6.5@3.90 | TACKL-039:tackles:1.5@1.09..4.5@3.10
+Noah Anderson | CLEAR-012:clearances:3.5@1.08..8.5@4.10 | DISPO-046:disposals:25.5@1.85..25.5@1.85 | DISPO-047:disposals:19.5@1.08..30.5@4.60 | FANTA-040:fantasy:89.5@1.11..129.5@3.35 | GOALS-025:goals:0.5@4.00..0.5@4.00 | HANDB-030:handballs:7.5@1.11..13.5@3.70 | KICKS-034:kicks:11.5@1.19..17.5@3.80 | MARKS-040:marks:5.5@1.17..10.5@4.50 | TACKL-040:tackles:3.5@1.13..7.5@3.60
+Rowan Marshall | CLEAR-013:clearances:3.5@1.12..7.5@3.50 | DISPO-048:disposals:13.5@1.10..24.5@4.65 | FANTA-041:fantasy:84.5@1.10..129.5@3.75 | GOALS-026:goals:0.5@1.36..1.5@2.80 | HANDB-031:handballs:7.5@1.56..11.5@4.40 | KICKS-035:kicks:9.5@1.46..13.5@3.80 | MARKS-041:marks:3.5@1.12..7.5@3.35 | TACKL-041:tackles:2.5@1.15..5.5@3.05
+Ryan Byrnes | DISPO-049:disposals:12.5@1.10..21.5@4.25 | FANTA-042:fantasy:69.5@1.58..94.5@4.90 | GOALS-027:goals:0.5@2.30..0.5@2.30 | HANDB-032:handballs:7.5@1.65..9.5@2.85 | KICKS-036:kicks:9.5@1.95..11.5@3.50 | MARKS-042:marks:3.5@1.08..8.5@4.30 | TACKL-042:tackles:1.5@1.41..3.5@4.40
+Sam Clohesy | DISPO-050:disposals:14.5@1.13..23.5@4.00 | FANTA-043:fantasy:69.5@1.44..94.5@4.20 | HANDB-033:handballs:7.5@1.42..11.5@4.00 | KICKS-037:kicks:9.5@1.56..13.5@4.60 | MARKS-043:marks:3.5@1.10..8.5@4.80 | TACKL-043:tackles:1.5@1.27..3.5@3.25
+Tobie Travaglia | DISPO-051:disposals:9.5@1.11..20.5@4.60 | FANTA-044:fantasy:69.5@2.75..79.5@4.75 | HANDB-034:handballs:7.5@1.94..9.5@3.10 | KICKS-038:kicks:9.5@3.05..9.5@3.05 | MARKS-044:marks:2.5@1.10..6.5@3.90 | TACKL-044:tackles:1.5@1.41..3.5@4.50
+Tom De Koning | CLEAR-014:clearances:2.5@1.14..5.5@3.00 | DISPO-052:disposals:9.5@1.11..18.5@4.20 | FANTA-045:fantasy:69.5@1.16..109.5@4.60 | GOALS-028:goals:0.5@1.52..1.5@3.60 | HANDB-035:handballs:7.5@2.20..9.5@3.90 | KICKS-039:kicks:9.5@3.60..9.5@3.60 | MARKS-045:marks:3.5@1.13..7.5@3.70 | TACKL-045:tackles:1.5@1.51..2.5@2.60
+Touk Miller | CLEAR-015:clearances:3.5@1.17..7.5@4.40 | DISPO-053:disposals:23.5@1.75..23.5@1.75 | DISPO-054:disposals:19.5@1.11..28.5@4.25 | FANTA-046:fantasy:74.5@1.12..114.5@5.00 | GOALS-029:goals:0.5@2.40..0.5@2.40 | HANDB-036:handballs:9.5@1.09..15.5@3.25 | KICKS-040:kicks:9.5@1.42..13.5@4.10 | MARKS-046:marks:1.5@1.08..5.5@5.00 | TACKL-046:tackles:3.5@1.20..7.5@4.80
+
+MARKET-FAMILY MATRICES — COMPARE ALL PLAYERS HORIZONTALLY
+# ID | player | family | market | ~1.10 | ~1.25 | ~1.40 | ~1.60 | ~1.85 | ~2.20 | ~3.00 | ~4.00
+CLEAR-001 | Bailey Humphrey | clearances | player_clearances_over | 2.5@1.33 | 2.5@1.33 | 2.5@1.33 | 2.5@1.33 | 3.5@1.88 | 3.5@1.88 | 4.5@2.90 | 4.5@2.90
+CLEAR-002 | Beau Addinsall | clearances | player_clearances_over | 2.5@1.63 | 2.5@1.63 | 2.5@1.63 | 2.5@1.63 | 2.5@1.63 | 3.5@2.60 | 3.5@2.60 | 4.5@4.80
+CLEAR-003 | Hugh Boxshall | clearances | player_clearances_over | 2.5@1.16 | 2.5@1.16 | 3.5@1.47 | 3.5@1.47 | 4.5@2.08 | 4.5@2.08 | 5.5@3.25 | 5.5@3.25
+CLEAR-004 | Hugo Garcia | clearances | player_clearances_over | 5.5@1.18 | 5.5@1.18 | 6.5@1.39 | 7.5@1.73 | 7.5@1.73 | 8.5@2.25 | 9.5@3.20 | 9.5@3.20
+CLEAR-005 | Jackson Macrae | clearances | player_clearances_over | 5.5@1.15 | 6.5@1.33 | 6.5@1.33 | 7.5@1.63 | 7.5@1.63 | 8.5@2.12 | 9.5@2.95 | 10.5@4.30
+CLEAR-006 | Jarrod Witts | clearances | player_clearances_over | 2.5@1.24 | 2.5@1.24 | 2.5@1.24 | 3.5@1.67 | 3.5@1.67 | 4.5@2.50 | 4.5@2.50 | 5.5@4.25
+CLEAR-007 | Marcus Windhager | clearances | player_clearances_over | 2.5@2.07 | 2.5@2.07 | 2.5@2.07 | 2.5@2.07 | 2.5@2.07 | 2.5@2.07 | 3.5@3.80 | 3.5@3.80
+CLEAR-008 | Matt Rowell | clearances | player_clearances_over | 5.5@1.11 | 6.5@1.25 | 7.5@1.51 | 7.5@1.51 | 8.5@1.91 | 8.5@1.91 | 9.5@2.55 | 10.5@3.50
+CLEAR-009 | Mattaes Phillipou | clearances | player_clearances_over | 2.5@1.13 | 2.5@1.13 | 3.5@1.39 | 3.5@1.39 | 4.5@1.90 | 4.5@1.90 | 5.5@2.85 | 6.5@4.80
+CLEAR-010 | Max Hall | clearances | player_clearances_over | 2.5@1.10 | 3.5@1.33 | 3.5@1.33 | 4.5@1.78 | 4.5@1.78 | 5.5@2.60 | 5.5@2.60 | 6.5@4.25
+CLEAR-011 | Ned Moyle | clearances | player_clearances_over | 2.5@1.14 | 2.5@1.14 | 3.5@1.40 | 3.5@1.40 | 4.5@1.93 | 4.5@1.93 | 5.5@2.95 | 6.5@4.90
+CLEAR-012 | Noah Anderson | clearances | player_clearances_over | 3.5@1.08 | 4.5@1.21 | 5.5@1.48 | 5.5@1.48 | 6.5@1.93 | 6.5@1.93 | 7.5@2.70 | 8.5@4.10
+CLEAR-013 | Rowan Marshall | clearances | player_clearances_over | 3.5@1.12 | 4.5@1.32 | 4.5@1.32 | 5.5@1.71 | 5.5@1.71 | 6.5@2.35 | 7.5@3.50 | 7.5@3.50
+CLEAR-014 | Tom De Koning | clearances | player_clearances_over | 2.5@1.14 | 2.5@1.14 | 3.5@1.42 | 3.5@1.42 | 4.5@1.97 | 4.5@1.97 | 5.5@3.00 | 5.5@3.00
+CLEAR-015 | Touk Miller | clearances | player_clearances_over | 3.5@1.17 | 3.5@1.17 | 4.5@1.45 | 4.5@1.45 | 5.5@1.96 | 5.5@1.96 | 6.5@2.80 | 7.5@4.40
+DISPO-001 | Angus Hastie | disposals | player_disposals_over | 10.5@1.13 | 12.5@1.28 | 13.5@1.42 | 14.5@1.63 | 15.5@1.88 | 16.5@2.24 | 17.5@2.72 | 19.5@4.00
+DISPO-002 | Bailey Humphrey | disposals | player_disposals_over | 11.5@1.13 | 13.5@1.30 | 14.5@1.44 | 15.5@1.63 | 16.5@1.88 | 17.5@2.23 | 18.5@2.70 | 20.5@4.00
+DISPO-003 | Beau Addinsall | disposals | player_disposals_over | 11.5@1.13 | 12.5@1.20 | 14.5@1.44 | 15.5@1.63 | 16.5@1.88 | 17.5@2.21 | 19.5@3.26 | 20.5@4.00
+DISPO-004 | Ben Jepson | disposals | player_disposals_over | 9.5@1.11 | 11.5@1.28 | 12.5@1.42 | 13.5@1.62 | 14.5@1.88 | 15.5@2.25 | 16.5@2.74 | 18.5@4.25
+DISPO-005 | Ben King | disposals | player_disposals_over | 9.5@2.08 | 9.5@2.08 | 9.5@2.08 | 9.5@2.08 | 9.5@2.08 | 9.5@2.08 | 10.5@2.67 | 11.5@3.45
+DISPO-006 | Ben Long | disposals | player_disposals_over | 9.5@1.53 | 9.5@1.53 | 9.5@1.53 | 9.5@1.53 | 10.5@1.85 | 11.5@2.33 | 12.5@3.06 | 13.5@4.00
+DISPO-007 | Bodhi Uwland | disposals | player_disposals_over | 19.5@1.12 | 20.5@1.20 | 21.5@1.34 | 22.5@1.54 | 23.5@1.85 | 24.5@2.16 | 26.5@3.12 | 27.5@3.78
+DISPO-008 | Bradley Hill | disposals | player_disposals | 33.5@1.87 | 33.5@1.87 | 33.5@1.87 | 33.5@1.87 | 33.5@1.87 | 33.5@1.87 | 33.5@1.87 | 33.5@1.87
+DISPO-009 | Bradley Hill | disposals | player_disposals_over | 27.5@1.09 | 29.5@1.20 | 31.5@1.46 | 32.5@1.67 | 33.5@1.87 | 34.5@2.11 | 36.5@2.78 | 38.5@3.70
+DISPO-010 | Callum Wilkie | disposals | player_disposals_over | 18.5@1.13 | 19.5@1.22 | 20.5@1.37 | 21.5@1.62 | 22.5@1.88 | 23.5@2.19 | 25.5@3.14 | 26.5@4.00
+DISPO-011 | Campbell Lake | disposals | player_disposals_over | 9.5@1.39 | 9.5@1.39 | 9.5@1.39 | 10.5@1.59 | 11.5@1.88 | 12.5@2.27 | 13.5@2.80 | 15.5@4.30
+DISPO-012 | Charlie Ballard | disposals | player_disposals_over | 9.5@1.41 | 9.5@1.41 | 9.5@1.41 | 10.5@1.61 | 11.5@1.92 | 12.5@2.32 | 13.5@2.88 | 14.5@3.70
+DISPO-013 | Cooper Sharman | disposals | player_disposals_over | 9.5@1.33 | 9.5@1.33 | 9.5@1.33 | 10.5@1.53 | 11.5@1.84 | 12.5@2.27 | 13.5@2.93 | 14.5@3.90
+DISPO-014 | Daniel Butler | disposals | player_disposals_over | 9.5@1.33 | 9.5@1.33 | 9.5@1.33 | 11.5@1.67 | 12.5@1.92 | 13.5@2.25 | 15.5@3.18 | 16.5@3.98
+DISPO-015 | Daniel Rioli | disposals | player_disposals_over | 16.5@1.13 | 17.5@1.20 | 19.5@1.44 | 20.5@1.62 | 21.5@1.86 | 22.5@2.19 | 24.5@3.22 | 25.5@4.00
+DISPO-016 | Darcy Wilson | disposals | player_disposals_over | 16.5@1.10 | 18.5@1.22 | 19.5@1.36 | 20.5@1.53 | 21.5@1.81 | 22.5@2.10 | 24.5@3.08 | 25.5@3.75
+DISPO-017 | Dougal Howard | disposals | player_disposals_over | 12.5@1.13 | 13.5@1.20 | 15.5@1.44 | 16.5@1.63 | 17.5@1.88 | 18.5@2.23 | 20.5@3.25 | 21.5@4.00
+DISPO-018 | Ethan Read | disposals | player_disposals_over | 9.5@1.33 | 9.5@1.33 | 9.5@1.33 | 11.5@1.67 | 12.5@1.91 | 13.5@2.22 | 15.5@3.20 | 16.5@3.92
+DISPO-019 | Hugh Boxshall | disposals | player_disposals_over | 11.5@1.13 | 12.5@1.20 | 14.5@1.44 | 15.5@1.63 | 16.5@1.88 | 17.5@2.21 | 19.5@3.26 | 20.5@4.00
+DISPO-020 | Hugo Garcia | disposals | player_disposals | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84
+DISPO-021 | Hugo Garcia | disposals | player_disposals_over | 19.5@1.08 | 21.5@1.20 | 23.5@1.41 | 24.5@1.59 | 25.5@1.84 | 26.5@2.11 | 28.5@2.97 | 30.5@4.25
+DISPO-022 | Jack Silvagni | disposals | player_disposals_over | 10.5@1.13 | 11.5@1.22 | 12.5@1.36 | 13.5@1.57 | 14.5@1.87 | 15.5@2.29 | 16.5@2.90 | 17.5@3.75
+DISPO-023 | Jackson Macrae | disposals | player_disposals | 24.5@1.96 | 24.5@1.96 | 24.5@1.96 | 24.5@1.96 | 24.5@1.96 | 24.5@1.96 | 24.5@1.96 | 24.5@1.96
+DISPO-024 | Jackson Macrae | disposals | player_disposals_over | 17.5@1.08 | 20.5@1.28 | 21.5@1.37 | 22.5@1.52 | 24.5@1.96 | 25.5@2.27 | 27.5@3.20 | 28.5@3.96
+DISPO-025 | Jake Rogers | disposals | player_disposals_over | 9.5@1.13 | 10.5@1.22 | 11.5@1.35 | 12.5@1.57 | 13.5@1.86 | 14.5@2.28 | 15.5@2.88 | 16.5@3.70
+DISPO-026 | Jarrod Witts | disposals | player_disposals_over | 9.5@1.25 | 9.5@1.25 | 10.5@1.41 | 11.5@1.62 | 12.5@1.91 | 13.5@2.31 | 14.5@2.86 | 15.5@3.45
+DISPO-027 | Jed Walter | disposals | player_disposals_over | 9.5@2.39 | 9.5@2.39 | 9.5@2.39 | 9.5@2.39 | 9.5@2.39 | 9.5@2.39 | 10.5@3.06 | 11.5@4.00
+DISPO-028 | Joel Jeffrey | disposals | player_disposals_over | 12.5@1.08 | 14.5@1.20 | 16.5@1.45 | 17.5@1.64 | 18.5@1.88 | 19.5@2.20 | 21.5@3.14 | 22.5@4.00
+DISPO-029 | John Noble | disposals | player_disposals | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84 | 25.5@1.84
+DISPO-030 | John Noble | disposals | player_disposals_over | 20.5@1.13 | 21.5@1.20 | 23.5@1.42 | 24.5@1.59 | 25.5@1.84 | 26.5@2.14 | 28.5@3.01 | 29.5@3.69
+DISPO-031 | Lachlan Gulbin | disposals | player_disposals_over | 9.5@1.34 | 9.5@1.34 | 9.5@1.34 | 11.5@1.69 | 12.5@1.93 | 13.5@2.28 | 14.5@2.72 | 16.5@4.00
+DISPO-032 | Leo Lombard | disposals | player_disposals_over | 11.5@1.10 | 13.5@1.25 | 14.5@1.39 | 15.5@1.59 | 16.5@1.86 | 17.5@2.26 | 18.5@2.81 | 19.5@3.45
+DISPO-033 | Liam O'Connell | disposals | player_disposals_over | 9.5@1.62 | 9.5@1.62 | 9.5@1.62 | 9.5@1.62 | 10.5@1.91 | 11.5@2.33 | 12.5@2.91 | 13.5@3.70
+DISPO-034 | Liam Ryan | disposals | player_disposals_over | 9.5@1.91 | 9.5@1.91 | 9.5@1.91 | 9.5@1.91 | 9.5@1.91 | 10.5@2.26 | 11.5@2.72 | 13.5@4.05
+DISPO-035 | Liam Stocker | disposals | player_disposals_over | 15.5@1.13 | 17.5@1.28 | 18.5@1.41 | 19.5@1.59 | 20.5@1.83 | 21.5@2.17 | 23.5@3.22 | 24.5@4.00
+DISPO-036 | Mac Andrew | disposals | player_disposals_over | 12.5@1.10 | 14.5@1.22 | 15.5@1.33 | 17.5@1.67 | 18.5@1.91 | 19.5@2.24 | 21.5@3.27 | 22.5@4.00
+DISPO-037 | Marcus Windhager | disposals | player_disposals_over | 17.5@1.10 | 19.5@1.22 | 21.5@1.45 | 22.5@1.62 | 23.5@1.83 | 24.5@2.12 | 26.5@3.00 | 28.5@4.30
+DISPO-038 | Matt Rowell | disposals | player_disposals | 26.5@1.85 | 26.5@1.85 | 26.5@1.85 | 26.5@1.85 | 26.5@1.85 | 26.5@1.85 | 26.5@1.85 | 26.5@1.85
+DISPO-039 | Matt Rowell | disposals | player_disposals_over | 20.5@1.08 | 22.5@1.20 | 24.5@1.43 | 25.5@1.61 | 26.5@1.85 | 27.5@2.12 | 29.5@2.95 | 31.5@4.25
+DISPO-040 | Mattaes Phillipou | disposals | player_disposals_over | 14.5@1.13 | 16.5@1.28 | 17.5@1.42 | 18.5@1.60 | 19.5@1.85 | 20.5@2.19 | 22.5@3.16 | 23.5@4.00
+DISPO-041 | Max Hall | disposals | player_disposals | 26.5@1.92 | 26.5@1.92 | 26.5@1.92 | 26.5@1.92 | 26.5@1.92 | 26.5@1.92 | 26.5@1.92 | 26.5@1.92
+DISPO-042 | Max Hall | disposals | player_disposals_over | 20.5@1.10 | 22.5@1.22 | 23.5@1.33 | 25.5@1.70 | 26.5@1.92 | 27.5@2.24 | 29.5@3.14 | 30.5@3.70
+DISPO-043 | Mitchito Owens | disposals | player_disposals_over | 10.5@1.13 | 11.5@1.22 | 12.5@1.36 | 13.5@1.57 | 14.5@1.85 | 15.5@2.24 | 16.5@2.79 | 17.5@3.45
+DISPO-044 | Ned Moyle | disposals | player_disposals_over | 9.5@1.51 | 9.5@1.51 | 9.5@1.51 | 9.5@1.51 | 11.5@1.97 | 12.5@2.30 | 13.5@2.75 | 15.5@4.00
+DISPO-045 | Nicholas Holman | disposals | player_disposals_over | 9.5@1.10 | 11.5@1.28 | 12.5@1.42 | 13.5@1.64 | 14.5@1.91 | 15.5@2.27 | 16.5@2.78 | 18.5@4.25
+DISPO-046 | Noah Anderson | disposals | player_disposals | 25.5@1.85 | 25.5@1.85 | 25.5@1.85 | 25.5@1.85 | 25.5@1.85 | 25.5@1.85 | 25.5@1.85 | 25.5@1.85
+DISPO-047 | Noah Anderson | disposals | player_disposals_over | 19.5@1.08 | 21.5@1.20 | 23.5@1.41 | 24.5@1.58 | 25.5@1.85 | 26.5@2.13 | 28.5@3.00 | 29.5@3.69
+DISPO-048 | Rowan Marshall | disposals | player_disposals_over | 13.5@1.10 | 15.5@1.22 | 17.5@1.46 | 18.5@1.65 | 19.5@1.88 | 20.5@2.20 | 22.5@3.14 | 23.5@3.80
+DISPO-049 | Ryan Byrnes | disposals | player_disposals_over | 12.5@1.10 | 14.5@1.25 | 15.5@1.38 | 16.5@1.57 | 17.5@1.83 | 18.5@2.21 | 19.5@2.73 | 21.5@4.25
+DISPO-050 | Sam Clohesy | disposals | player_disposals_over | 14.5@1.13 | 15.5@1.20 | 17.5@1.44 | 18.5@1.63 | 19.5@1.88 | 20.5@2.22 | 21.5@2.70 | 23.5@4.00
+DISPO-051 | Tobie Travaglia | disposals | player_disposals_over | 9.5@1.11 | 11.5@1.25 | 12.5@1.36 | 14.5@1.69 | 15.5@1.91 | 16.5@2.22 | 18.5@3.12 | 19.5@3.70
+DISPO-052 | Tom De Koning | disposals | player_disposals_over | 9.5@1.11 | 11.5@1.28 | 12.5@1.41 | 13.5@1.60 | 14.5@1.86 | 15.5@2.21 | 16.5@2.70 | 18.5@4.20
+DISPO-053 | Touk Miller | disposals | player_disposals | 23.5@1.75 | 23.5@1.75 | 23.5@1.75 | 23.5@1.75 | 23.5@1.75 | 23.5@1.75 | 23.5@1.75 | 23.5@1.75
+DISPO-054 | Touk Miller | disposals | player_disposals_over | 19.5@1.11 | 21.5@1.30 | 22.5@1.46 | 22.5@1.46 | 23.5@1.75 | 25.5@2.37 | 26.5@2.86 | 28.5@4.25
+FANTA-001 | Angus Hastie | fantasy | player_afl_fantasy_points_over | 69.5@1.72 | 69.5@1.72 | 69.5@1.72 | 69.5@1.72 | 69.5@1.72 | 74.5@2.08 | 84.5@3.20 | 89.5@4.10
+FANTA-002 | Bailey Humphrey | fantasy | player_afl_fantasy_points_over | 69.5@1.47 | 69.5@1.47 | 69.5@1.47 | 74.5@1.70 | 79.5@2.00 | 84.5@2.40 | 89.5@3.00 | 94.5@3.90
+FANTA-003 | Beau Addinsall | fantasy | player_afl_fantasy_points_over | 69.5@2.55 | 69.5@2.55 | 69.5@2.55 | 69.5@2.55 | 69.5@2.55 | 69.5@2.55 | 74.5@3.40 | 79.5@4.60
+FANTA-004 | Ben Jepson | fantasy | player_afl_fantasy_points_over | 69.5@1.51 | 69.5@1.51 | 69.5@1.51 | 69.5@1.51 | 74.5@1.78 | 79.5@2.12 | 84.5@2.65 | 94.5@4.40
+FANTA-005 | Ben King | fantasy | player_afl_fantasy_points_over | 69.5@2.35 | 69.5@2.35 | 69.5@2.35 | 69.5@2.35 | 69.5@2.35 | 69.5@2.35 | 74.5@2.90 | 79.5@3.60
+FANTA-006 | Ben Long | fantasy | player_afl_fantasy_points_over | 69.5@3.15 | 69.5@3.15 | 69.5@3.15 | 69.5@3.15 | 69.5@3.15 | 69.5@3.15 | 69.5@3.15 | 74.5@4.10
+FANTA-007 | Bodhi Uwland | fantasy | player_afl_fantasy_points_over | 74.5@1.10 | 79.5@1.18 | 84.5@1.32 | 89.5@1.52 | 94.5@1.78 | 99.5@2.15 | 109.5@3.35 | 114.5@4.30
+FANTA-008 | Bradley Hill | fantasy | player_afl_fantasy_points_over | 109.5@1.08 | 119.5@1.22 | 124.5@1.34 | 129.5@1.49 | 129.5@1.49 | 129.5@1.49 | 129.5@1.49 | 129.5@1.49
+FANTA-009 | Callum Wilkie | fantasy | player_afl_fantasy_points_over | 79.5@1.08 | 89.5@1.23 | 94.5@1.37 | 99.5@1.55 | 104.5@1.79 | 109.5@2.08 | 119.5@3.00 | 124.5@3.75
+FANTA-010 | Campbell Lake | fantasy | player_afl_fantasy_points_over | 69.5@1.66 | 69.5@1.66 | 69.5@1.66 | 69.5@1.66 | 74.5@1.98 | 79.5@2.40 | 84.5@3.05 | 89.5@3.90
+FANTA-011 | Charlie Ballard | fantasy | player_afl_fantasy_points_over | 69.5@3.10 | 69.5@3.10 | 69.5@3.10 | 69.5@3.10 | 69.5@3.10 | 69.5@3.10 | 69.5@3.10 | 74.5@4.00
+FANTA-012 | Cooper Sharman | fantasy | player_afl_fantasy_points_over | 69.5@2.40 | 69.5@2.40 | 69.5@2.40 | 69.5@2.40 | 69.5@2.40 | 69.5@2.40 | 74.5@3.05 | 79.5@3.90
+FANTA-013 | Daniel Butler | fantasy | player_afl_fantasy_points_over | 69.5@1.53 | 69.5@1.53 | 69.5@1.53 | 69.5@1.53 | 74.5@1.77 | 79.5@2.08 | 89.5@3.10 | 94.5@3.90
+FANTA-014 | Daniel Rioli | fantasy | player_afl_fantasy_points_over | 69.5@1.17 | 74.5@1.28 | 79.5@1.45 | 84.5@1.67 | 89.5@1.98 | 94.5@2.40 | 99.5@3.00 | 104.5@3.90
+FANTA-015 | Darcy Wilson | fantasy | player_afl_fantasy_points_over | 69.5@1.14 | 74.5@1.25 | 79.5@1.42 | 84.5@1.64 | 89.5@1.93 | 94.5@2.30 | 99.5@2.85 | 104.5@3.60
+FANTA-016 | Dougal Howard | fantasy | player_afl_fantasy_points_over | 69.5@1.36 | 69.5@1.36 | 69.5@1.36 | 74.5@1.55 | 79.5@1.81 | 84.5@2.12 | 94.5@3.30 | 99.5@4.30
+FANTA-017 | Ethan Read | fantasy | player_afl_fantasy_points_over | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 74.5@3.60
+FANTA-018 | Hugh Boxshall | fantasy | player_afl_fantasy_points_over | 69.5@1.21 | 69.5@1.21 | 74.5@1.34 | 79.5@1.52 | 84.5@1.77 | 89.5@2.10 | 99.5@3.25 | 104.5@4.25
+FANTA-019 | Hugo Garcia | fantasy | player_afl_fantasy_points_over | 89.5@1.13 | 94.5@1.21 | 99.5@1.33 | 109.5@1.70 | 114.5@1.97 | 119.5@2.35 | 124.5@2.85 | 129.5@3.50
+FANTA-020 | Jack Silvagni | fantasy | player_afl_fantasy_points_over | 69.5@1.49 | 69.5@1.49 | 69.5@1.49 | 69.5@1.49 | 74.5@1.72 | 79.5@2.03 | 89.5@3.15 | 94.5@4.10
+FANTA-021 | Jackson Macrae | fantasy | player_afl_fantasy_points_over | 69.5@1.08 | 79.5@1.23 | 84.5@1.36 | 89.5@1.55 | 94.5@1.81 | 99.5@2.15 | 104.5@2.65 | 114.5@4.30
+FANTA-022 | Jake Rogers | fantasy | player_afl_fantasy_points_over | 69.5@4.30 | 69.5@4.30 | 69.5@4.30 | 69.5@4.30 | 69.5@4.30 | 69.5@4.30 | 69.5@4.30 | 69.5@4.30
+FANTA-023 | Jarrod Witts | fantasy | player_afl_fantasy_points_over | 69.5@1.39 | 69.5@1.39 | 69.5@1.39 | 74.5@1.65 | 79.5@2.00 | 79.5@2.00 | 89.5@3.40 | 94.5@4.60
+FANTA-024 | Jed Walter | fantasy | player_afl_fantasy_points_over | 69.5@3.05 | 69.5@3.05 | 69.5@3.05 | 69.5@3.05 | 69.5@3.05 | 69.5@3.05 | 69.5@3.05 | 74.5@3.90
+FANTA-025 | Joel Jeffrey | fantasy | player_afl_fantasy_points_over | 69.5@1.46 | 69.5@1.46 | 69.5@1.46 | 74.5@1.70 | 74.5@1.70 | 79.5@2.05 | 89.5@3.20 | 94.5@4.20
+FANTA-026 | John Noble | fantasy | player_afl_fantasy_points_over | 84.5@1.09 | 94.5@1.24 | 99.5@1.38 | 104.5@1.55 | 109.5@1.80 | 114.5@2.10 | 124.5@3.05 | 129.5@3.80
+FANTA-027 | Lachlan Gulbin | fantasy | player_afl_fantasy_points_over | 69.5@2.85 | 69.5@2.85 | 69.5@2.85 | 69.5@2.85 | 69.5@2.85 | 69.5@2.85 | 69.5@2.85 | 74.5@3.70
+FANTA-028 | Leo Lombard | fantasy | player_afl_fantasy_points_over | 69.5@1.45 | 69.5@1.45 | 69.5@1.45 | 74.5@1.68 | 79.5@2.00 | 79.5@2.00 | 89.5@3.10 | 94.5@4.00
+FANTA-029 | Liam O'Connell | fantasy | player_afl_fantasy_points_over | 69.5@3.35 | 69.5@3.35 | 69.5@3.35 | 69.5@3.35 | 69.5@3.35 | 69.5@3.35 | 69.5@3.35 | 74.5@4.50
+FANTA-030 | Liam Ryan | fantasy | player_afl_fantasy_points_over | 69.5@3.60 | 69.5@3.60 | 69.5@3.60 | 69.5@3.60 | 69.5@3.60 | 69.5@3.60 | 69.5@3.60 | 69.5@3.60
+FANTA-031 | Liam Stocker | fantasy | player_afl_fantasy_points_over | 69.5@1.14 | 74.5@1.24 | 79.5@1.37 | 84.5@1.56 | 89.5@1.81 | 94.5@2.15 | 104.5@3.30 | 109.5@4.25
+FANTA-032 | Mac Andrew | fantasy | player_afl_fantasy_points_over | 69.5@1.16 | 74.5@1.27 | 79.5@1.42 | 84.5@1.62 | 89.5@1.89 | 94.5@2.25 | 99.5@2.75 | 109.5@4.40
+FANTA-033 | Marcus Windhager | fantasy | player_afl_fantasy_points_over | 74.5@1.12 | 79.5@1.20 | 84.5@1.32 | 89.5@1.49 | 94.5@1.72 | 99.5@2.02 | 109.5@3.00 | 114.5@3.75
+FANTA-034 | Matt Rowell | fantasy | player_afl_fantasy_points_over | 89.5@1.11 | 94.5@1.18 | 104.5@1.47 | 109.5@1.69 | 114.5@1.98 | 119.5@2.35 | 124.5@2.90 | 129.5@3.60
+FANTA-035 | Mattaes Phillipou | fantasy | player_afl_fantasy_points_over | 69.5@1.17 | 74.5@1.28 | 79.5@1.44 | 84.5@1.66 | 89.5@1.94 | 94.5@2.30 | 99.5@2.90 | 104.5@3.70
+FANTA-036 | Max Hall | fantasy | player_afl_fantasy_points_over | 94.5@1.08 | 104.5@1.20 | 114.5@1.43 | 119.5@1.60 | 124.5@1.81 | 129.5@2.08 | 129.5@2.08 | 129.5@2.08
+FANTA-037 | Mitchito Owens | fantasy | player_afl_fantasy_points_over | 69.5@1.33 | 69.5@1.33 | 69.5@1.33 | 79.5@1.69 | 84.5@2.00 | 89.5@2.35 | 94.5@2.95 | 99.5@3.60
+FANTA-038 | Ned Moyle | fantasy | player_afl_fantasy_points_over | 69.5@1.11 | 74.5@1.19 | 79.5@1.33 | 84.5@1.53 | 89.5@1.81 | 94.5@2.20 | 99.5@2.70 | 104.5@3.50
+FANTA-039 | Nicholas Holman | fantasy | player_afl_fantasy_points_over | 69.5@1.86 | 69.5@1.86 | 69.5@1.86 | 69.5@1.86 | 69.5@1.86 | 74.5@2.25 | 79.5@2.80 | 84.5@3.60
+FANTA-040 | Noah Anderson | fantasy | player_afl_fantasy_points_over | 89.5@1.11 | 99.5@1.29 | 104.5@1.44 | 109.5@1.63 | 114.5@1.88 | 119.5@2.20 | 124.5@2.70 | 129.5@3.35
+FANTA-041 | Rowan Marshall | fantasy | player_afl_fantasy_points_over | 84.5@1.10 | 94.5@1.29 | 99.5@1.40 | 104.5@1.57 | 109.5@1.80 | 114.5@2.08 | 124.5@3.05 | 129.5@3.75
+FANTA-042 | Ryan Byrnes | fantasy | player_afl_fantasy_points_over | 69.5@1.58 | 69.5@1.58 | 69.5@1.58 | 69.5@1.58 | 74.5@1.88 | 79.5@2.25 | 84.5@2.85 | 89.5@3.70
+FANTA-043 | Sam Clohesy | fantasy | player_afl_fantasy_points_over | 69.5@1.44 | 69.5@1.44 | 69.5@1.44 | 74.5@1.69 | 74.5@1.69 | 79.5@2.03 | 89.5@3.25 | 94.5@4.20
+FANTA-044 | Tobie Travaglia | fantasy | player_afl_fantasy_points_over | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 69.5@2.75 | 74.5@3.60
+FANTA-045 | Tom De Koning | fantasy | player_afl_fantasy_points_over | 69.5@1.16 | 74.5@1.29 | 79.5@1.41 | 84.5@1.61 | 89.5@1.89 | 94.5@2.25 | 99.5@2.80 | 104.5@3.50
+FANTA-046 | Touk Miller | fantasy | player_afl_fantasy_points_over | 74.5@1.12 | 79.5@1.22 | 84.5@1.37 | 89.5@1.59 | 94.5@1.91 | 99.5@2.30 | 104.5@2.95 | 109.5@3.75
+GOALS-001 | Bailey Humphrey | goals | player_goals_scored_over | 0.5@1.25 | 0.5@1.25 | 0.5@1.25 | 0.5@1.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25
+GOALS-002 | Beau Addinsall | goals | player_goals_scored_over | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00
+GOALS-003 | Ben Jepson | goals | player_goals_scored_over | 0.5@2.65 | 0.5@2.65 | 0.5@2.65 | 0.5@2.65 | 0.5@2.65 | 0.5@2.65 | 0.5@2.65 | 0.5@2.65
+GOALS-004 | Ben King | goals | player_goals_scored_over | 1.5@1.32 | 1.5@1.32 | 1.5@1.32 | 1.5@1.32 | 2.5@2.03 | 2.5@2.03 | 3.5@3.70 | 3.5@3.70
+GOALS-005 | Ben Long | goals | player_goals_scored_over | 0.5@1.33 | 0.5@1.33 | 0.5@1.33 | 0.5@1.33 | 0.5@1.33 | 1.5@2.70 | 1.5@2.70 | 1.5@2.70
+GOALS-006 | Bradley Hill | goals | player_goals_scored_over | 0.5@2.15 | 0.5@2.15 | 0.5@2.15 | 0.5@2.15 | 0.5@2.15 | 0.5@2.15 | 0.5@2.15 | 0.5@2.15
+GOALS-007 | Campbell Lake | goals | player_goals_scored_over | 0.5@1.93 | 0.5@1.93 | 0.5@1.93 | 0.5@1.93 | 0.5@1.93 | 0.5@1.93 | 0.5@1.93 | 0.5@1.93
+GOALS-008 | Cooper Sharman | goals | player_goals_scored_over | 0.5@1.12 | 0.5@1.12 | 0.5@1.12 | 1.5@1.73 | 1.5@1.73 | 1.5@1.73 | 2.5@3.30 | 2.5@3.30
+GOALS-009 | Daniel Butler | goals | player_goals_scored_over | 0.5@1.41 | 0.5@1.41 | 0.5@1.41 | 0.5@1.41 | 0.5@1.41 | 0.5@1.41 | 1.5@3.10 | 1.5@3.10
+GOALS-010 | Darcy Wilson | goals | player_goals_scored_over | 0.5@1.68 | 0.5@1.68 | 0.5@1.68 | 0.5@1.68 | 0.5@1.68 | 0.5@1.68 | 0.5@1.68 | 1.5@4.60
+GOALS-011 | Ethan Read | goals | player_goals_scored_over | 0.5@1.72 | 0.5@1.72 | 0.5@1.72 | 0.5@1.72 | 0.5@1.72 | 0.5@1.72 | 0.5@1.72 | 1.5@4.70
+GOALS-012 | Hugo Garcia | goals | player_goals_scored_over | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95
+GOALS-013 | Jake Rogers | goals | player_goals_scored_over | 0.5@2.50 | 0.5@2.50 | 0.5@2.50 | 0.5@2.50 | 0.5@2.50 | 0.5@2.50 | 0.5@2.50 | 0.5@2.50
+GOALS-014 | Jed Walter | goals | player_goals_scored_over | 0.5@1.14 | 0.5@1.14 | 0.5@1.14 | 1.5@1.77 | 1.5@1.77 | 1.5@1.77 | 2.5@3.45 | 2.5@3.45
+GOALS-015 | Lachlan Gulbin | goals | player_goals_scored_over | 0.5@2.05 | 0.5@2.05 | 0.5@2.05 | 0.5@2.05 | 0.5@2.05 | 0.5@2.05 | 0.5@2.05 | 0.5@2.05
+GOALS-016 | Leo Lombard | goals | player_goals_scored_over | 0.5@1.73 | 0.5@1.73 | 0.5@1.73 | 0.5@1.73 | 0.5@1.73 | 0.5@1.73 | 0.5@1.73 | 1.5@4.70
+GOALS-017 | Liam Ryan | goals | player_goals_scored_over | 1.5@1.46 | 1.5@1.46 | 1.5@1.46 | 1.5@1.46 | 1.5@1.46 | 2.5@2.45 | 2.5@2.45 | 3.5@5.00
+GOALS-018 | Marcus Windhager | goals | player_goals_scored_over | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95 | 0.5@2.95
+GOALS-019 | Matt Rowell | goals | player_goals_scored_over | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00
+GOALS-020 | Mattaes Phillipou | goals | player_goals_scored_over | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30
+GOALS-021 | Max Hall | goals | player_goals_scored_over | 0.5@1.32 | 0.5@1.32 | 0.5@1.32 | 0.5@1.32 | 0.5@1.32 | 1.5@2.60 | 1.5@2.60 | 1.5@2.60
+GOALS-022 | Mitchito Owens | goals | player_goals_scored_over | 0.5@1.10 | 0.5@1.10 | 1.5@1.61 | 1.5@1.61 | 1.5@1.61 | 1.5@1.61 | 2.5@2.85 | 2.5@2.85
+GOALS-023 | Ned Moyle | goals | player_goals_scored_over | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00
+GOALS-024 | Nicholas Holman | goals | player_goals_scored_over | 0.5@1.63 | 0.5@1.63 | 0.5@1.63 | 0.5@1.63 | 0.5@1.63 | 0.5@1.63 | 1.5@4.25 | 1.5@4.25
+GOALS-025 | Noah Anderson | goals | player_goals_scored_over | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00 | 0.5@4.00
+GOALS-026 | Rowan Marshall | goals | player_goals_scored_over | 0.5@1.36 | 0.5@1.36 | 0.5@1.36 | 0.5@1.36 | 0.5@1.36 | 1.5@2.80 | 1.5@2.80 | 1.5@2.80
+GOALS-027 | Ryan Byrnes | goals | player_goals_scored_over | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30 | 0.5@2.30
+GOALS-028 | Tom De Koning | goals | player_goals_scored_over | 0.5@1.52 | 0.5@1.52 | 0.5@1.52 | 0.5@1.52 | 0.5@1.52 | 0.5@1.52 | 1.5@3.60 | 1.5@3.60
+GOALS-029 | Touk Miller | goals | player_goals_scored_over | 0.5@2.40 | 0.5@2.40 | 0.5@2.40 | 0.5@2.40 | 0.5@2.40 | 0.5@2.40 | 0.5@2.40 | 0.5@2.40
+HANDB-001 | Bailey Humphrey | handballs | player_handballs_over | 7.5@1.73 | 7.5@1.73 | 7.5@1.73 | 7.5@1.73 | 7.5@1.73 | 7.5@1.73 | 9.5@2.80 | 9.5@2.80
+HANDB-002 | Beau Addinsall | handballs | player_handballs_over | 7.5@1.28 | 7.5@1.28 | 7.5@1.28 | 9.5@1.77 | 9.5@1.77 | 9.5@1.77 | 11.5@2.75 | 13.5@4.90
+HANDB-003 | Bodhi Uwland | handballs | player_handballs_over | 7.5@1.54 | 7.5@1.54 | 7.5@1.54 | 7.5@1.54 | 7.5@1.54 | 9.5@2.65 | 9.5@2.65 | 9.5@2.65
+HANDB-004 | Bradley Hill | handballs | player_handballs_over | 9.5@1.29 | 9.5@1.29 | 9.5@1.29 | 11.5@1.87 | 11.5@1.87 | 11.5@1.87 | 13.5@3.15 | 13.5@3.15
+HANDB-005 | Callum Wilkie | handballs | player_handballs_over | 7.5@2.15 | 7.5@2.15 | 7.5@2.15 | 7.5@2.15 | 7.5@2.15 | 7.5@2.15 | 7.5@2.15 | 9.5@4.60
+HANDB-006 | Campbell Lake | handballs | player_handballs_over | 7.5@2.35 | 7.5@2.35 | 7.5@2.35 | 7.5@2.35 | 7.5@2.35 | 7.5@2.35 | 7.5@2.35 | 9.5@4.30
+HANDB-007 | Daniel Butler | handballs | player_handballs_over | 7.5@4.10 | 7.5@4.10 | 7.5@4.10 | 7.5@4.10 | 7.5@4.10 | 7.5@4.10 | 7.5@4.10 | 7.5@4.10
+HANDB-008 | Daniel Rioli | handballs | player_handballs_over | 7.5@1.20 | 7.5@1.20 | 7.5@1.20 | 9.5@1.66 | 9.5@1.66 | 11.5@2.70 | 11.5@2.70 | 11.5@2.70
+HANDB-009 | Darcy Wilson | handballs | player_handballs_over | 7.5@1.26 | 7.5@1.26 | 7.5@1.26 | 9.5@1.86 | 9.5@1.86 | 9.5@1.86 | 11.5@3.30 | 11.5@3.30
+HANDB-010 | Ethan Read | handballs | player_handballs_over | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50
+HANDB-011 | Hugh Boxshall | handballs | player_handballs_over | 7.5@1.42 | 7.5@1.42 | 7.5@1.42 | 7.5@1.42 | 9.5@2.12 | 9.5@2.12 | 11.5@3.60 | 11.5@3.60
+HANDB-012 | Hugo Garcia | handballs | player_handballs_over | 11.5@1.24 | 11.5@1.24 | 11.5@1.24 | 13.5@1.67 | 13.5@1.67 | 15.5@2.50 | 15.5@2.50 | 17.5@4.30
+HANDB-013 | Jackson Macrae | handballs | player_handballs_over | 11.5@1.13 | 11.5@1.13 | 13.5@1.37 | 13.5@1.37 | 15.5@1.83 | 15.5@1.83 | 17.5@2.65 | 19.5@4.40
+HANDB-014 | Jake Rogers | handballs | player_handballs_over | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50 | 7.5@3.50
+HANDB-015 | Jarrod Witts | handballs | player_handballs_over | 7.5@2.08 | 7.5@2.08 | 7.5@2.08 | 7.5@2.08 | 7.5@2.08 | 7.5@2.08 | 9.5@3.60 | 9.5@3.60
+HANDB-016 | Joel Jeffrey | handballs | player_handballs_over | 7.5@3.30 | 7.5@3.30 | 7.5@3.30 | 7.5@3.30 | 7.5@3.30 | 7.5@3.30 | 7.5@3.30 | 7.5@3.30
+HANDB-017 | John Noble | handballs | player_handballs_over | 7.5@1.70 | 7.5@1.70 | 7.5@1.70 | 7.5@1.70 | 7.5@1.70 | 7.5@1.70 | 9.5@3.05 | 9.5@3.05
+HANDB-018 | Lachlan Gulbin | handballs | player_handballs_over | 7.5@3.90 | 7.5@3.90 | 7.5@3.90 | 7.5@3.90 | 7.5@3.90 | 7.5@3.90 | 7.5@3.90 | 7.5@3.90
+HANDB-019 | Leo Lombard | handballs | player_handballs_over | 7.5@1.57 | 7.5@1.57 | 7.5@1.57 | 7.5@1.57 | 7.5@1.57 | 9.5@2.60 | 9.5@2.60 | 11.5@5.00
+HANDB-021 | Liam Stocker | handballs | player_handballs_over | 7.5@2.60 | 7.5@2.60 | 7.5@2.60 | 7.5@2.60 | 7.5@2.60 | 7.5@2.60 | 7.5@2.60 | 7.5@2.60
+HANDB-022 | Mac Andrew | handballs | player_handballs_over | 7.5@2.70 | 7.5@2.70 | 7.5@2.70 | 7.5@2.70 | 7.5@2.70 | 7.5@2.70 | 7.5@2.70 | 7.5@2.70
+HANDB-023 | Marcus Windhager | handballs | player_handballs_over | 7.5@1.21 | 7.5@1.21 | 7.5@1.21 | 9.5@1.68 | 9.5@1.68 | 11.5@2.70 | 11.5@2.70 | 11.5@2.70
+HANDB-024 | Matt Rowell | handballs | player_handballs_over | 9.5@1.18 | 9.5@1.18 | 11.5@1.57 | 11.5@1.57 | 11.5@1.57 | 13.5@2.35 | 13.5@2.35 | 15.5@4.00
+HANDB-025 | Mattaes Phillipou | handballs | player_handballs_over | 7.5@1.08 | 9.5@1.32 | 9.5@1.32 | 11.5@1.81 | 11.5@1.81 | 11.5@1.81 | 13.5@2.80 | 15.5@5.00
+HANDB-026 | Max Hall | handballs | player_handballs_over | 9.5@1.30 | 9.5@1.30 | 9.5@1.30 | 11.5@1.84 | 11.5@1.84 | 11.5@1.84 | 13.5@3.05 | 13.5@3.05
+HANDB-027 | Mitchito Owens | handballs | player_handballs_over | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 9.5@4.30
+HANDB-028 | Ned Moyle | handballs | player_handballs_over | 7.5@2.25 | 7.5@2.25 | 7.5@2.25 | 7.5@2.25 | 7.5@2.25 | 7.5@2.25 | 9.5@3.50 | 9.5@3.50
+HANDB-029 | Nicholas Holman | handballs | player_handballs_over | 7.5@2.02 | 7.5@2.02 | 7.5@2.02 | 7.5@2.02 | 7.5@2.02 | 7.5@2.02 | 9.5@3.40 | 9.5@3.40
+HANDB-030 | Noah Anderson | handballs | player_handballs_over | 7.5@1.11 | 7.5@1.11 | 9.5@1.40 | 9.5@1.40 | 11.5@2.10 | 11.5@2.10 | 13.5@3.70 | 13.5@3.70
+HANDB-031 | Rowan Marshall | handballs | player_handballs_over | 7.5@1.56 | 7.5@1.56 | 7.5@1.56 | 7.5@1.56 | 7.5@1.56 | 9.5@2.50 | 9.5@2.50 | 11.5@4.40
+HANDB-032 | Ryan Byrnes | handballs | player_handballs_over | 7.5@1.65 | 7.5@1.65 | 7.5@1.65 | 7.5@1.65 | 7.5@1.65 | 7.5@1.65 | 9.5@2.85 | 9.5@2.85
+HANDB-033 | Sam Clohesy | handballs | player_handballs_over | 7.5@1.42 | 7.5@1.42 | 7.5@1.42 | 7.5@1.42 | 9.5@2.20 | 9.5@2.20 | 9.5@2.20 | 11.5@4.00
+HANDB-034 | Tobie Travaglia | handballs | player_handballs_over | 7.5@1.94 | 7.5@1.94 | 7.5@1.94 | 7.5@1.94 | 7.5@1.94 | 7.5@1.94 | 9.5@3.10 | 9.5@3.10
+HANDB-035 | Tom De Koning | handballs | player_handballs_over | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 7.5@2.20 | 9.5@3.90
+HANDB-036 | Touk Miller | handballs | player_handballs_over | 9.5@1.09 | 11.5@1.35 | 11.5@1.35 | 11.5@1.35 | 13.5@1.95 | 13.5@1.95 | 15.5@3.25 | 15.5@3.25
+KICKS-001 | Angus Hastie | kicks | player_kicks_over | 9.5@1.33 | 9.5@1.33 | 9.5@1.33 | 11.5@1.83 | 11.5@1.83 | 11.5@1.83 | 13.5@2.75 | 15.5@4.80
+KICKS-002 | Bailey Humphrey | kicks | player_kicks_over | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60
+KICKS-004 | Ben Jepson | kicks | player_kicks_over | 9.5@1.71 | 9.5@1.71 | 9.5@1.71 | 9.5@1.71 | 9.5@1.71 | 9.5@1.71 | 11.5@2.75 | 13.5@5.00
+KICKS-005 | Ben Long | kicks | player_kicks_over | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60
+KICKS-006 | Bodhi Uwland | kicks | player_kicks_over | 11.5@1.09 | 13.5@1.33 | 13.5@1.33 | 13.5@1.33 | 15.5@1.90 | 15.5@1.90 | 17.5@3.05 | 17.5@3.05
+KICKS-007 | Bradley Hill | kicks | player_kicks_over | 17.5@1.10 | 19.5@1.32 | 19.5@1.32 | 21.5@1.69 | 21.5@1.69 | 23.5@2.35 | 25.5@3.50 | 25.5@3.50
+KICKS-008 | Callum Wilkie | kicks | player_kicks_over | 11.5@1.08 | 13.5@1.32 | 13.5@1.32 | 15.5@1.86 | 15.5@1.86 | 15.5@1.86 | 17.5@2.90 | 17.5@2.90
+KICKS-009 | Charlie Ballard | kicks | player_kicks_over | 9.5@2.90 | 9.5@2.90 | 9.5@2.90 | 9.5@2.90 | 9.5@2.90 | 9.5@2.90 | 9.5@2.90 | 9.5@2.90
+KICKS-010 | Cooper Sharman | kicks | player_kicks_over | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50
+KICKS-011 | Daniel Butler | kicks | player_kicks_over | 9.5@3.45 | 9.5@3.45 | 9.5@3.45 | 9.5@3.45 | 9.5@3.45 | 9.5@3.45 | 9.5@3.45 | 9.5@3.45
+KICKS-012 | Daniel Rioli | kicks | player_kicks_over | 9.5@1.35 | 9.5@1.35 | 9.5@1.35 | 9.5@1.35 | 11.5@1.97 | 11.5@1.97 | 13.5@3.35 | 13.5@3.35
+KICKS-013 | Darcy Wilson | kicks | player_kicks_over | 9.5@1.21 | 9.5@1.21 | 9.5@1.21 | 11.5@1.65 | 11.5@1.65 | 13.5@2.60 | 13.5@2.60 | 15.5@4.60
+KICKS-014 | Dougal Howard | kicks | player_kicks_over | 9.5@1.08 | 11.5@1.24 | 11.5@1.24 | 13.5@1.58 | 13.5@1.58 | 15.5@2.20 | 17.5@3.35 | 17.5@3.35
+KICKS-015 | Ethan Read | kicks | player_kicks_over | 9.5@4.10 | 9.5@4.10 | 9.5@4.10 | 9.5@4.10 | 9.5@4.10 | 9.5@4.10 | 9.5@4.10 | 9.5@4.10
+KICKS-016 | Hugh Boxshall | kicks | player_kicks_over | 9.5@3.80 | 9.5@3.80 | 9.5@3.80 | 9.5@3.80 | 9.5@3.80 | 9.5@3.80 | 9.5@3.80 | 9.5@3.80
+KICKS-017 | Hugo Garcia | kicks | player_kicks_over | 9.5@1.31 | 9.5@1.31 | 9.5@1.31 | 11.5@1.89 | 11.5@1.89 | 11.5@1.89 | 13.5@3.15 | 13.5@3.15
+KICKS-018 | Jack Silvagni | kicks | player_kicks_over | 9.5@1.67 | 9.5@1.67 | 9.5@1.67 | 9.5@1.67 | 9.5@1.67 | 9.5@1.67 | 11.5@2.75 | 11.5@2.75
+KICKS-019 | Jackson Macrae | kicks | player_kicks_over | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60 | 9.5@2.60
+KICKS-020 | Jake Rogers | kicks | player_kicks_over | 9.5@3.40 | 9.5@3.40 | 9.5@3.40 | 9.5@3.40 | 9.5@3.40 | 9.5@3.40 | 9.5@3.40 | 9.5@3.40
+KICKS-021 | Joel Jeffrey | kicks | player_kicks_over | 9.5@1.20 | 9.5@1.20 | 11.5@1.58 | 11.5@1.58 | 11.5@1.58 | 13.5@2.30 | 13.5@2.30 | 15.5@3.80
+KICKS-022 | John Noble | kicks | player_kicks_over | 13.5@1.12 | 15.5@1.35 | 15.5@1.35 | 17.5@1.83 | 17.5@1.83 | 17.5@1.83 | 19.5@2.70 | 21.5@4.40
+KICKS-023 | Lachlan Gulbin | kicks | player_kicks_over | 9.5@3.90 | 9.5@3.90 | 9.5@3.90 | 9.5@3.90 | 9.5@3.90 | 9.5@3.90 | 9.5@3.90 | 9.5@3.90
+KICKS-024 | Leo Lombard | kicks | player_kicks_over | 9.5@2.95 | 9.5@2.95 | 9.5@2.95 | 9.5@2.95 | 9.5@2.95 | 9.5@2.95 | 9.5@2.95 | 9.5@2.95
+KICKS-025 | Liam Ryan | kicks | player_kicks_over | 9.5@3.15 | 9.5@3.15 | 9.5@3.15 | 9.5@3.15 | 9.5@3.15 | 9.5@3.15 | 9.5@3.15 | 9.5@3.15
+KICKS-026 | Liam Stocker | kicks | player_kicks_over | 9.5@1.08 | 11.5@1.28 | 11.5@1.28 | 13.5@1.73 | 13.5@1.73 | 15.5@2.60 | 15.5@2.60 | 17.5@4.60
+KICKS-027 | Mac Andrew | kicks | player_kicks_over | 9.5@1.27 | 9.5@1.27 | 9.5@1.27 | 11.5@1.73 | 11.5@1.73 | 11.5@1.73 | 13.5@2.70 | 15.5@4.80
+KICKS-028 | Marcus Windhager | kicks | player_kicks_over | 9.5@1.12 | 11.5@1.37 | 11.5@1.37 | 11.5@1.37 | 13.5@1.92 | 13.5@1.92 | 15.5@3.05 | 15.5@3.05
+KICKS-029 | Matt Rowell | kicks | player_kicks_over | 11.5@1.24 | 11.5@1.24 | 11.5@1.24 | 13.5@1.68 | 13.5@1.68 | 15.5@2.55 | 15.5@2.55 | 17.5@4.50
+KICKS-030 | Mattaes Phillipou | kicks | player_kicks_over | 9.5@3.35 | 9.5@3.35 | 9.5@3.35 | 9.5@3.35 | 9.5@3.35 | 9.5@3.35 | 9.5@3.35 | 9.5@3.35
+KICKS-031 | Max Hall | kicks | player_kicks_over | 11.5@1.18 | 11.5@1.18 | 13.5@1.54 | 13.5@1.54 | 13.5@1.54 | 15.5@2.20 | 17.5@3.70 | 17.5@3.70
+KICKS-032 | Mitchito Owens | kicks | player_kicks_over | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60
+KICKS-033 | Nicholas Holman | kicks | player_kicks_over | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50 | 9.5@4.50
+KICKS-034 | Noah Anderson | kicks | player_kicks_over | 11.5@1.19 | 11.5@1.19 | 13.5@1.55 | 13.5@1.55 | 13.5@1.55 | 15.5@2.25 | 15.5@2.25 | 17.5@3.80
+KICKS-035 | Rowan Marshall | kicks | player_kicks_over | 9.5@1.46 | 9.5@1.46 | 9.5@1.46 | 9.5@1.46 | 11.5@2.18 | 11.5@2.18 | 13.5@3.80 | 13.5@3.80
+KICKS-036 | Ryan Byrnes | kicks | player_kicks_over | 9.5@1.95 | 9.5@1.95 | 9.5@1.95 | 9.5@1.95 | 9.5@1.95 | 9.5@1.95 | 11.5@3.50 | 11.5@3.50
+KICKS-037 | Sam Clohesy | kicks | player_kicks_over | 9.5@1.56 | 9.5@1.56 | 9.5@1.56 | 9.5@1.56 | 9.5@1.56 | 11.5@2.45 | 11.5@2.45 | 13.5@4.60
+KICKS-038 | Tobie Travaglia | kicks | player_kicks_over | 9.5@3.05 | 9.5@3.05 | 9.5@3.05 | 9.5@3.05 | 9.5@3.05 | 9.5@3.05 | 9.5@3.05 | 9.5@3.05
+KICKS-039 | Tom De Koning | kicks | player_kicks_over | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60 | 9.5@3.60
+KICKS-040 | Touk Miller | kicks | player_kicks_over | 9.5@1.42 | 9.5@1.42 | 9.5@1.42 | 9.5@1.42 | 11.5@2.20 | 11.5@2.20 | 11.5@2.20 | 13.5@4.10
+MARKS-001 | Angus Hastie | marks | player_marks_over | 4.5@1.17 | 4.5@1.17 | 5.5@1.36 | 6.5@1.72 | 6.5@1.72 | 7.5@2.30 | 8.5@3.30 | 8.5@3.30
+MARKS-002 | Bailey Humphrey | marks | player_marks_over | 3.5@1.21 | 3.5@1.21 | 4.5@1.51 | 4.5@1.51 | 5.5@2.05 | 5.5@2.05 | 6.5@3.05 | 7.5@4.90
+MARKS-003 | Beau Addinsall | marks | player_marks_over | 1.5@1.09 | 2.5@1.33 | 2.5@1.33 | 2.5@1.33 | 3.5@1.87 | 3.5@1.87 | 4.5@2.95 | 4.5@2.95
+MARKS-004 | Ben Jepson | marks | player_marks_over | 3.5@1.23 | 3.5@1.23 | 3.5@1.23 | 4.5@1.57 | 4.5@1.57 | 5.5@2.15 | 6.5@3.20 | 6.5@3.20
+MARKS-005 | Ben King | marks | player_marks_over | 3.5@1.12 | 4.5@1.32 | 4.5@1.32 | 5.5@1.71 | 5.5@1.71 | 6.5@2.35 | 7.5@3.50 | 7.5@3.50
+MARKS-006 | Ben Long | marks | player_marks_over | 1.5@1.09 | 2.5@1.33 | 2.5@1.33 | 2.5@1.33 | 3.5@1.87 | 3.5@1.87 | 4.5@2.95 | 4.5@2.95
+MARKS-007 | Bodhi Uwland | marks | player_marks_over | 5.5@1.09 | 6.5@1.20 | 7.5@1.41 | 8.5@1.75 | 8.5@1.75 | 9.5@2.25 | 10.5@3.05 | 11.5@4.30
+MARKS-008 | Bradley Hill | marks | player_marks_over | 8.5@1.13 | 9.5@1.24 | 10.5@1.44 | 11.5@1.72 | 11.5@1.72 | 11.5@1.72 | 11.5@1.72 | 11.5@1.72
+MARKS-009 | Callum Wilkie | marks | player_marks_over | 9.5@1.09 | 10.5@1.18 | 11.5@1.33 | 11.5@1.33 | 11.5@1.33 | 11.5@1.33 | 11.5@1.33 | 11.5@1.33
+MARKS-010 | Campbell Lake | marks | player_marks_over | 1.5@1.18 | 1.5@1.18 | 1.5@1.18 | 2.5@1.64 | 2.5@1.64 | 3.5@2.60 | 3.5@2.60 | 4.5@4.75
+MARKS-011 | Charlie Ballard | marks | player_marks_over | 4.5@1.09 | 5.5@1.22 | 6.5@1.47 | 6.5@1.47 | 7.5@1.87 | 8.5@2.50 | 8.5@2.50 | 9.5@3.60
+MARKS-012 | Cooper Sharman | marks | player_marks_over | 2.5@1.14 | 2.5@1.14 | 3.5@1.43 | 3.5@1.43 | 4.5@2.00 | 4.5@2.00 | 5.5@3.05 | 5.5@3.05
+MARKS-013 | Daniel Butler | marks | player_marks_over | 2.5@1.16 | 2.5@1.16 | 3.5@1.47 | 3.5@1.47 | 4.5@2.10 | 4.5@2.10 | 5.5@3.30 | 5.5@3.30
+MARKS-014 | Daniel Rioli | marks | player_marks_over | 5.5@1.18 | 5.5@1.18 | 6.5@1.40 | 7.5@1.75 | 7.5@1.75 | 8.5@2.30 | 9.5@3.25 | 9.5@3.25
+MARKS-015 | Darcy Wilson | marks | player_marks_over | 3.5@1.14 | 3.5@1.14 | 4.5@1.36 | 5.5@1.77 | 5.5@1.77 | 6.5@2.50 | 6.5@2.50 | 7.5@3.70
+MARKS-016 | Dougal Howard | marks | player_marks_over | 5.5@1.16 | 5.5@1.16 | 6.5@1.35 | 7.5@1.68 | 7.5@1.68 | 8.5@2.18 | 9.5@3.00 | 10.5@4.40
+MARKS-017 | Ethan Read | marks | player_marks_over | 1.5@1.21 | 1.5@1.21 | 1.5@1.21 | 2.5@1.72 | 2.5@1.72 | 2.5@1.72 | 3.5@2.80 | 3.5@2.80
+MARKS-018 | Hugh Boxshall | marks | player_marks_over | 2.5@1.15 | 2.5@1.15 | 3.5@1.43 | 3.5@1.43 | 4.5@1.96 | 4.5@1.96 | 5.5@2.95 | 6.5@5.00
+MARKS-019 | Hugo Garcia | marks | player_marks_over | 3.5@1.16 | 3.5@1.16 | 4.5@1.41 | 4.5@1.41 | 5.5@1.86 | 5.5@1.86 | 6.5@2.65 | 7.5@4.00
+MARKS-020 | Jack Silvagni | marks | player_marks_over | 6.5@1.11 | 7.5@1.23 | 8.5@1.44 | 9.5@1.76 | 9.5@1.76 | 10.5@2.25 | 11.5@3.00 | 11.5@3.00
+MARKS-021 | Jackson Macrae | marks | player_marks_over | 3.5@1.21 | 3.5@1.21 | 4.5@1.51 | 4.5@1.51 | 5.5@2.08 | 5.5@2.08 | 6.5@3.05 | 7.5@4.90
+MARKS-022 | Jake Rogers | marks | player_marks_over | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 2.5@2.45 | 2.5@2.45 | 3.5@5.00
+MARKS-023 | Jarrod Witts | marks | player_marks_over | 1.5@1.10 | 1.5@1.10 | 2.5@1.41 | 2.5@1.41 | 3.5@2.05 | 3.5@2.05 | 4.5@3.35 | 4.5@3.35
+MARKS-024 | Jed Walter | marks | player_marks_over | 2.5@1.15 | 2.5@1.15 | 3.5@1.44 | 3.5@1.44 | 4.5@1.98 | 4.5@1.98 | 5.5@3.00 | 5.5@3.00
+MARKS-025 | Joel Jeffrey | marks | player_marks_over | 3.5@1.11 | 4.5@1.31 | 4.5@1.31 | 5.5@1.66 | 5.5@1.66 | 6.5@2.25 | 7.5@3.35 | 7.5@3.35
+MARKS-026 | John Noble | marks | player_marks_over | 6.5@1.12 | 7.5@1.25 | 8.5@1.48 | 8.5@1.48 | 9.5@1.82 | 10.5@2.35 | 11.5@3.20 | 11.5@3.20
+MARKS-027 | Lachlan Gulbin | marks | player_marks_over | 1.5@1.10 | 2.5@1.39 | 2.5@1.39 | 2.5@1.39 | 3.5@2.02 | 3.5@2.02 | 4.5@3.25 | 4.5@3.25
+MARKS-028 | Leo Lombard | marks | player_marks_over | 3.5@1.16 | 3.5@1.16 | 4.5@1.42 | 4.5@1.42 | 5.5@1.88 | 5.5@1.88 | 6.5@2.70 | 7.5@4.25
+MARKS-029 | Liam O'Connell | marks | player_marks_over | 3.5@1.14 | 3.5@1.14 | 4.5@1.38 | 5.5@1.79 | 5.5@1.79 | 6.5@2.50 | 6.5@2.50 | 7.5@3.80
+MARKS-030 | Liam Ryan | marks | player_marks_over | 1.5@1.16 | 1.5@1.16 | 2.5@1.55 | 2.5@1.55 | 2.5@1.55 | 3.5@2.50 | 3.5@2.50 | 4.5@4.30
+MARKS-031 | Liam Stocker | marks | player_marks_over | 5.5@1.10 | 6.5@1.23 | 7.5@1.45 | 7.5@1.45 | 8.5@1.82 | 9.5@2.40 | 10.5@3.30 | 10.5@3.30
+MARKS-032 | Mac Andrew | marks | player_marks_over | 6.5@1.16 | 6.5@1.16 | 7.5@1.35 | 8.5@1.62 | 9.5@2.05 | 9.5@2.05 | 10.5@2.75 | 11.5@3.80
+MARKS-033 | Marcus Windhager | marks | player_marks_over | 3.5@1.10 | 4.5@1.28 | 4.5@1.28 | 5.5@1.61 | 5.5@1.61 | 6.5@2.18 | 7.5@3.20 | 7.5@3.20
+MARKS-034 | Matt Rowell | marks | player_marks_over | 1.5@1.10 | 2.5@1.39 | 2.5@1.39 | 2.5@1.39 | 3.5@2.02 | 3.5@2.02 | 4.5@3.30 | 4.5@3.30
+MARKS-035 | Mattaes Phillipou | marks | player_marks_over | 4.5@1.19 | 4.5@1.19 | 5.5@1.44 | 5.5@1.44 | 6.5@1.86 | 6.5@1.86 | 7.5@2.55 | 8.5@3.80
+MARKS-036 | Max Hall | marks | player_marks_over | 6.5@1.10 | 7.5@1.22 | 8.5@1.42 | 9.5@1.74 | 9.5@1.74 | 10.5@2.20 | 11.5@2.95 | 11.5@2.95
+MARKS-037 | Mitchito Owens | marks | player_marks_over | 4.5@1.15 | 4.5@1.15 | 5.5@1.35 | 6.5@1.69 | 6.5@1.69 | 7.5@2.25 | 8.5@3.20 | 8.5@3.20
+MARKS-038 | Ned Moyle | marks | player_marks_over | 2.5@1.25 | 2.5@1.25 | 2.5@1.25 | 3.5@1.67 | 3.5@1.67 | 4.5@2.50 | 4.5@2.50 | 5.5@4.20
+MARKS-039 | Nicholas Holman | marks | player_marks_over | 2.5@1.09 | 3.5@1.29 | 3.5@1.29 | 4.5@1.70 | 4.5@1.70 | 5.5@2.45 | 5.5@2.45 | 6.5@3.90
+MARKS-040 | Noah Anderson | marks | player_marks_over | 5.5@1.17 | 5.5@1.17 | 6.5@1.37 | 7.5@1.70 | 7.5@1.70 | 8.5@2.20 | 9.5@3.10 | 10.5@4.50
+MARKS-041 | Rowan Marshall | marks | player_marks_over | 3.5@1.12 | 4.5@1.32 | 4.5@1.32 | 5.5@1.65 | 5.5@1.65 | 6.5@2.25 | 7.5@3.35 | 7.5@3.35
+MARKS-042 | Ryan Byrnes | marks | player_marks_over | 3.5@1.08 | 4.5@1.23 | 5.5@1.51 | 5.5@1.51 | 6.5@1.99 | 6.5@1.99 | 7.5@2.80 | 8.5@4.30
+MARKS-043 | Sam Clohesy | marks | player_marks_over | 3.5@1.10 | 4.5@1.27 | 4.5@1.27 | 5.5@1.60 | 5.5@1.60 | 6.5@2.15 | 7.5@3.15 | 8.5@4.80
+MARKS-044 | Tobie Travaglia | marks | player_marks_over | 2.5@1.10 | 3.5@1.32 | 3.5@1.32 | 4.5@1.72 | 4.5@1.72 | 5.5@2.45 | 5.5@2.45 | 6.5@3.90
+MARKS-045 | Tom De Koning | marks | player_marks_over | 3.5@1.13 | 4.5@1.35 | 4.5@1.35 | 5.5@1.74 | 5.5@1.74 | 6.5@2.40 | 6.5@2.40 | 7.5@3.70
+MARKS-046 | Touk Miller | marks | player_marks_over | 1.5@1.08 | 2.5@1.32 | 2.5@1.32 | 3.5@1.85 | 3.5@1.85 | 3.5@1.85 | 4.5@2.90 | 5.5@5.00
+TACKL-001 | Angus Hastie | tackles | player_tackles_over | 1.5@1.32 | 1.5@1.32 | 1.5@1.32 | 1.5@1.32 | 2.5@2.03 | 2.5@2.03 | 3.5@3.60 | 3.5@3.60
+TACKL-002 | Bailey Humphrey | tackles | player_tackles_over | 1.5@1.19 | 1.5@1.19 | 1.5@1.19 | 2.5@1.65 | 2.5@1.65 | 3.5@2.65 | 3.5@2.65 | 4.5@4.90
+TACKL-003 | Beau Addinsall | tackles | player_tackles_over | 1.5@1.17 | 1.5@1.17 | 2.5@1.59 | 2.5@1.59 | 2.5@1.59 | 3.5@2.50 | 3.5@2.50 | 4.5@4.60
+TACKL-004 | Ben Jepson | tackles | player_tackles_over | 2.5@1.10 | 3.5@1.32 | 3.5@1.32 | 4.5@1.72 | 4.5@1.72 | 5.5@2.45 | 5.5@2.45 | 6.5@3.90
+TACKL-005 | Ben King | tackles | player_tackles_over | 1.5@2.30 | 1.5@2.30 | 1.5@2.30 | 1.5@2.30 | 1.5@2.30 | 1.5@2.30 | 1.5@2.30 | 1.5@2.30
+TACKL-006 | Ben Long | tackles | player_tackles_over | 1.5@1.17 | 1.5@1.17 | 2.5@1.59 | 2.5@1.59 | 2.5@1.59 | 3.5@2.50 | 3.5@2.50 | 4.5@4.50
+TACKL-007 | Bodhi Uwland | tackles | player_tackles_over | 1.5@1.76 | 1.5@1.76 | 1.5@1.76 | 1.5@1.76 | 1.5@1.76 | 1.5@1.76 | 2.5@3.40 | 2.5@3.40
+TACKL-008 | Bradley Hill | tackles | player_tackles_over | 1.5@1.23 | 1.5@1.23 | 1.5@1.23 | 2.5@1.78 | 2.5@1.78 | 2.5@1.78 | 3.5@3.00 | 3.5@3.00
+TACKL-009 | Callum Wilkie | tackles | player_tackles_over | 1.5@2.10 | 1.5@2.10 | 1.5@2.10 | 1.5@2.10 | 1.5@2.10 | 1.5@2.10 | 1.5@2.10 | 2.5@4.60
+TACKL-010 | Campbell Lake | tackles | player_tackles_over | 5.5@1.13 | 6.5@1.29 | 6.5@1.29 | 7.5@1.58 | 8.5@2.00 | 8.5@2.00 | 9.5@2.70 | 9.5@2.70
+TACKL-011 | Charlie Ballard | tackles | player_tackles_over | 1.5@2.12 | 1.5@2.12 | 1.5@2.12 | 1.5@2.12 | 1.5@2.12 | 1.5@2.12 | 1.5@2.12 | 2.5@4.75
+TACKL-012 | Cooper Sharman | tackles | player_tackles_over | 1.5@1.37 | 1.5@1.37 | 1.5@1.37 | 1.5@1.37 | 2.5@2.18 | 2.5@2.18 | 2.5@2.18 | 3.5@4.00
+TACKL-013 | Daniel Butler | tackles | player_tackles_over | 3.5@1.09 | 4.5@1.24 | 5.5@1.53 | 5.5@1.53 | 6.5@2.00 | 6.5@2.00 | 7.5@2.85 | 8.5@4.40
+TACKL-014 | Daniel Rioli | tackles | player_tackles_over | 1.5@1.23 | 1.5@1.23 | 1.5@1.23 | 2.5@1.81 | 2.5@1.81 | 2.5@1.81 | 3.5@3.00 | 3.5@3.00
+TACKL-015 | Darcy Wilson | tackles | player_tackles_over | 1.5@1.18 | 1.5@1.18 | 1.5@1.18 | 2.5@1.63 | 2.5@1.63 | 3.5@2.60 | 3.5@2.60 | 4.5@4.80
+TACKL-016 | Dougal Howard | tackles | player_tackles_over | 1.5@1.50 | 1.5@1.50 | 1.5@1.50 | 1.5@1.50 | 1.5@1.50 | 2.5@2.55 | 2.5@2.55 | 2.5@2.55
+TACKL-017 | Ethan Read | tackles | player_tackles_over | 1.5@1.55 | 1.5@1.55 | 1.5@1.55 | 1.5@1.55 | 1.5@1.55 | 2.5@2.70 | 2.5@2.70 | 2.5@2.70
+TACKL-018 | Hugh Boxshall | tackles | player_tackles_over | 5.5@1.12 | 6.5@1.28 | 6.5@1.28 | 7.5@1.54 | 8.5@1.96 | 8.5@1.96 | 9.5@2.60 | 9.5@2.60
+TACKL-019 | Hugo Garcia | tackles | player_tackles_over | 5.5@1.18 | 5.5@1.18 | 6.5@1.37 | 7.5@1.72 | 7.5@1.72 | 8.5@2.25 | 9.5@3.10 | 9.5@3.10
+TACKL-020 | Jack Silvagni | tackles | player_tackles_over | 1.5@1.31 | 1.5@1.31 | 1.5@1.31 | 1.5@1.31 | 2.5@2.03 | 2.5@2.03 | 3.5@3.70 | 3.5@3.70
+TACKL-021 | Jackson Macrae | tackles | player_tackles_over | 3.5@1.18 | 3.5@1.18 | 4.5@1.47 | 4.5@1.47 | 5.5@1.98 | 5.5@1.98 | 6.5@2.85 | 7.5@4.50
+TACKL-022 | Jake Rogers | tackles | player_tackles_over | 1.5@1.19 | 1.5@1.19 | 1.5@1.19 | 2.5@1.67 | 2.5@1.67 | 3.5@2.65 | 3.5@2.65 | 4.5@4.90
+TACKL-023 | Jarrod Witts | tackles | player_tackles_over | 1.5@1.33 | 1.5@1.33 | 1.5@1.33 | 1.5@1.33 | 2.5@2.05 | 2.5@2.05 | 3.5@3.70 | 3.5@3.70
+TACKL-024 | Jed Walter | tackles | player_tackles_over | 1.5@1.18 | 1.5@1.18 | 1.5@1.18 | 2.5@1.64 | 2.5@1.64 | 3.5@2.65 | 3.5@2.65 | 4.5@4.80
+TACKL-025 | Joel Jeffrey | tackles | player_tackles_over | 1.5@1.27 | 1.5@1.27 | 1.5@1.27 | 2.5@1.88 | 2.5@1.88 | 2.5@1.88 | 3.5@3.30 | 3.5@3.30
+TACKL-026 | John Noble | tackles | player_tackles_over | 1.5@1.11 | 1.5@1.11 | 2.5@1.41 | 2.5@1.41 | 3.5@2.05 | 3.5@2.05 | 4.5@3.40 | 4.5@3.40
+TACKL-027 | Lachlan Gulbin | tackles | player_tackles_over | 1.5@1.08 | 2.5@1.32 | 2.5@1.32 | 3.5@1.83 | 3.5@1.83 | 3.5@1.83 | 4.5@2.90 | 5.5@5.00
+TACKL-028 | Leo Lombard | tackles | player_tackles_over | 2.5@1.26 | 2.5@1.26 | 2.5@1.26 | 3.5@1.70 | 3.5@1.70 | 4.5@2.55 | 4.5@2.55 | 5.5@4.30
+TACKL-029 | Liam O'Connell | tackles | player_tackles_over | 1.5@1.08 | 2.5@1.32 | 2.5@1.32 | 3.5@1.80 | 3.5@1.80 | 3.5@1.80 | 4.5@2.80 | 5.5@4.90
+TACKL-030 | Liam Ryan | tackles | player_tackles_over | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25 | 1.5@2.25
+TACKL-031 | Liam Stocker | tackles | player_tackles_over | 1.5@1.25 | 1.5@1.25 | 1.5@1.25 | 2.5@1.83 | 2.5@1.83 | 2.5@1.83 | 3.5@3.15 | 3.5@3.15
+TACKL-032 | Mac Andrew | tackles | player_tackles_over | 1.5@1.97 | 1.5@1.97 | 1.5@1.97 | 1.5@1.97 | 1.5@1.97 | 1.5@1.97 | 1.5@1.97 | 2.5@4.20
+TACKL-033 | Marcus Windhager | tackles | player_tackles_over | 2.5@1.17 | 2.5@1.17 | 3.5@1.49 | 3.5@1.49 | 4.5@2.08 | 4.5@2.08 | 5.5@3.30 | 5.5@3.30
+TACKL-034 | Matt Rowell | tackles | player_tackles_over | 5.5@1.11 | 6.5@1.24 | 7.5@1.48 | 7.5@1.48 | 8.5@1.85 | 9.5@2.45 | 9.5@2.45 | 9.5@2.45
+TACKL-035 | Mattaes Phillipou | tackles | player_tackles_over | 2.5@1.09 | 3.5@1.28 | 3.5@1.28 | 4.5@1.68 | 4.5@1.68 | 5.5@2.40 | 5.5@2.40 | 6.5@3.75
+TACKL-036 | Max Hall | tackles | player_tackles_over | 3.5@1.19 | 3.5@1.19 | 4.5@1.47 | 4.5@1.47 | 5.5@1.99 | 5.5@1.99 | 6.5@2.90 | 7.5@4.50
+TACKL-037 | Mitchito Owens | tackles | player_tackles_over | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 1.5@1.47 | 2.5@2.45 | 2.5@2.45 | 3.5@4.90
+TACKL-038 | Ned Moyle | tackles | player_tackles_over | 1.5@1.11 | 1.5@1.11 | 2.5@1.41 | 2.5@1.41 | 3.5@2.07 | 3.5@2.07 | 4.5@3.40 | 4.5@3.40
+TACKL-039 | Nicholas Holman | tackles | player_tackles_over | 1.5@1.09 | 2.5@1.34 | 2.5@1.34 | 2.5@1.34 | 3.5@1.89 | 3.5@1.89 | 4.5@3.10 | 4.5@3.10
+TACKL-040 | Noah Anderson | tackles | player_tackles_over | 3.5@1.13 | 4.5@1.34 | 4.5@1.34 | 5.5@1.74 | 5.5@1.74 | 6.5@2.40 | 6.5@2.40 | 7.5@3.60
+TACKL-041 | Rowan Marshall | tackles | player_tackles_over | 2.5@1.15 | 2.5@1.15 | 3.5@1.45 | 3.5@1.45 | 4.5@2.02 | 4.5@2.02 | 5.5@3.05 | 5.5@3.05
+TACKL-042 | Ryan Byrnes | tackles | player_tackles_over | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 2.5@2.30 | 2.5@2.30 | 3.5@4.40
+TACKL-043 | Sam Clohesy | tackles | player_tackles_over | 1.5@1.27 | 1.5@1.27 | 1.5@1.27 | 2.5@1.88 | 2.5@1.88 | 2.5@1.88 | 3.5@3.25 | 3.5@3.25
+TACKL-044 | Tobie Travaglia | tackles | player_tackles_over | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 1.5@1.41 | 2.5@2.30 | 2.5@2.30 | 3.5@4.50
+TACKL-045 | Tom De Koning | tackles | player_tackles_over | 1.5@1.51 | 1.5@1.51 | 1.5@1.51 | 1.5@1.51 | 1.5@1.51 | 2.5@2.60 | 2.5@2.60 | 2.5@2.60
+TACKL-046 | Touk Miller | tackles | player_tackles_over | 3.5@1.20 | 3.5@1.20 | 4.5@1.51 | 4.5@1.51 | 5.5@2.05 | 5.5@2.05 | 6.5@3.00 | 7.5@4.80
+
+FULL LADDER DICTIONARY — EXACT EXPORTED LINES
+# ID | player | market | full exported ladder
+CLEAR-001 | Bailey Humphrey | player_clearances_over | 2.5@1.33; 3.5@1.88; 4.5@2.90
+CLEAR-002 | Beau Addinsall | player_clearances_over | 2.5@1.63; 3.5@2.60; 4.5@4.80
+CLEAR-003 | Hugh Boxshall | player_clearances_over | 2.5@1.16; 3.5@1.47; 4.5@2.08; 5.5@3.25
+CLEAR-004 | Hugo Garcia | player_clearances_over | 5.5@1.18; 6.5@1.39; 7.5@1.73; 8.5@2.25; 9.5@3.20; 10.5@4.80
+CLEAR-005 | Jackson Macrae | player_clearances_over | 5.5@1.15; 6.5@1.33; 7.5@1.63; 8.5@2.12; 9.5@2.95; 10.5@4.30
+CLEAR-006 | Jarrod Witts | player_clearances_over | 2.5@1.24; 3.5@1.67; 4.5@2.50; 5.5@4.25
+CLEAR-007 | Marcus Windhager | player_clearances_over | 2.5@2.07; 3.5@3.80
+CLEAR-008 | Matt Rowell | player_clearances_over | 5.5@1.11; 6.5@1.25; 7.5@1.51; 8.5@1.91; 9.5@2.55; 10.5@3.50
+CLEAR-009 | Mattaes Phillipou | player_clearances_over | 2.5@1.13; 3.5@1.39; 4.5@1.90; 5.5@2.85; 6.5@4.80
+CLEAR-010 | Max Hall | player_clearances_over | 2.5@1.10; 3.5@1.33; 4.5@1.78; 5.5@2.60; 6.5@4.25
+CLEAR-011 | Ned Moyle | player_clearances_over | 2.5@1.14; 3.5@1.40; 4.5@1.93; 5.5@2.95; 6.5@4.90
+CLEAR-012 | Noah Anderson | player_clearances_over | 3.5@1.08; 4.5@1.21; 5.5@1.48; 6.5@1.93; 7.5@2.70; 8.5@4.10
+CLEAR-013 | Rowan Marshall | player_clearances_over | 3.5@1.12; 4.5@1.32; 5.5@1.71; 6.5@2.35; 7.5@3.50
+CLEAR-014 | Tom De Koning | player_clearances_over | 2.5@1.14; 3.5@1.42; 4.5@1.97; 5.5@3.00
+CLEAR-015 | Touk Miller | player_clearances_over | 3.5@1.17; 4.5@1.45; 5.5@1.96; 6.5@2.80; 7.5@4.40
+DISPO-001 | Angus Hastie | player_disposals_over | 10.5@1.13; 11.5@1.17; 12.5@1.28; 13.5@1.42; 14.5@1.63; 15.5@1.88; 16.5@2.24; 17.5@2.72; 18.5@3.32; 19.5@4.00
+DISPO-002 | Bailey Humphrey | player_disposals_over | 11.5@1.13; 12.5@1.17; 13.5@1.30; 14.5@1.44; 15.5@1.63; 16.5@1.88; 17.5@2.23; 18.5@2.70; 19.5@3.32; 20.5@4.00
+DISPO-003 | Beau Addinsall | player_disposals_over | 11.5@1.13; 12.5@1.20; 13.5@1.30; 14.5@1.44; 15.5@1.63; 16.5@1.88; 17.5@2.21; 18.5@2.66; 19.5@3.26; 20.5@4.00; 21.5@5.00
+DISPO-004 | Ben Jepson | player_disposals_over | 9.5@1.11; 10.5@1.17; 11.5@1.28; 12.5@1.42; 13.5@1.62; 14.5@1.88; 15.5@2.25; 16.5@2.74; 17.5@3.32; 18.5@4.25
+DISPO-005 | Ben King | player_disposals_over | 9.5@2.08; 10.5@2.67; 11.5@3.45; 12.5@4.65
+DISPO-006 | Ben Long | player_disposals_over | 9.5@1.53; 10.5@1.85; 11.5@2.33; 12.5@3.06; 13.5@4.00
+DISPO-007 | Bodhi Uwland | player_disposals_over | 19.5@1.12; 20.5@1.20; 21.5@1.34; 22.5@1.54; 23.5@1.85; 24.5@2.16; 25.5@2.58; 26.5@3.12; 27.5@3.78; 28.5@4.65
+DISPO-008 | Bradley Hill | player_disposals | 33.5@1.87
+DISPO-009 | Bradley Hill | player_disposals_over | 27.5@1.09; 28.5@1.14; 29.5@1.20; 30.5@1.33; 31.5@1.46; 32.5@1.67; 33.5@1.87; 34.5@2.11; 35.5@2.39; 36.5@2.78; 37.5@3.22; 38.5@3.70; 39.5@4.50
+DISPO-010 | Callum Wilkie | player_disposals_over | 18.5@1.13; 19.5@1.22; 20.5@1.37; 21.5@1.62; 22.5@1.88; 23.5@2.19; 24.5@2.62; 25.5@3.14; 26.5@4.00; 27.5@4.65
+DISPO-011 | Campbell Lake | player_disposals_over | 9.5@1.39; 10.5@1.59; 11.5@1.88; 12.5@2.27; 13.5@2.80; 14.5@3.45; 15.5@4.30
+DISPO-012 | Charlie Ballard | player_disposals_over | 9.5@1.41; 10.5@1.61; 11.5@1.92; 12.5@2.32; 13.5@2.88; 14.5@3.70; 15.5@4.65
+DISPO-013 | Cooper Sharman | player_disposals_over | 9.5@1.33; 10.5@1.53; 11.5@1.84; 12.5@2.27; 13.5@2.93; 14.5@3.90
+DISPO-014 | Daniel Butler | player_disposals_over | 9.5@1.33; 10.5@1.47; 11.5@1.67; 12.5@1.92; 13.5@2.25; 14.5@2.66; 15.5@3.18; 16.5@3.98; 17.5@4.65
+DISPO-015 | Daniel Rioli | player_disposals_over | 16.5@1.13; 17.5@1.20; 18.5@1.30; 19.5@1.44; 20.5@1.62; 21.5@1.86; 22.5@2.19; 23.5@2.61; 24.5@3.22; 25.5@4.00
+DISPO-016 | Darcy Wilson | player_disposals_over | 16.5@1.10; 17.5@1.14; 18.5@1.22; 19.5@1.36; 20.5@1.53; 21.5@1.81; 22.5@2.10; 23.5@2.53; 24.5@3.08; 25.5@3.75; 26.5@4.65
+DISPO-017 | Dougal Howard | player_disposals_over | 12.5@1.13; 13.5@1.20; 14.5@1.30; 15.5@1.44; 16.5@1.63; 17.5@1.88; 18.5@2.23; 19.5@2.67; 20.5@3.25; 21.5@4.00; 22.5@4.80
+DISPO-018 | Ethan Read | player_disposals_over | 9.5@1.33; 10.5@1.48; 11.5@1.67; 12.5@1.91; 13.5@2.22; 14.5@2.65; 15.5@3.20; 16.5@3.92; 17.5@4.65
+DISPO-019 | Hugh Boxshall | player_disposals_over | 11.5@1.13; 12.5@1.20; 13.5@1.30; 14.5@1.44; 15.5@1.63; 16.5@1.88; 17.5@2.21; 18.5@2.65; 19.5@3.26; 20.5@4.00; 21.5@5.00
+DISPO-020 | Hugo Garcia | player_disposals | 25.5@1.84
+DISPO-021 | Hugo Garcia | player_disposals_over | 19.5@1.08; 20.5@1.13; 21.5@1.20; 22.5@1.30; 23.5@1.41; 24.5@1.59; 25.5@1.84; 26.5@2.11; 27.5@2.47; 28.5@2.97; 29.5@3.45; 30.5@4.25
+DISPO-022 | Jack Silvagni | player_disposals_over | 10.5@1.13; 11.5@1.22; 12.5@1.36; 13.5@1.57; 14.5@1.87; 15.5@2.29; 16.5@2.90; 17.5@3.75; 18.5@5.00
+DISPO-023 | Jackson Macrae | player_disposals | 24.5@1.96
+DISPO-024 | Jackson Macrae | player_disposals_over | 17.5@1.08; 18.5@1.13; 19.5@1.17; 20.5@1.28; 21.5@1.37; 22.5@1.52; 23.5@1.71; 24.5@1.96; 25.5@2.27; 26.5@2.70; 27.5@3.20; 28.5@3.96; 29.5@4.65
+DISPO-025 | Jake Rogers | player_disposals_over | 9.5@1.13; 10.5@1.22; 11.5@1.35; 12.5@1.57; 13.5@1.86; 14.5@2.28; 15.5@2.88; 16.5@3.70; 17.5@4.65
+DISPO-026 | Jarrod Witts | player_disposals_over | 9.5@1.25; 10.5@1.41; 11.5@1.62; 12.5@1.91; 13.5@2.31; 14.5@2.86; 15.5@3.45; 16.5@4.60
+DISPO-027 | Jed Walter | player_disposals_over | 9.5@2.39; 10.5@3.06; 11.5@4.00
+DISPO-028 | Joel Jeffrey | player_disposals_over | 12.5@1.08; 13.5@1.14; 14.5@1.20; 15.5@1.31; 16.5@1.45; 17.5@1.64; 18.5@1.88; 19.5@2.20; 20.5@2.65; 21.5@3.14; 22.5@4.00; 23.5@4.65
+DISPO-029 | John Noble | player_disposals | 25.5@1.84
+DISPO-030 | John Noble | player_disposals_over | 20.5@1.13; 21.5@1.20; 22.5@1.30; 23.5@1.42; 24.5@1.59; 25.5@1.84; 26.5@2.14; 27.5@2.50; 28.5@3.01; 29.5@3.69; 30.5@4.50
+DISPO-031 | Lachlan Gulbin | player_disposals_over | 9.5@1.34; 10.5@1.50; 11.5@1.69; 12.5@1.93; 13.5@2.28; 14.5@2.72; 15.5@3.28; 16.5@4.00; 17.5@4.65
+DISPO-032 | Leo Lombard | player_disposals_over | 11.5@1.10; 12.5@1.17; 13.5@1.25; 14.5@1.39; 15.5@1.59; 16.5@1.86; 17.5@2.26; 18.5@2.81; 19.5@3.45; 20.5@4.60
+DISPO-033 | Liam O'Connell | player_disposals_over | 9.5@1.62; 10.5@1.91; 11.5@2.33; 12.5@2.91; 13.5@3.70; 14.5@4.65
+DISPO-034 | Liam Ryan | player_disposals_over | 9.5@1.91; 10.5@2.26; 11.5@2.72; 12.5@3.32; 13.5@4.05
+DISPO-035 | Liam Stocker | player_disposals_over | 15.5@1.13; 16.5@1.17; 17.5@1.28; 18.5@1.41; 19.5@1.59; 20.5@1.83; 21.5@2.17; 22.5@2.64; 23.5@3.22; 24.5@4.00
+DISPO-036 | Mac Andrew | player_disposals_over | 12.5@1.10; 13.5@1.14; 14.5@1.22; 15.5@1.33; 16.5@1.47; 17.5@1.67; 18.5@1.91; 19.5@2.24; 20.5@2.68; 21.5@3.27; 22.5@4.00; 23.5@4.65
+DISPO-037 | Marcus Windhager | player_disposals_over | 17.5@1.10; 18.5@1.14; 19.5@1.22; 20.5@1.31; 21.5@1.45; 22.5@1.62; 23.5@1.83; 24.5@2.12; 25.5@2.50; 26.5@3.00; 27.5@3.45; 28.5@4.30
+DISPO-038 | Matt Rowell | player_disposals | 26.5@1.85
+DISPO-039 | Matt Rowell | player_disposals_over | 20.5@1.08; 21.5@1.14; 22.5@1.20; 23.5@1.30; 24.5@1.43; 25.5@1.61; 26.5@1.85; 27.5@2.12; 28.5@2.47; 29.5@2.95; 30.5@3.45; 31.5@4.25
+DISPO-040 | Mattaes Phillipou | player_disposals_over | 14.5@1.13; 15.5@1.17; 16.5@1.28; 17.5@1.42; 18.5@1.60; 19.5@1.85; 20.5@2.19; 21.5@2.61; 22.5@3.16; 23.5@4.00; 24.5@4.65
+DISPO-041 | Max Hall | player_disposals | 26.5@1.92
+DISPO-042 | Max Hall | player_disposals_over | 20.5@1.10; 21.5@1.16; 22.5@1.22; 23.5@1.33; 24.5@1.48; 25.5@1.70; 26.5@1.92; 27.5@2.24; 28.5@2.65; 29.5@3.14; 30.5@3.70; 31.5@4.60
+DISPO-043 | Mitchito Owens | player_disposals_over | 10.5@1.13; 11.5@1.22; 12.5@1.36; 13.5@1.57; 14.5@1.85; 15.5@2.24; 16.5@2.79; 17.5@3.45; 18.5@4.60
+DISPO-044 | Ned Moyle | player_disposals_over | 9.5@1.51; 10.5@1.72; 11.5@1.97; 12.5@2.30; 13.5@2.75; 14.5@3.33; 15.5@4.00; 16.5@4.80
+DISPO-045 | Nicholas Holman | player_disposals_over | 9.5@1.10; 10.5@1.17; 11.5@1.28; 12.5@1.42; 13.5@1.64; 14.5@1.91; 15.5@2.27; 16.5@2.78; 17.5@3.35; 18.5@4.25
+DISPO-046 | Noah Anderson | player_disposals | 25.5@1.85
+DISPO-047 | Noah Anderson | player_disposals_over | 19.5@1.08; 20.5@1.13; 21.5@1.20; 22.5@1.30; 23.5@1.41; 24.5@1.58; 25.5@1.85; 26.5@2.13; 27.5@2.50; 28.5@3.00; 29.5@3.69; 30.5@4.60
+DISPO-048 | Rowan Marshall | player_disposals_over | 13.5@1.10; 14.5@1.14; 15.5@1.22; 16.5@1.33; 17.5@1.46; 18.5@1.65; 19.5@1.88; 20.5@2.20; 21.5@2.59; 22.5@3.14; 23.5@3.80; 24.5@4.65
+DISPO-049 | Ryan Byrnes | player_disposals_over | 12.5@1.10; 13.5@1.14; 14.5@1.25; 15.5@1.38; 16.5@1.57; 17.5@1.83; 18.5@2.21; 19.5@2.73; 20.5@3.32; 21.5@4.25
+DISPO-050 | Sam Clohesy | player_disposals_over | 14.5@1.13; 15.5@1.20; 16.5@1.30; 17.5@1.44; 18.5@1.63; 19.5@1.88; 20.5@2.22; 21.5@2.70; 22.5@3.31; 23.5@4.00
+DISPO-051 | Tobie Travaglia | player_disposals_over | 9.5@1.11; 10.5@1.17; 11.5@1.25; 12.5@1.36; 13.5@1.50; 14.5@1.69; 15.5@1.91; 16.5@2.22; 17.5@2.61; 18.5@3.12; 19.5@3.70; 20.5@4.60
+DISPO-052 | Tom De Koning | player_disposals_over | 9.5@1.11; 10.5@1.17; 11.5@1.28; 12.5@1.41; 13.5@1.60; 14.5@1.86; 15.5@2.21; 16.5@2.70; 17.5@3.32; 18.5@4.20
+DISPO-053 | Touk Miller | player_disposals | 23.5@1.75
+DISPO-054 | Touk Miller | player_disposals_over | 19.5@1.11; 20.5@1.17; 21.5@1.30; 22.5@1.46; 23.5@1.75; 24.5@2.02; 25.5@2.37; 26.5@2.86; 27.5@3.45; 28.5@4.25
+FANTA-001 | Angus Hastie | player_afl_fantasy_points_over | 69.5@1.72; 74.5@2.08; 79.5@2.55; 84.5@3.20; 89.5@4.10
+FANTA-002 | Bailey Humphrey | player_afl_fantasy_points_over | 69.5@1.47; 74.5@1.70; 79.5@2.00; 84.5@2.40; 89.5@3.00; 94.5@3.90
+FANTA-003 | Beau Addinsall | player_afl_fantasy_points_over | 69.5@2.55; 74.5@3.40; 79.5@4.60
+FANTA-004 | Ben Jepson | player_afl_fantasy_points_over | 69.5@1.51; 74.5@1.78; 79.5@2.12; 84.5@2.65; 89.5@3.35; 94.5@4.40
+FANTA-005 | Ben King | player_afl_fantasy_points_over | 69.5@2.35; 74.5@2.90; 79.5@3.60; 84.5@4.75
+FANTA-006 | Ben Long | player_afl_fantasy_points_over | 69.5@3.15; 74.5@4.10
+FANTA-007 | Bodhi Uwland | player_afl_fantasy_points_over | 74.5@1.10; 79.5@1.18; 84.5@1.32; 89.5@1.52; 94.5@1.78; 99.5@2.15; 104.5@2.60; 109.5@3.35; 114.5@4.30
+FANTA-008 | Bradley Hill | player_afl_fantasy_points_over | 109.5@1.08; 114.5@1.14; 119.5@1.22; 124.5@1.34; 129.5@1.49
+FANTA-009 | Callum Wilkie | player_afl_fantasy_points_over | 79.5@1.08; 84.5@1.14; 89.5@1.23; 94.5@1.37; 99.5@1.55; 104.5@1.79; 109.5@2.08; 114.5@2.50; 119.5@3.00; 124.5@3.75; 129.5@4.70
+FANTA-010 | Campbell Lake | player_afl_fantasy_points_over | 69.5@1.66; 74.5@1.98; 79.5@2.40; 84.5@3.05; 89.5@3.90
+FANTA-011 | Charlie Ballard | player_afl_fantasy_points_over | 69.5@3.10; 74.5@4.00
+FANTA-012 | Cooper Sharman | player_afl_fantasy_points_over | 69.5@2.40; 74.5@3.05; 79.5@3.90
+FANTA-013 | Daniel Butler | player_afl_fantasy_points_over | 69.5@1.53; 74.5@1.77; 79.5@2.08; 84.5@2.50; 89.5@3.10; 94.5@3.90
+FANTA-014 | Daniel Rioli | player_afl_fantasy_points_over | 69.5@1.17; 74.5@1.28; 79.5@1.45; 84.5@1.67; 89.5@1.98; 94.5@2.40; 99.5@3.00; 104.5@3.90
+FANTA-015 | Darcy Wilson | player_afl_fantasy_points_over | 69.5@1.14; 74.5@1.25; 79.5@1.42; 84.5@1.64; 89.5@1.93; 94.5@2.30; 99.5@2.85; 104.5@3.60; 109.5@4.60
+FANTA-016 | Dougal Howard | player_afl_fantasy_points_over | 69.5@1.36; 74.5@1.55; 79.5@1.81; 84.5@2.12; 89.5@2.60; 94.5@3.30; 99.5@4.30
+FANTA-017 | Ethan Read | player_afl_fantasy_points_over | 69.5@2.75; 74.5@3.60; 79.5@4.75
+FANTA-018 | Hugh Boxshall | player_afl_fantasy_points_over | 69.5@1.21; 74.5@1.34; 79.5@1.52; 84.5@1.77; 89.5@2.10; 94.5@2.60; 99.5@3.25; 104.5@4.25
+FANTA-019 | Hugo Garcia | player_afl_fantasy_points_over | 89.5@1.13; 94.5@1.21; 99.5@1.33; 104.5@1.49; 109.5@1.70; 114.5@1.97; 119.5@2.35; 124.5@2.85; 129.5@3.50
+FANTA-020 | Jack Silvagni | player_afl_fantasy_points_over | 69.5@1.49; 74.5@1.72; 79.5@2.03; 84.5@2.50; 89.5@3.15; 94.5@4.10
+FANTA-021 | Jackson Macrae | player_afl_fantasy_points_over | 69.5@1.08; 74.5@1.13; 79.5@1.23; 84.5@1.36; 89.5@1.55; 94.5@1.81; 99.5@2.15; 104.5@2.65; 109.5@3.35; 114.5@4.30
+FANTA-022 | Jake Rogers | player_afl_fantasy_points_over | 69.5@4.30
+FANTA-023 | Jarrod Witts | player_afl_fantasy_points_over | 69.5@1.39; 74.5@1.65; 79.5@2.00; 84.5@2.55; 89.5@3.40; 94.5@4.60
+FANTA-024 | Jed Walter | player_afl_fantasy_points_over | 69.5@3.05; 74.5@3.90
+FANTA-025 | Joel Jeffrey | player_afl_fantasy_points_over | 69.5@1.46; 74.5@1.70; 79.5@2.05; 84.5@2.50; 89.5@3.20; 94.5@4.20
+FANTA-026 | John Noble | player_afl_fantasy_points_over | 84.5@1.09; 89.5@1.15; 94.5@1.24; 99.5@1.38; 104.5@1.55; 109.5@1.80; 114.5@2.10; 119.5@2.50; 124.5@3.05; 129.5@3.80
+FANTA-027 | Lachlan Gulbin | player_afl_fantasy_points_over | 69.5@2.85; 74.5@3.70; 79.5@4.90
+FANTA-028 | Leo Lombard | player_afl_fantasy_points_over | 69.5@1.45; 74.5@1.68; 79.5@2.00; 84.5@2.50; 89.5@3.10; 94.5@4.00
+FANTA-029 | Liam O'Connell | player_afl_fantasy_points_over | 69.5@3.35; 74.5@4.50
+FANTA-030 | Liam Ryan | player_afl_fantasy_points_over | 69.5@3.60; 74.5@4.70
+FANTA-031 | Liam Stocker | player_afl_fantasy_points_over | 69.5@1.14; 74.5@1.24; 79.5@1.37; 84.5@1.56; 89.5@1.81; 94.5@2.15; 99.5@2.65; 104.5@3.30; 109.5@4.25
+FANTA-032 | Mac Andrew | player_afl_fantasy_points_over | 69.5@1.16; 74.5@1.27; 79.5@1.42; 84.5@1.62; 89.5@1.89; 94.5@2.25; 99.5@2.75; 104.5@3.45; 109.5@4.40
+FANTA-033 | Marcus Windhager | player_afl_fantasy_points_over | 74.5@1.12; 79.5@1.20; 84.5@1.32; 89.5@1.49; 94.5@1.72; 99.5@2.02; 104.5@2.40; 109.5@3.00; 114.5@3.75; 119.5@4.90
+FANTA-034 | Matt Rowell | player_afl_fantasy_points_over | 89.5@1.11; 94.5@1.18; 99.5@1.32; 104.5@1.47; 109.5@1.69; 114.5@1.98; 119.5@2.35; 124.5@2.90; 129.5@3.60
+FANTA-035 | Mattaes Phillipou | player_afl_fantasy_points_over | 69.5@1.17; 74.5@1.28; 79.5@1.44; 84.5@1.66; 89.5@1.94; 94.5@2.30; 99.5@2.90; 104.5@3.70; 109.5@4.70
+FANTA-036 | Max Hall | player_afl_fantasy_points_over | 94.5@1.08; 99.5@1.13; 104.5@1.20; 109.5@1.30; 114.5@1.43; 119.5@1.60; 124.5@1.81; 129.5@2.08
+FANTA-037 | Mitchito Owens | player_afl_fantasy_points_over | 69.5@1.33; 74.5@1.49; 79.5@1.69; 84.5@2.00; 89.5@2.35; 94.5@2.95; 99.5@3.60; 104.5@4.60
+FANTA-038 | Ned Moyle | player_afl_fantasy_points_over | 69.5@1.11; 74.5@1.19; 79.5@1.33; 84.5@1.53; 89.5@1.81; 94.5@2.20; 99.5@2.70; 104.5@3.50; 109.5@4.60
+FANTA-039 | Nicholas Holman | player_afl_fantasy_points_over | 69.5@1.86; 74.5@2.25; 79.5@2.80; 84.5@3.60; 89.5@4.80
+FANTA-040 | Noah Anderson | player_afl_fantasy_points_over | 89.5@1.11; 94.5@1.19; 99.5@1.29; 104.5@1.44; 109.5@1.63; 114.5@1.88; 119.5@2.20; 124.5@2.70; 129.5@3.35
+FANTA-041 | Rowan Marshall | player_afl_fantasy_points_over | 84.5@1.10; 89.5@1.17; 94.5@1.29; 99.5@1.40; 104.5@1.57; 109.5@1.80; 114.5@2.08; 119.5@2.50; 124.5@3.05; 129.5@3.75
+FANTA-042 | Ryan Byrnes | player_afl_fantasy_points_over | 69.5@1.58; 74.5@1.88; 79.5@2.25; 84.5@2.85; 89.5@3.70; 94.5@4.90
+FANTA-043 | Sam Clohesy | player_afl_fantasy_points_over | 69.5@1.44; 74.5@1.69; 79.5@2.03; 84.5@2.50; 89.5@3.25; 94.5@4.20
+FANTA-044 | Tobie Travaglia | player_afl_fantasy_points_over | 69.5@2.75; 74.5@3.60; 79.5@4.75
+FANTA-045 | Tom De Koning | player_afl_fantasy_points_over | 69.5@1.16; 74.5@1.29; 79.5@1.41; 84.5@1.61; 89.5@1.89; 94.5@2.25; 99.5@2.80; 104.5@3.50; 109.5@4.60
+FANTA-046 | Touk Miller | player_afl_fantasy_points_over | 74.5@1.12; 79.5@1.22; 84.5@1.37; 89.5@1.59; 94.5@1.91; 99.5@2.30; 104.5@2.95; 109.5@3.75; 114.5@5.00
+GOALS-001 | Bailey Humphrey | player_goals_scored_over | 0.5@1.25; 1.5@2.25
+GOALS-002 | Beau Addinsall | player_goals_scored_over | 0.5@4.00
+GOALS-003 | Ben Jepson | player_goals_scored_over | 0.5@2.65
+GOALS-004 | Ben King | player_goals_scored_over | 1.5@1.32; 2.5@2.03; 3.5@3.70
+GOALS-005 | Ben Long | player_goals_scored_over | 0.5@1.33; 1.5@2.70
+GOALS-006 | Bradley Hill | player_goals_scored_over | 0.5@2.15
+GOALS-007 | Campbell Lake | player_goals_scored_over | 0.5@1.93
+GOALS-008 | Cooper Sharman | player_goals_scored_over | 0.5@1.12; 1.5@1.73; 2.5@3.30
+GOALS-009 | Daniel Butler | player_goals_scored_over | 0.5@1.41; 1.5@3.10
+GOALS-010 | Darcy Wilson | player_goals_scored_over | 0.5@1.68; 1.5@4.60
+GOALS-011 | Ethan Read | player_goals_scored_over | 0.5@1.72; 1.5@4.70
+GOALS-012 | Hugo Garcia | player_goals_scored_over | 0.5@2.95
+GOALS-013 | Jake Rogers | player_goals_scored_over | 0.5@2.50
+GOALS-014 | Jed Walter | player_goals_scored_over | 0.5@1.14; 1.5@1.77; 2.5@3.45
+GOALS-015 | Lachlan Gulbin | player_goals_scored_over | 0.5@2.05
+GOALS-016 | Leo Lombard | player_goals_scored_over | 0.5@1.73; 1.5@4.70
+GOALS-017 | Liam Ryan | player_goals_scored_over | 1.5@1.46; 2.5@2.45; 3.5@5.00
+GOALS-018 | Marcus Windhager | player_goals_scored_over | 0.5@2.95
+GOALS-019 | Matt Rowell | player_goals_scored_over | 0.5@4.00
+GOALS-020 | Mattaes Phillipou | player_goals_scored_over | 0.5@2.30
+GOALS-021 | Max Hall | player_goals_scored_over | 0.5@1.32; 1.5@2.60
+GOALS-022 | Mitchito Owens | player_goals_scored_over | 0.5@1.10; 1.5@1.61; 2.5@2.85
+GOALS-023 | Ned Moyle | player_goals_scored_over | 0.5@4.00
+GOALS-024 | Nicholas Holman | player_goals_scored_over | 0.5@1.63; 1.5@4.25
+GOALS-025 | Noah Anderson | player_goals_scored_over | 0.5@4.00
+GOALS-026 | Rowan Marshall | player_goals_scored_over | 0.5@1.36; 1.5@2.80
+GOALS-027 | Ryan Byrnes | player_goals_scored_over | 0.5@2.30
+GOALS-028 | Tom De Koning | player_goals_scored_over | 0.5@1.52; 1.5@3.60
+GOALS-029 | Touk Miller | player_goals_scored_over | 0.5@2.40
+HANDB-001 | Bailey Humphrey | player_handballs_over | 7.5@1.73; 9.5@2.80
+HANDB-002 | Beau Addinsall | player_handballs_over | 7.5@1.28; 9.5@1.77; 11.5@2.75; 13.5@4.90
+HANDB-003 | Bodhi Uwland | player_handballs_over | 7.5@1.54; 9.5@2.65
+HANDB-004 | Bradley Hill | player_handballs_over | 9.5@1.29; 11.5@1.87; 13.5@3.15
+HANDB-005 | Callum Wilkie | player_handballs_over | 7.5@2.15; 9.5@4.60
+HANDB-006 | Campbell Lake | player_handballs_over | 7.5@2.35; 9.5@4.30
+HANDB-007 | Daniel Butler | player_handballs_over | 7.5@4.10
+HANDB-008 | Daniel Rioli | player_handballs_over | 7.5@1.20; 9.5@1.66; 11.5@2.70
+HANDB-009 | Darcy Wilson | player_handballs_over | 7.5@1.26; 9.5@1.86; 11.5@3.30
+HANDB-010 | Ethan Read | player_handballs_over | 7.5@3.50
+HANDB-011 | Hugh Boxshall | player_handballs_over | 7.5@1.42; 9.5@2.12; 11.5@3.60
+HANDB-012 | Hugo Garcia | player_handballs_over | 11.5@1.24; 13.5@1.67; 15.5@2.50; 17.5@4.30
+HANDB-013 | Jackson Macrae | player_handballs_over | 11.5@1.13; 13.5@1.37; 15.5@1.83; 17.5@2.65; 19.5@4.40
+HANDB-014 | Jake Rogers | player_handballs_over | 7.5@3.50
+HANDB-015 | Jarrod Witts | player_handballs_over | 7.5@2.08; 9.5@3.60
+HANDB-016 | Joel Jeffrey | player_handballs_over | 7.5@3.30
+HANDB-017 | John Noble | player_handballs_over | 7.5@1.70; 9.5@3.05
+HANDB-018 | Lachlan Gulbin | player_handballs_over | 7.5@3.90
+HANDB-019 | Leo Lombard | player_handballs_over | 7.5@1.57; 9.5@2.60; 11.5@5.00
+HANDB-021 | Liam Stocker | player_handballs_over | 7.5@2.60
+HANDB-022 | Mac Andrew | player_handballs_over | 7.5@2.70
+HANDB-023 | Marcus Windhager | player_handballs_over | 7.5@1.21; 9.5@1.68; 11.5@2.70
+HANDB-024 | Matt Rowell | player_handballs_over | 9.5@1.18; 11.5@1.57; 13.5@2.35; 15.5@4.00
+HANDB-025 | Mattaes Phillipou | player_handballs_over | 7.5@1.08; 9.5@1.32; 11.5@1.81; 13.5@2.80; 15.5@5.00
+HANDB-026 | Max Hall | player_handballs_over | 9.5@1.30; 11.5@1.84; 13.5@3.05
+HANDB-027 | Mitchito Owens | player_handballs_over | 7.5@2.20; 9.5@4.30
+HANDB-028 | Ned Moyle | player_handballs_over | 7.5@2.25; 9.5@3.50
+HANDB-029 | Nicholas Holman | player_handballs_over | 7.5@2.02; 9.5@3.40
+HANDB-030 | Noah Anderson | player_handballs_over | 7.5@1.11; 9.5@1.40; 11.5@2.10; 13.5@3.70
+HANDB-031 | Rowan Marshall | player_handballs_over | 7.5@1.56; 9.5@2.50; 11.5@4.40
+HANDB-032 | Ryan Byrnes | player_handballs_over | 7.5@1.65; 9.5@2.85
+HANDB-033 | Sam Clohesy | player_handballs_over | 7.5@1.42; 9.5@2.20; 11.5@4.00
+HANDB-034 | Tobie Travaglia | player_handballs_over | 7.5@1.94; 9.5@3.10
+HANDB-035 | Tom De Koning | player_handballs_over | 7.5@2.20; 9.5@3.90
+HANDB-036 | Touk Miller | player_handballs_over | 9.5@1.09; 11.5@1.35; 13.5@1.95; 15.5@3.25
+KICKS-001 | Angus Hastie | player_kicks_over | 9.5@1.33; 11.5@1.83; 13.5@2.75; 15.5@4.80
+KICKS-002 | Bailey Humphrey | player_kicks_over | 9.5@2.60
+KICKS-004 | Ben Jepson | player_kicks_over | 9.5@1.71; 11.5@2.75; 13.5@5.00
+KICKS-005 | Ben Long | player_kicks_over | 9.5@3.60
+KICKS-006 | Bodhi Uwland | player_kicks_over | 11.5@1.09; 13.5@1.33; 15.5@1.90; 17.5@3.05
+KICKS-007 | Bradley Hill | player_kicks_over | 17.5@1.10; 19.5@1.32; 21.5@1.69; 23.5@2.35; 25.5@3.50
+KICKS-008 | Callum Wilkie | player_kicks_over | 11.5@1.08; 13.5@1.32; 15.5@1.86; 17.5@2.90
+KICKS-009 | Charlie Ballard | player_kicks_over | 9.5@2.90
+KICKS-010 | Cooper Sharman | player_kicks_over | 9.5@4.50
+KICKS-011 | Daniel Butler | player_kicks_over | 9.5@3.45
+KICKS-012 | Daniel Rioli | player_kicks_over | 9.5@1.35; 11.5@1.97; 13.5@3.35
+KICKS-013 | Darcy Wilson | player_kicks_over | 9.5@1.21; 11.5@1.65; 13.5@2.60; 15.5@4.60
+KICKS-014 | Dougal Howard | player_kicks_over | 9.5@1.08; 11.5@1.24; 13.5@1.58; 15.5@2.20; 17.5@3.35
+KICKS-015 | Ethan Read | player_kicks_over | 9.5@4.10
+KICKS-016 | Hugh Boxshall | player_kicks_over | 9.5@3.80
+KICKS-017 | Hugo Garcia | player_kicks_over | 9.5@1.31; 11.5@1.89; 13.5@3.15
+KICKS-018 | Jack Silvagni | player_kicks_over | 9.5@1.67; 11.5@2.75
+KICKS-019 | Jackson Macrae | player_kicks_over | 9.5@2.60
+KICKS-020 | Jake Rogers | player_kicks_over | 9.5@3.40
+KICKS-021 | Joel Jeffrey | player_kicks_over | 9.5@1.20; 11.5@1.58; 13.5@2.30; 15.5@3.80
+KICKS-022 | John Noble | player_kicks_over | 13.5@1.12; 15.5@1.35; 17.5@1.83; 19.5@2.70; 21.5@4.40
+KICKS-023 | Lachlan Gulbin | player_kicks_over | 9.5@3.90
+KICKS-024 | Leo Lombard | player_kicks_over | 9.5@2.95
+KICKS-025 | Liam Ryan | player_kicks_over | 9.5@3.15
+KICKS-026 | Liam Stocker | player_kicks_over | 9.5@1.08; 11.5@1.28; 13.5@1.73; 15.5@2.60; 17.5@4.60
+KICKS-027 | Mac Andrew | player_kicks_over | 9.5@1.27; 11.5@1.73; 13.5@2.70; 15.5@4.80
+KICKS-028 | Marcus Windhager | player_kicks_over | 9.5@1.12; 11.5@1.37; 13.5@1.92; 15.5@3.05
+KICKS-029 | Matt Rowell | player_kicks_over | 11.5@1.24; 13.5@1.68; 15.5@2.55; 17.5@4.50
+KICKS-030 | Mattaes Phillipou | player_kicks_over | 9.5@3.35
+KICKS-031 | Max Hall | player_kicks_over | 11.5@1.18; 13.5@1.54; 15.5@2.20; 17.5@3.70
+KICKS-032 | Mitchito Owens | player_kicks_over | 9.5@3.60
+KICKS-033 | Nicholas Holman | player_kicks_over | 9.5@4.50
+KICKS-034 | Noah Anderson | player_kicks_over | 11.5@1.19; 13.5@1.55; 15.5@2.25; 17.5@3.80
+KICKS-035 | Rowan Marshall | player_kicks_over | 9.5@1.46; 11.5@2.18; 13.5@3.80
+KICKS-036 | Ryan Byrnes | player_kicks_over | 9.5@1.95; 11.5@3.50
+KICKS-037 | Sam Clohesy | player_kicks_over | 9.5@1.56; 11.5@2.45; 13.5@4.60
+KICKS-038 | Tobie Travaglia | player_kicks_over | 9.5@3.05
+KICKS-039 | Tom De Koning | player_kicks_over | 9.5@3.60
+KICKS-040 | Touk Miller | player_kicks_over | 9.5@1.42; 11.5@2.20; 13.5@4.10
+MARKS-001 | Angus Hastie | player_marks_over | 4.5@1.17; 5.5@1.36; 6.5@1.72; 7.5@2.30; 8.5@3.30; 9.5@5.00
+MARKS-002 | Bailey Humphrey | player_marks_over | 3.5@1.21; 4.5@1.51; 5.5@2.05; 6.5@3.05; 7.5@4.90
+MARKS-003 | Beau Addinsall | player_marks_over | 1.5@1.09; 2.5@1.33; 3.5@1.87; 4.5@2.95
+MARKS-004 | Ben Jepson | player_marks_over | 3.5@1.23; 4.5@1.57; 5.5@2.15; 6.5@3.20
+MARKS-005 | Ben King | player_marks_over | 3.5@1.12; 4.5@1.32; 5.5@1.71; 6.5@2.35; 7.5@3.50
+MARKS-006 | Ben Long | player_marks_over | 1.5@1.09; 2.5@1.33; 3.5@1.87; 4.5@2.95
+MARKS-007 | Bodhi Uwland | player_marks_over | 5.5@1.09; 6.5@1.20; 7.5@1.41; 8.5@1.75; 9.5@2.25; 10.5@3.05; 11.5@4.30
+MARKS-008 | Bradley Hill | player_marks_over | 8.5@1.13; 9.5@1.24; 10.5@1.44; 11.5@1.72
+MARKS-009 | Callum Wilkie | player_marks_over | 9.5@1.09; 10.5@1.18; 11.5@1.33
+MARKS-010 | Campbell Lake | player_marks_over | 1.5@1.18; 2.5@1.64; 3.5@2.60; 4.5@4.75
+MARKS-011 | Charlie Ballard | player_marks_over | 4.5@1.09; 5.5@1.22; 6.5@1.47; 7.5@1.87; 8.5@2.50; 9.5@3.60
+MARKS-012 | Cooper Sharman | player_marks_over | 2.5@1.14; 3.5@1.43; 4.5@2.00; 5.5@3.05
+MARKS-013 | Daniel Butler | player_marks_over | 2.5@1.16; 3.5@1.47; 4.5@2.10; 5.5@3.30
+MARKS-014 | Daniel Rioli | player_marks_over | 5.5@1.18; 6.5@1.40; 7.5@1.75; 8.5@2.30; 9.5@3.25; 10.5@4.80
+MARKS-015 | Darcy Wilson | player_marks_over | 3.5@1.14; 4.5@1.36; 5.5@1.77; 6.5@2.50; 7.5@3.70
+MARKS-016 | Dougal Howard | player_marks_over | 5.5@1.16; 6.5@1.35; 7.5@1.68; 8.5@2.18; 9.5@3.00; 10.5@4.40
+MARKS-017 | Ethan Read | player_marks_over | 1.5@1.21; 2.5@1.72; 3.5@2.80
+MARKS-018 | Hugh Boxshall | player_marks_over | 2.5@1.15; 3.5@1.43; 4.5@1.96; 5.5@2.95; 6.5@5.00
+MARKS-019 | Hugo Garcia | player_marks_over | 3.5@1.16; 4.5@1.41; 5.5@1.86; 6.5@2.65; 7.5@4.00
+MARKS-020 | Jack Silvagni | player_marks_over | 6.5@1.11; 7.5@1.23; 8.5@1.44; 9.5@1.76; 10.5@2.25; 11.5@3.00
+MARKS-021 | Jackson Macrae | player_marks_over | 3.5@1.21; 4.5@1.51; 5.5@2.08; 6.5@3.05; 7.5@4.90
+MARKS-022 | Jake Rogers | player_marks_over | 1.5@1.47; 2.5@2.45; 3.5@5.00
+MARKS-023 | Jarrod Witts | player_marks_over | 1.5@1.10; 2.5@1.41; 3.5@2.05; 4.5@3.35
+MARKS-024 | Jed Walter | player_marks_over | 2.5@1.15; 3.5@1.44; 4.5@1.98; 5.5@3.00
+MARKS-025 | Joel Jeffrey | player_marks_over | 3.5@1.11; 4.5@1.31; 5.5@1.66; 6.5@2.25; 7.5@3.35
+MARKS-026 | John Noble | player_marks_over | 6.5@1.12; 7.5@1.25; 8.5@1.48; 9.5@1.82; 10.5@2.35; 11.5@3.20
+MARKS-027 | Lachlan Gulbin | player_marks_over | 1.5@1.10; 2.5@1.39; 3.5@2.02; 4.5@3.25
+MARKS-028 | Leo Lombard | player_marks_over | 3.5@1.16; 4.5@1.42; 5.5@1.88; 6.5@2.70; 7.5@4.25
+MARKS-029 | Liam O'Connell | player_marks_over | 3.5@1.14; 4.5@1.38; 5.5@1.79; 6.5@2.50; 7.5@3.80
+MARKS-030 | Liam Ryan | player_marks_over | 1.5@1.16; 2.5@1.55; 3.5@2.50; 4.5@4.30
+MARKS-031 | Liam Stocker | player_marks_over | 5.5@1.10; 6.5@1.23; 7.5@1.45; 8.5@1.82; 9.5@2.40; 10.5@3.30; 11.5@4.80
+MARKS-032 | Mac Andrew | player_marks_over | 6.5@1.16; 7.5@1.35; 8.5@1.62; 9.5@2.05; 10.5@2.75; 11.5@3.80
+MARKS-033 | Marcus Windhager | player_marks_over | 3.5@1.10; 4.5@1.28; 5.5@1.61; 6.5@2.18; 7.5@3.20; 8.5@4.90
+MARKS-034 | Matt Rowell | player_marks_over | 1.5@1.10; 2.5@1.39; 3.5@2.02; 4.5@3.30
+MARKS-035 | Mattaes Phillipou | player_marks_over | 4.5@1.19; 5.5@1.44; 6.5@1.86; 7.5@2.55; 8.5@3.80
+MARKS-036 | Max Hall | player_marks_over | 6.5@1.10; 7.5@1.22; 8.5@1.42; 9.5@1.74; 10.5@2.20; 11.5@2.95
+MARKS-037 | Mitchito Owens | player_marks_over | 4.5@1.15; 5.5@1.35; 6.5@1.69; 7.5@2.25; 8.5@3.20; 9.5@4.90
+MARKS-038 | Ned Moyle | player_marks_over | 2.5@1.25; 3.5@1.67; 4.5@2.50; 5.5@4.20
+MARKS-039 | Nicholas Holman | player_marks_over | 2.5@1.09; 3.5@1.29; 4.5@1.70; 5.5@2.45; 6.5@3.90
+MARKS-040 | Noah Anderson | player_marks_over | 5.5@1.17; 6.5@1.37; 7.5@1.70; 8.5@2.20; 9.5@3.10; 10.5@4.50
+MARKS-041 | Rowan Marshall | player_marks_over | 3.5@1.12; 4.5@1.32; 5.5@1.65; 6.5@2.25; 7.5@3.35
+MARKS-042 | Ryan Byrnes | player_marks_over | 3.5@1.08; 4.5@1.23; 5.5@1.51; 6.5@1.99; 7.5@2.80; 8.5@4.30
+MARKS-043 | Sam Clohesy | player_marks_over | 3.5@1.10; 4.5@1.27; 5.5@1.60; 6.5@2.15; 7.5@3.15; 8.5@4.80
+MARKS-044 | Tobie Travaglia | player_marks_over | 2.5@1.10; 3.5@1.32; 4.5@1.72; 5.5@2.45; 6.5@3.90
+MARKS-045 | Tom De Koning | player_marks_over | 3.5@1.13; 4.5@1.35; 5.5@1.74; 6.5@2.40; 7.5@3.70
+MARKS-046 | Touk Miller | player_marks_over | 1.5@1.08; 2.5@1.32; 3.5@1.85; 4.5@2.90; 5.5@5.00
+TACKL-001 | Angus Hastie | player_tackles_over | 1.5@1.32; 2.5@2.03; 3.5@3.60
+TACKL-002 | Bailey Humphrey | player_tackles_over | 1.5@1.19; 2.5@1.65; 3.5@2.65; 4.5@4.90
+TACKL-003 | Beau Addinsall | player_tackles_over | 1.5@1.17; 2.5@1.59; 3.5@2.50; 4.5@4.60
+TACKL-004 | Ben Jepson | player_tackles_over | 2.5@1.10; 3.5@1.32; 4.5@1.72; 5.5@2.45; 6.5@3.90
+TACKL-005 | Ben King | player_tackles_over | 1.5@2.30
+TACKL-006 | Ben Long | player_tackles_over | 1.5@1.17; 2.5@1.59; 3.5@2.50; 4.5@4.50
+TACKL-007 | Bodhi Uwland | player_tackles_over | 1.5@1.76; 2.5@3.40
+TACKL-008 | Bradley Hill | player_tackles_over | 1.5@1.23; 2.5@1.78; 3.5@3.00
+TACKL-009 | Callum Wilkie | player_tackles_over | 1.5@2.10; 2.5@4.60
+TACKL-010 | Campbell Lake | player_tackles_over | 5.5@1.13; 6.5@1.29; 7.5@1.58; 8.5@2.00; 9.5@2.70
+TACKL-011 | Charlie Ballard | player_tackles_over | 1.5@2.12; 2.5@4.75
+TACKL-012 | Cooper Sharman | player_tackles_over | 1.5@1.37; 2.5@2.18; 3.5@4.00
+TACKL-013 | Daniel Butler | player_tackles_over | 3.5@1.09; 4.5@1.24; 5.5@1.53; 6.5@2.00; 7.5@2.85; 8.5@4.40
+TACKL-014 | Daniel Rioli | player_tackles_over | 1.5@1.23; 2.5@1.81; 3.5@3.00
+TACKL-015 | Darcy Wilson | player_tackles_over | 1.5@1.18; 2.5@1.63; 3.5@2.60; 4.5@4.80
+TACKL-016 | Dougal Howard | player_tackles_over | 1.5@1.50; 2.5@2.55
+TACKL-017 | Ethan Read | player_tackles_over | 1.5@1.55; 2.5@2.70
+TACKL-018 | Hugh Boxshall | player_tackles_over | 5.5@1.12; 6.5@1.28; 7.5@1.54; 8.5@1.96; 9.5@2.60
+TACKL-019 | Hugo Garcia | player_tackles_over | 5.5@1.18; 6.5@1.37; 7.5@1.72; 8.5@2.25; 9.5@3.10
+TACKL-020 | Jack Silvagni | player_tackles_over | 1.5@1.31; 2.5@2.03; 3.5@3.70
+TACKL-021 | Jackson Macrae | player_tackles_over | 3.5@1.18; 4.5@1.47; 5.5@1.98; 6.5@2.85; 7.5@4.50
+TACKL-022 | Jake Rogers | player_tackles_over | 1.5@1.19; 2.5@1.67; 3.5@2.65; 4.5@4.90
+TACKL-023 | Jarrod Witts | player_tackles_over | 1.5@1.33; 2.5@2.05; 3.5@3.70
+TACKL-024 | Jed Walter | player_tackles_over | 1.5@1.18; 2.5@1.64; 3.5@2.65; 4.5@4.80
+TACKL-025 | Joel Jeffrey | player_tackles_over | 1.5@1.27; 2.5@1.88; 3.5@3.30
+TACKL-026 | John Noble | player_tackles_over | 1.5@1.11; 2.5@1.41; 3.5@2.05; 4.5@3.40
+TACKL-027 | Lachlan Gulbin | player_tackles_over | 1.5@1.08; 2.5@1.32; 3.5@1.83; 4.5@2.90; 5.5@5.00
+TACKL-028 | Leo Lombard | player_tackles_over | 2.5@1.26; 3.5@1.70; 4.5@2.55; 5.5@4.30
+TACKL-029 | Liam O'Connell | player_tackles_over | 1.5@1.08; 2.5@1.32; 3.5@1.80; 4.5@2.80; 5.5@4.90
+TACKL-030 | Liam Ryan | player_tackles_over | 1.5@2.25
+TACKL-031 | Liam Stocker | player_tackles_over | 1.5@1.25; 2.5@1.83; 3.5@3.15
+TACKL-032 | Mac Andrew | player_tackles_over | 1.5@1.97; 2.5@4.20
+TACKL-033 | Marcus Windhager | player_tackles_over | 2.5@1.17; 3.5@1.49; 4.5@2.08; 5.5@3.30
+TACKL-034 | Matt Rowell | player_tackles_over | 5.5@1.11; 6.5@1.24; 7.5@1.48; 8.5@1.85; 9.5@2.45
+TACKL-035 | Mattaes Phillipou | player_tackles_over | 2.5@1.09; 3.5@1.28; 4.5@1.68; 5.5@2.40; 6.5@3.75
+TACKL-036 | Max Hall | player_tackles_over | 3.5@1.19; 4.5@1.47; 5.5@1.99; 6.5@2.90; 7.5@4.50
+TACKL-037 | Mitchito Owens | player_tackles_over | 1.5@1.47; 2.5@2.45; 3.5@4.90
+TACKL-038 | Ned Moyle | player_tackles_over | 1.5@1.11; 2.5@1.41; 3.5@2.07; 4.5@3.40
+TACKL-039 | Nicholas Holman | player_tackles_over | 1.5@1.09; 2.5@1.34; 3.5@1.89; 4.5@3.10
+TACKL-040 | Noah Anderson | player_tackles_over | 3.5@1.13; 4.5@1.34; 5.5@1.74; 6.5@2.40; 7.5@3.60
+TACKL-041 | Rowan Marshall | player_tackles_over | 2.5@1.15; 3.5@1.45; 4.5@2.02; 5.5@3.05
+TACKL-042 | Ryan Byrnes | player_tackles_over | 1.5@1.41; 2.5@2.30; 3.5@4.40
+TACKL-043 | Sam Clohesy | player_tackles_over | 1.5@1.27; 2.5@1.88; 3.5@3.25
+TACKL-044 | Tobie Travaglia | player_tackles_over | 1.5@1.41; 2.5@2.30; 3.5@4.50
+TACKL-045 | Tom De Koning | player_tackles_over | 1.5@1.51; 2.5@2.60
+TACKL-046 | Touk Miller | player_tackles_over | 3.5@1.20; 4.5@1.51; 5.5@2.05; 6.5@3.00; 7.5@4.80
+
+MASTER ANALYSIS PROMPT — USE THIS EVERY TIME
+You are the lead quantitative AFL/NRL betting analyst. Treat this V16 pack as the complete meaningful Sportsbet player-prop universe inside the configured individual-odds range. Bet Intelligence is a data engine, not a betting model. Do not anchor to Sportsbet Hot Legs, promotions, previous multis, previous user screenshots or browser labels. Start independently from this V16 universe.
+
+OBJECTIVE
+Maximise probability-adjusted selection quality. Evidence > intuition. Verified current information > remembered information. Probability > attractive payout. Do not force a multi or a target price. A valid conclusion is NO BET.
+
+HOW TO HANDLE THE LARGE DATASET
+1. Do NOT process the pack sequentially line by line. First scan the PLAYER MAP to understand every player and their available market families.
+2. Next scan each MARKET-FAMILY MATRIX horizontally. Compare all players at similar Sportsbet price landmarks. Look for potentially interesting differences in required performance, ladder steepness, price jumps and alternate-line structure. This is only a structural screen — Sportsbet pricing is not our probability model.
+3. Use the FULL LADDER DICTIONARY only when a player/market warrants closer inspection. Nothing is excluded merely because it was not immediately attractive in the matrix.
+4. Build an internal research queue dynamically from the evidence. Do not impose an arbitrary fixed candidate count. Research as many or as few ladders as necessary to reach a defensible conclusion.
+5. Before recommending any player, verify current/final team selection, injuries, late changes and substitution/interchange risk. Reject any player whose participation cannot reasonably be established.
+6. Verify CURRENT ROLE. AFL: position, midfield/forward split, CBAs where relevant, TOG expectation, kick-ins, ruck share and goal-kicking role. NRL: starting position, expected minutes, interchange role, goal-kicking role and attacking/tackling involvement.
+7. Retrieve the actual exact stat for recent completed matches where useful, preferably L5 and L10 plus season/longer-term baseline. Shrink small samples toward the longer prior and do not let one outlier dominate.
+8. Check opponent, venue, team changes, tactical matchup, pace/game environment and weather where material. H2H is supporting evidence only.
+9. For every serious surviving player/market, estimate true hit probability with uncertainty across the useful points in the full ladder. Calculate implied probability = 1/decimal odds, fair odds = 1/model probability, and edge = model probability - implied probability.
+10. Select the best probability-adjusted point from the FULL ladder. Do not automatically choose the shortest line, a round-number line, the highest price, or a Sportsbet-promoted line.
+11. Distinguish GOOD PLAYER vs GOOD BET vs GOOD MULTI LEG. A good player at a bad line must be rejected.
+12. Explicitly assess correlation: same-player redundancy, teammates competing for stat opportunity, shared game-script dependence, scoring-environment dependence and other positive/negative relationships. Do not multiply correlated leg probabilities as if independent.
+13. Before finalising a leg, conduct an adversarial check: try to disprove the bet using role instability, data freshness, sample relevance, matchup, uncertainty, injury/sub risk, line suitability and price/value. Remove any leg that does not survive.
+
+ANTI-BIAS RULES
+- Do not anchor to Sportsbet Hot Legs or promotional markets.
+- Do not select a leg merely because it hit 5/5 recently.
+- Do not force market-family diversity.
+- Do not treat very short odds as automatically safe.
+- Do not add weak legs just to reach a requested total price.
+- Do not recommend a player you cannot reasonably establish is playing.
+- If critical information cannot be verified, reject the player rather than guessing.
+- If the strongest justified multi is only $3, $5 or $8, return it rather than padding it.
+
+FINAL OUTPUT — KEEP IT SHORT
+Return only:
+BEST MULTI: selections with individual odds, approximate combined individual-leg odds, and confidence.
+OPTIONAL ALTERNATIVE MULTI only if genuinely justified and preferably using different players.
+BEST BET / strongest leg.
+WEAKEST selected leg.
+ONE short warning if material.
+If evidence does not justify a bet: NO BET and the single most important reason.
+
+POST-MATCH RULE
+When results are available, classify every failed leg only as: Variance; Bad line selection; Incorrect role assumption; Injury/substitution; Team-selection error; Matchup error; Correlation error; Data-quality problem; Model error. Do not rationalise losses after the event.
